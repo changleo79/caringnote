@@ -3,15 +3,15 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
-// 환경 변수 검증 - 프로덕션에서는 필수
-if (process.env.NODE_ENV === 'production' && !process.env.NEXTAUTH_SECRET) {
-  throw new Error(
-    'NEXTAUTH_SECRET이 설정되지 않았습니다. Vercel 환경 변수에서 NEXTAUTH_SECRET을 설정하세요.'
-  )
+// 환경 변수 검증
+const requiredSecret = process.env.NEXTAUTH_SECRET
+
+if (!requiredSecret && process.env.NODE_ENV === 'production') {
+  console.error('❌ NEXTAUTH_SECRET이 설정되지 않았습니다. Vercel 환경 변수를 확인하세요.')
 }
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: requiredSecret || (process.env.NODE_ENV === 'development' ? 'dev-secret-only' : undefined),
   providers: [
     CredentialsProvider({
       name: "Credentials",
