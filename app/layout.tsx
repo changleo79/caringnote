@@ -3,8 +3,8 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "요양원 케어 플랫폼",
-  description: "요양원에 계신 부모님들의 생활을 지원하고 가족들과 소통할 수 있는 통합 플랫폼",
+  title: "케어링노트 - 부모님의 따뜻한 하루를 함께합니다",
+  description: "요양원에 계신 부모님의 일상을 가족과 함께 공유하고, 건강한 생활을 지원하는 통합 소통 플랫폼",
 };
 
 export default function RootLayout({

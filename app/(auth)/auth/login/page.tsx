@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { Heart, Mail, Lock, ArrowLeft } from "lucide-react"
+import Logo from "@/components/brand/Logo"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -52,14 +53,14 @@ export default function LoginPage() {
 
         {/* Logo/Title */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl mb-6 shadow-xl shadow-primary-500/20 transform hover:scale-105 transition-transform">
-            <Heart className="w-10 h-10 text-white" />
+          <div className="mb-6 flex justify-center">
+            <Logo variant="default" size="lg" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-3 tracking-tight">
             로그인
           </h1>
           <p className="text-base text-gray-600">
-            요양원 케어 플랫폼에 오신 것을 환영합니다
+            케어링노트에 오신 것을 환영합니다
           </p>
         </div>
 

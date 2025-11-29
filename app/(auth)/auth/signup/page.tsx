@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { Heart, Mail, Lock, User, Phone, Building2, ArrowLeft } from "lucide-react"
+import Logo from "@/components/brand/Logo"
 
 export default function SignupPage() {
   const router = useRouter()
@@ -144,14 +145,14 @@ export default function SignupPage() {
 
         {/* Logo/Title */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl mb-6 shadow-xl shadow-primary-500/20 transform hover:scale-105 transition-transform">
-            <Heart className="w-10 h-10 text-white" />
+          <div className="mb-6 flex justify-center">
+            <Logo variant="default" size="lg" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-3 tracking-tight">
             회원가입
           </h1>
           <p className="text-base text-gray-600">
-            새 계정을 만들어 시작하세요
+            케어링노트와 함께 시작하세요
           </p>
         </div>
 

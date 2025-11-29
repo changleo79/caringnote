@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import Logo from "@/components/brand/Logo"
 import {
   Home,
   Camera,
@@ -35,17 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <Link 
-              href="/dashboard" 
-              className="flex items-center gap-2 group"
-            >
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:scale-105 transition-transform">
-                <Heart className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900 hidden sm:inline">
-                케어 플랫폼
-              </span>
-            </Link>
+            <Logo variant="default" size="md" href="/dashboard" />
             
             <div className="flex items-center gap-4">
               {/* 알림 */}

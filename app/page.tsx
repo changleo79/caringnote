@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Heart, Camera, ShoppingBag, Shield, Bell, Users, Sparkles } from "lucide-react";
+import Logo from "@/components/brand/Logo";
 
 export default function HomePage() {
   return (
@@ -23,16 +24,20 @@ export default function HomePage() {
               <span>부모님의 따뜻한 하루를 함께합니다</span>
             </div>
             
+            {/* Logo */}
+            <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.05s' }}>
+              <Logo variant="default" size="lg" className="justify-center" />
+            </div>
+            
             {/* Main Heading */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-              <span className="block">요양원 케어</span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 animate-gradient bg-[length:200%_auto]">
-                플랫폼
+                케어링노트
               </span>
             </h1>
             
             {/* Description */}
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               요양원에 계신 부모님의 일상을 가족과 함께 공유하고,<br className="hidden md:block" />
               <span className="text-gray-700 font-medium">건강한 생활을 지원하는 통합 소통 플랫폼</span>입니다.
             </p>
