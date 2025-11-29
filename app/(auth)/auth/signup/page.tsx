@@ -22,25 +22,36 @@ export default function SignupPage() {
 
   // 요양원 목록 불러오기
   useEffect(() => {
-    fetch("/api/care-centers")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch care centers")
+    const loadCareCenters = async () => {
+      try {
+        const res = await fetch("/api/care-centers")
+        const data = await res.json()
+        
+        // 에러가 포함된 경우도 처리
+        if (data.error) {
+          console.error("Care centers API error:", data.error)
+          // 오류가 있어도 빈 배열로 설정 (회원가입은 계속 가능)
+          setCareCenters([])
+          return
         }
-        return res.json()
-      })
-      .then((data) => {
+        
+        // 배열인지 확인
         if (Array.isArray(data)) {
           setCareCenters(data)
+        } else if (data.careCenters && Array.isArray(data.careCenters)) {
+          setCareCenters(data.careCenters)
         } else {
           console.error("Invalid data format:", data)
           setCareCenters([])
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching care centers:", error)
+        // 오류가 발생해도 빈 배열로 설정
         setCareCenters([])
-      })
+      }
+    }
+
+    loadCareCenters()
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,16 +88,26 @@ export default function SignupPage() {
         }),
       })
 
-      const data = await response.json()
+      let data
+      try {
+        data = await response.json()
+      } catch (jsonError) {
+        throw new Error("서버 응답을 처리할 수 없습니다.")
+      }
 
       if (response.ok) {
         toast.success("회원가입 성공! 로그인해주세요.")
-        router.push("/auth/login")
+        setTimeout(() => {
+          router.push("/auth/login")
+        }, 1000)
       } else {
-        toast.error(data.error || "회원가입 중 오류가 발생했습니다.")
+        const errorMessage = data?.error || `회원가입 중 오류가 발생했습니다. (${response.status})`
+        toast.error(errorMessage)
+        console.error("Signup error:", data)
       }
-    } catch (error) {
-      toast.error("회원가입 중 오류가 발생했습니다.")
+    } catch (error: any) {
+      console.error("Signup error:", error)
+      toast.error(error.message || "회원가입 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.")
     } finally {
       setIsLoading(false)
     }

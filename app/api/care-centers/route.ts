@@ -15,13 +15,23 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(careCenters)
-  } catch (error) {
+    // 요양원이 없으면 빈 배열 반환 (오류 아님)
+    return NextResponse.json(careCenters || [])
+  } catch (error: any) {
     console.error("Error fetching care centers:", error)
-    return NextResponse.json(
-      { error: "요양원 목록을 불러오는 중 오류가 발생했습니다." },
-      { status: 500 }
-    )
+    
+    // 데이터베이스 연결 오류인 경우
+    if (error.code === 'P1001' || error.message?.includes('connect')) {
+      return NextResponse.json(
+        { 
+          error: "데이터베이스 연결 오류가 발생했습니다.",
+          careCenters: [] 
+        },
+        { status: 500 }
+      )
+    }
+
+    // 오류 발생 시 빈 배열 반환 (페이지는 정상 작동)
+    return NextResponse.json([])
   }
 }
-
