@@ -9,8 +9,9 @@ if (!process.env.NEXTAUTH_SECRET) {
 }
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET || "development-secret-change-in-production",
+  secret: process.env.NEXTAUTH_SECRET || "development-secret-change-in-production-please-set-nexauth-secret",
   debug: process.env.NODE_ENV === 'development',
+  trustHost: true, // Vercel에서 자동으로 호스트 신뢰
   providers: [
     CredentialsProvider({
       name: "Credentials",

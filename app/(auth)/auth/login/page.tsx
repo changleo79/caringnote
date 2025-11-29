@@ -26,14 +26,27 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        toast.error("이메일 또는 비밀번호가 올바르지 않습니다.")
-      } else {
+        console.error("로그인 오류:", result.error)
+        
+        // 구체적인 오류 메시지 제공
+        if (result.error.includes("configuration") || result.error.includes("server")) {
+          toast.error("서버 설정 오류입니다. 관리자에게 문의하세요.")
+          console.error("NextAuth 설정 오류 - 환경 변수를 확인하세요.")
+        } else if (result.error.includes("CredentialsSignin")) {
+          toast.error("이메일 또는 비밀번호가 올바르지 않습니다.")
+        } else {
+          toast.error(`로그인 실패: ${result.error}`)
+        }
+      } else if (result?.ok) {
         toast.success("로그인 성공!")
         router.push("/dashboard")
         router.refresh()
+      } else {
+        toast.error("로그인에 실패했습니다. 다시 시도해주세요.")
       }
-    } catch (error) {
-      toast.error("로그인 중 오류가 발생했습니다.")
+    } catch (error: any) {
+      console.error("로그인 예외:", error)
+      toast.error("로그인 중 오류가 발생했습니다. 네트워크를 확인해주세요.")
     } finally {
       setIsLoading(false)
     }
