@@ -41,3 +41,8 @@ next-env.d.ts
 *.db-journal
 dev.db*
 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

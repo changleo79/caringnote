@@ -19,7 +19,32 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
-        <Toaster position="top-center" />
+        <Toaster 
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#fff',
+              color: '#1f2937',
+              borderRadius: '12px',
+              boxShadow: '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
+              padding: '16px',
+              fontSize: '14px',
+            },
+            success: {
+              iconTheme: {
+                primary: '#0d8ae8',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

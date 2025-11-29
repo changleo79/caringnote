@@ -10,7 +10,9 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "setup": "npm install && npm run db:generate && npm run db:push"
+    "setup": "npm install && npm run db:generate && npm run db:push",
+    "deploy": "node scripts/deploy.js",
+    "deploy:msg": "node scripts/deploy.js"
   },
   "dependencies": {
     "next": "^14.2.0",
