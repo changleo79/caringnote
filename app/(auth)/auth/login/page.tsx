@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import toast from "react-hot-toast"
-import { Mail, Lock, ArrowLeft, AlertCircle } from "lucide-react"
+import { Mail, Lock, ArrowLeft, AlertCircle, Sparkles } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 
 export default function LoginPage() {
@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [serverConfigError, setServerConfigError] = useState(false)
 
-  // 서버 구성 상태 확인
   useEffect(() => {
     const checkServerConfig = async () => {
       try {
@@ -48,7 +47,6 @@ export default function LoginPage() {
       if (result?.error) {
         console.error("로그인 오류:", result.error)
         
-        // 서버 구성 오류 감지
         if (
           result.error.includes("configuration") || 
           result.error.includes("server") ||
@@ -60,9 +58,6 @@ export default function LoginPage() {
             <div className="flex flex-col gap-1">
               <span className="font-semibold">서버 구성 오류</span>
               <span className="text-sm">NEXTAUTH_SECRET 환경 변수가 필요합니다.</span>
-              <span className="text-xs text-gray-500 mt-1">
-                Vercel Settings → Environment Variables 확인 필요
-              </span>
             </div>,
             { duration: 5000 }
           )
@@ -80,25 +75,23 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       console.error("로그인 예외:", error)
-      
-      // 네트워크 오류 또는 서버 오류
-      if (error.message?.includes("fetch") || error.message?.includes("network")) {
-        toast.error("네트워크 오류가 발생했습니다. 연결을 확인해주세요.")
-      } else {
-        toast.error("로그인 중 오류가 발생했습니다.")
-      }
+      toast.error("로그인 중 오류가 발생했습니다.")
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/30 flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/40 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* 배경 요소 */}
+      <div className="absolute top-20 left-10 w-40 h-40 bg-primary-300/20 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+      
+      <div className="max-w-md w-full relative z-10">
         {/* Back to Home */}
         <Link 
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-8 transition-colors group font-medium"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>홈으로</span>
@@ -106,15 +99,15 @@ export default function LoginPage() {
 
         {/* Server Config Warning */}
         {serverConfigError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+          <div className="mb-6 p-5 bg-red-50/90 backdrop-blur-sm border-2 border-red-200 rounded-2xl shadow-lg">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <h3 className="font-semibold text-red-900 mb-1">서버 구성 오류</h3>
-                <p className="text-sm text-red-700 mb-2">
+                <h3 className="font-black text-red-900 mb-2">서버 구성 오류</h3>
+                <p className="text-sm text-red-700 mb-2 font-medium">
                   NEXTAUTH_SECRET 환경 변수가 설정되지 않았습니다.
                 </p>
-                <p className="text-xs text-red-600">
+                <p className="text-xs text-red-600 font-medium">
                   관리자에게 문의하거나 Vercel 환경 변수를 확인하세요.
                 </p>
               </div>
@@ -122,53 +115,54 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Logo/Title */}
-        <div className="text-center mb-10">
-          <div className="mb-6 flex justify-center">
+        {/* Logo/Title - 프리미엄 디자인 */}
+        <div className="text-center mb-12">
+          <div className="mb-8 flex justify-center animate-fade-in-up">
             <Logo variant="default" size="lg" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-3 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-4 tracking-tighter">
             로그인
           </h1>
-          <p className="text-base text-gray-600">
-            케어링노트에 오신 것을 환영합니다
-          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50/80 backdrop-blur-sm text-primary-700 rounded-full text-sm font-bold mb-2">
+            <Sparkles className="w-4 h-4 text-primary-600" />
+            <span>케어링노트에 오신 것을 환영합니다</span>
+          </div>
         </div>
 
-        {/* Login Form */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/5 p-8 md:p-10 border border-white/50">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Login Form - 프리미엄 디자인 */}
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/10 p-10 md:p-12 border border-white/60">
+          <form onSubmit={handleSubmit} className="space-y-7">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-3">
+              <label htmlFor="email" className="block text-sm font-black text-gray-900 mb-4">
                 이메일
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="your@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-800 mb-3">
+              <label htmlFor="password" className="block text-sm font-black text-gray-900 mb-4">
                 비밀번호
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="비밀번호를 입력하세요"
                 />
               </div>
@@ -177,11 +171,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading || serverConfigError}
-              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-4 rounded-xl font-semibold text-base hover:from-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r from-primary-600 via-primary-600 to-primary-700 text-white py-5 rounded-2xl font-black text-lg hover:from-primary-700 hover:via-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-300 shadow-2xl shadow-primary-500/40 hover:shadow-3xl hover:shadow-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span className="flex items-center justify-center gap-3">
+                  <span className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></span>
                   로그인 중...
                 </span>
               ) : serverConfigError ? (
@@ -192,12 +186,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm text-gray-600">
+          <div className="mt-10 pt-8 border-t-2 border-gray-100">
+            <p className="text-center text-sm text-gray-600 font-medium">
               계정이 없으신가요?{" "}
               <Link 
                 href="/auth/signup" 
-                className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
+                className="text-primary-600 hover:text-primary-700 font-black transition-colors"
               >
                 회원가입
               </Link>

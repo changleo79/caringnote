@@ -1,15 +1,90 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { redirect } from "next/navigation"
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
-import { ArrowLeft, Heart } from "lucide-react"
+import toast from "react-hot-toast"
+import { ArrowLeft, Heart, Calendar } from "lucide-react"
 
-export default async function NewMedicalRecordPage() {
-  const session = await getServerSession(authOptions)
+export default function NewMedicalRecordPage() {
+  const router = useRouter()
+  const { data: session } = useSession()
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    recordDate: new Date().toISOString().split("T")[0],
+    category: "Other",
+    residentId: "",
+  })
+  const [residents, setResidents] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingResidents, setLoadingResidents] = useState(true)
+
+  // 입소자 목록 불러오기
+  useEffect(() => {
+    const loadResidents = async () => {
+      try {
+        const res = await fetch("/api/residents")
+        const data = await res.json()
+        if (res.ok && Array.isArray(data)) {
+          setResidents(data)
+        }
+      } catch (error) {
+        console.error("Error loading residents:", error)
+      } finally {
+        setLoadingResidents(false)
+      }
+    }
+
+    if (session) {
+      loadResidents()
+    }
+  }, [session])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!formData.title.trim() || !formData.residentId) {
+      toast.error("제목과 입소자는 필수입니다.")
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const response = await fetch("/api/medical-records", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: formData.title,
+          content: formData.content || null,
+          recordDate: formData.recordDate,
+          category: formData.category,
+          residentId: formData.residentId,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast.success("의료 기록이 작성되었습니다!")
+        router.push("/medical")
+        router.refresh()
+      } else {
+        toast.error(data.error || "의료 기록 작성에 실패했습니다.")
+      }
+    } catch (error: any) {
+      console.error("Error creating medical record:", error)
+      toast.error("의료 기록 작성 중 오류가 발생했습니다.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   if (!session) {
-    redirect("/auth/login")
+    return null
   }
 
   return (
@@ -34,29 +109,116 @@ export default async function NewMedicalRecordPage() {
           </p>
         </div>
 
-        {/* Form Placeholder */}
-        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12">
-          <div className="text-center py-16">
-            <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Heart className="w-10 h-10 text-red-600" />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12 space-y-6">
+          {/* 입소자 선택 */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
+              입소자 <span className="text-red-500">*</span>
+            </label>
+            {loadingResidents ? (
+              <div className="w-full px-4 py-3.5 border border-gray-200 rounded-xl bg-gray-50 text-gray-500">
+                입소자 목록 로딩 중...
+              </div>
+            ) : (
+              <select
+                value={formData.residentId}
+                onChange={(e) => setFormData({ ...formData, residentId: e.target.value })}
+                required
+                className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900"
+              >
+                <option value="">입소자를 선택하세요</option>
+                {residents.map((resident) => (
+                  <option key={resident.id} value={resident.id}>
+                    {resident.name} {resident.roomNumber ? `(${resident.roomNumber})` : ""}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* 기록 날짜 */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
+              기록 날짜 <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+              <input
+                type="date"
+                value={formData.recordDate}
+                onChange={(e) => setFormData({ ...formData, recordDate: e.target.value })}
+                required
+                className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900"
+              />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
-              의료 기록 작성 기능 준비 중
-            </h2>
-            <p className="text-gray-600 mb-8">
-              곧 의료 기록 작성 기능이 제공될 예정입니다
-            </p>
+          </div>
+
+          {/* 카테고리 */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
+              카테고리
+            </label>
+            <select
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900"
+            >
+              <option value="Treatment">진료</option>
+              <option value="Medication">약물</option>
+              <option value="Exam">검사</option>
+              <option value="Symptom">증상</option>
+              <option value="Other">기타</option>
+            </select>
+          </div>
+
+          {/* 제목 */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
+              제목 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              required
+              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              placeholder="의료 기록 제목을 입력하세요"
+            />
+          </div>
+
+          {/* 내용 */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
+              내용
+            </label>
+            <textarea
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              rows={8}
+              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 resize-none"
+              placeholder="의료 기록 내용을 입력하세요..."
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex gap-4 pt-4">
             <Link
               href="/medical"
-              className="btn-secondary inline-flex items-center gap-2"
+              className="btn-secondary flex-1 text-center"
             >
-              <ArrowLeft className="w-4 h-4" />
-              의료 정보로 돌아가기
+              취소
             </Link>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-primary flex-1 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
+            >
+              {isLoading ? "작성 중..." : "의료 기록 작성"}
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </AppLayout>
   )
 }
-

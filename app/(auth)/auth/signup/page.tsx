@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import toast from "react-hot-toast"
-import { Heart, Mail, Lock, User, Phone, Building2, ArrowLeft } from "lucide-react"
+import { Mail, Lock, User, Phone, Building2, ArrowLeft, Sparkles } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 
 export default function SignupPage() {
@@ -30,22 +30,18 @@ export default function SignupPage() {
         const res = await fetch("/api/care-centers")
         const data = await res.json()
         
-        // 에러가 포함된 경우도 처리
         if (data.error) {
           console.error("Care centers API error:", data.error)
           setCareCenters([])
           return
         }
         
-        // 배열인지 확인
         if (Array.isArray(data)) {
           setCareCenters(data)
           
-          // 요양원이 없으면 시드 데이터 생성 시도
           if (data.length === 0) {
             try {
               await fetch("/api/care-centers/seed", { method: "POST" })
-              // 시드 생성 후 다시 로드
               const res2 = await fetch("/api/care-centers")
               const data2 = await res2.json()
               if (Array.isArray(data2)) {
@@ -132,62 +128,67 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/30 flex items-center justify-center px-4 py-12">
-      <div className="max-w-lg w-full">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/40 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* 배경 요소 */}
+      <div className="absolute top-20 left-10 w-40 h-40 bg-primary-300/20 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+      
+      <div className="max-w-lg w-full relative z-10">
         {/* Back to Home */}
         <Link 
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-8 transition-colors group font-medium"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>홈으로</span>
         </Link>
 
-        {/* Logo/Title */}
-        <div className="text-center mb-10">
-          <div className="mb-6 flex justify-center">
+        {/* Logo/Title - 프리미엄 디자인 */}
+        <div className="text-center mb-12">
+          <div className="mb-8 flex justify-center animate-fade-in-up">
             <Logo variant="default" size="lg" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-3 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-4 tracking-tighter">
             회원가입
           </h1>
-          <p className="text-base text-gray-600">
-            케어링노트와 함께 시작하세요
-          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50/80 backdrop-blur-sm text-primary-700 rounded-full text-sm font-bold">
+            <Sparkles className="w-4 h-4 text-primary-600" />
+            <span>새 계정을 만들어 시작하세요</span>
+          </div>
         </div>
 
-        {/* Signup Form */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/5 p-8 md:p-10 border border-white/50">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Signup Form - 프리미엄 디자인 */}
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/10 p-10 md:p-12 border border-white/60">
+          <form onSubmit={handleSubmit} className="space-y-7">
             {/* 회원 유형 */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-4">
+              <label className="block text-sm font-black text-gray-900 mb-5">
                 회원 유형
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, role: "FAMILY" })}
-                  className={`p-5 rounded-2xl border-2 transition-all duration-200 ${
+                  className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
                     formData.role === "FAMILY"
-                      ? "border-primary-500 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-md shadow-primary-500/10"
+                      ? "border-primary-500 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-xl shadow-primary-500/20 scale-105"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700"
                   }`}
                 >
-                  <User className={`w-6 h-6 mx-auto mb-2 ${formData.role === "FAMILY" ? "text-primary-600" : "text-gray-400"}`} />
-                  <span className="font-semibold text-sm">가족 회원</span>
+                  <User className={`w-7 h-7 mx-auto mb-3 ${formData.role === "FAMILY" ? "text-primary-600" : "text-gray-400"}`} />
+                  <span className="font-black text-sm">가족 회원</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, role: "CAREGIVER" })}
-                  className={`p-5 rounded-2xl border-2 transition-all duration-200 ${
+                  className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
                     formData.role === "CAREGIVER"
-                      ? "border-primary-500 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-md shadow-primary-500/10"
+                      ? "border-primary-500 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-xl shadow-primary-500/20 scale-105"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700"
                   }`}
                 >
-                  <Building2 className={`w-6 h-6 mx-auto mb-2 ${formData.role === "CAREGIVER" ? "text-primary-600" : "text-gray-400"}`} />
-                  <span className="font-semibold text-sm">요양원 직원</span>
+                  <Building2 className={`w-7 h-7 mx-auto mb-3 ${formData.role === "CAREGIVER" ? "text-primary-600" : "text-gray-400"}`} />
+                  <span className="font-black text-sm">요양원 직원</span>
                 </button>
               </div>
             </div>
@@ -195,20 +196,17 @@ export default function SignupPage() {
             {/* 요양원 선택 */}
             {formData.role === "FAMILY" && (
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-3">
+                <label className="block text-sm font-black text-gray-900 mb-4">
                   요양원 선택
-                  {loadingCareCenters && (
-                    <span className="ml-2 text-xs text-gray-500">(로딩 중...)</span>
-                  )}
                 </label>
                 <div className="relative">
-                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                  <Building2 className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                   <select
                     value={formData.careCenterId}
                     onChange={(e) => setFormData({ ...formData, careCenterId: e.target.value })}
                     required
                     disabled={loadingCareCenters}
-                    className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                   >
                     <option value="">
                       {loadingCareCenters 
@@ -224,27 +222,22 @@ export default function SignupPage() {
                     ))}
                   </select>
                 </div>
-                {careCenters.length === 0 && !loadingCareCenters && (
-                  <p className="mt-2 text-xs text-gray-500">
-                    요양원이 없습니다. 요양원 직원으로 가입하거나 관리자에게 문의하세요.
-                  </p>
-                )}
               </div>
             )}
 
             {/* 이름 */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">
+              <label className="block text-sm font-black text-gray-900 mb-4">
                 이름
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="이름을 입력하세요"
                 />
               </div>
@@ -252,17 +245,17 @@ export default function SignupPage() {
 
             {/* 이메일 */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">
+              <label className="block text-sm font-black text-gray-900 mb-4">
                 이메일
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="your@email.com"
                 />
               </div>
@@ -270,16 +263,16 @@ export default function SignupPage() {
 
             {/* 전화번호 */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">
+              <label className="block text-sm font-black text-gray-900 mb-4">
                 전화번호
               </label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="010-0000-0000"
                 />
               </div>
@@ -287,18 +280,18 @@ export default function SignupPage() {
 
             {/* 비밀번호 */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">
+              <label className="block text-sm font-black text-gray-900 mb-4">
                 비밀번호
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
                   minLength={6}
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="최소 6자 이상"
                 />
               </div>
@@ -306,17 +299,17 @@ export default function SignupPage() {
 
             {/* 비밀번호 확인 */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">
+              <label className="block text-sm font-black text-gray-900 mb-4">
                 비밀번호 확인
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="password"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   required
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
                   placeholder="비밀번호를 다시 입력하세요"
                 />
               </div>
@@ -325,11 +318,11 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-4 rounded-xl font-semibold text-base hover:from-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-2"
+              className="w-full bg-gradient-to-r from-primary-600 via-primary-600 to-primary-700 text-white py-5 rounded-2xl font-black text-lg hover:from-primary-700 hover:via-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-300 shadow-2xl shadow-primary-500/40 hover:shadow-3xl hover:shadow-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-2"
             >
               {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span className="flex items-center justify-center gap-3">
+                  <span className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></span>
                   가입 중...
                 </span>
               ) : (
@@ -338,12 +331,12 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm text-gray-600">
+          <div className="mt-10 pt-8 border-t-2 border-gray-100">
+            <p className="text-center text-sm text-gray-600 font-medium">
               이미 계정이 있으신가요?{" "}
               <Link 
                 href="/auth/login" 
-                className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
+                className="text-primary-600 hover:text-primary-700 font-black transition-colors"
               >
                 로그인
               </Link>

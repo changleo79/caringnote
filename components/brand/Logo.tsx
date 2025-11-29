@@ -16,18 +16,21 @@ export default function Logo({
 }: LogoProps) {
   const sizeClasses = {
     sm: {
-      icon: "w-8 h-8",
-      text: "text-lg",
+      icon: "w-10 h-10",
+      text: "text-xl",
+      subtext: "text-xs",
       container: "gap-2.5"
     },
     md: {
-      icon: "w-10 h-10",
+      icon: "w-12 h-12",
       text: "text-2xl",
+      subtext: "text-xs",
       container: "gap-3"
     },
     lg: {
-      icon: "w-14 h-14",
+      icon: "w-16 h-16",
       text: "text-4xl",
+      subtext: "text-sm",
       container: "gap-4"
     }
   }
@@ -41,56 +44,65 @@ export default function Logo({
       classes.container,
       className
     )}>
-      {/* Icon Container - 개선된 디자인 */}
+      {/* Icon Container - 프리미엄 디자인 */}
       <div className={cn(
         "relative flex items-center justify-center",
         "bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500",
-        "rounded-2xl shadow-lg shadow-primary-500/25",
-        "transform transition-all duration-300",
-        "hover:scale-105 hover:shadow-xl hover:shadow-primary-500/35",
+        "rounded-2xl shadow-xl shadow-primary-500/30",
+        "transform transition-all duration-500 ease-out",
+        "hover:scale-110 hover:shadow-2xl hover:shadow-primary-500/40 hover:rotate-2",
         "group",
+        "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/20 before:to-transparent before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-500",
         classes.icon
       )}>
-        {/* Glow 효과 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        {/* Inner Glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent rounded-2xl opacity-60"></div>
         
-        {/* SVG 로고 - 더 세련된 디자인 */}
+        {/* 프리미엄 SVG 로고 - 심장과 노트북 조합 */}
         <svg
-          viewBox="0 0 40 40"
+          viewBox="0 0 48 48"
           className={cn(
-            "relative z-10 text-white fill-white",
-            size === "sm" ? "w-5 h-5" : size === "md" ? "w-6 h-6" : "w-8 h-8"
+            "relative z-10 text-white fill-white drop-shadow-lg",
+            "transform transition-transform duration-500 group-hover:scale-110",
+            size === "sm" ? "w-6 h-6" : size === "md" ? "w-7 h-7" : "w-9 h-9"
           )}
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* 심장 아이콘 - 더 부드럽고 현대적인 디자인 */}
+          {/* 심장 - 더 부드럽고 세련된 곡선 */}
           <path
-            d="M20 34.6c-.3 0-.6-.1-.8-.3C10.8 26.7 4 21.2 4 13.5c0-4.2 3.2-7.5 7.5-7.5 2.4 0 4.6 1.1 6 3 1.4-1.9 3.6-3 6-3 4.3 0 7.5 3.3 7.5 7.5 0 7.7-6.8 13.2-15.2 20.8-.2.2-.5.3-.8.3z"
-            className="drop-shadow-sm"
+            d="M24 42.5c-.4 0-.7-.15-1-.45C12.5 33.8 4 27 4 17.5c0-5.5 4-9.5 9.5-9.5 3 0 6 1.5 7.5 4 1.5-2.5 4.5-4 7.5-4 5.5 0 9.5 4 9.5 9.5 0 9.5-8.5 16.3-19 24.55-.3.3-.6.45-1 .45z"
+            className="drop-shadow-md"
           />
-          {/* 노트북/노트 아이콘 오버레이 */}
-          <path
-            d="M26 18h-8v2h8v-2zm-8-4h12v2H18v-2zm0 8h10v2H18v-2z"
-            fill="currentColor"
-            opacity="0.15"
-            transform="translate(0, -2)"
-          />
+          {/* 노트북 오버레이 - 더 세련된 디자인 */}
+          <g opacity="0.2" transform="translate(10, 14)">
+            <rect x="0" y="0" width="28" height="20" rx="2" fill="white" />
+            <line x1="4" y1="4" x2="24" y2="4" stroke="white" strokeWidth="1.5" />
+            <line x1="4" y1="8" x2="20" y2="8" stroke="white" strokeWidth="1" />
+            <line x1="4" y1="12" x2="22" y2="12" stroke="white" strokeWidth="1" />
+          </g>
         </svg>
       </div>
 
-      {/* Text */}
+      {/* Text - 프리미엄 타이포그래피 */}
       {variant !== "icon" && (
         <div className="flex flex-col">
           <span className={cn(
-            "font-bold bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 bg-clip-text text-transparent",
-            "leading-tight tracking-tight",
-            "group-hover:from-primary-700 group-hover:to-accent-700 transition-all duration-300",
+            "font-black tracking-tighter",
+            "bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 bg-clip-text text-transparent",
+            "leading-none",
+            "group-hover:from-primary-700 group-hover:via-primary-600 group-hover:to-accent-700",
+            "transition-all duration-500",
+            "drop-shadow-sm",
             classes.text
           )}>
             케어링노트
           </span>
           {size === "lg" && (
-            <span className="text-xs text-gray-500 font-medium mt-1 tracking-wide">
+            <span className={cn(
+              "text-gray-600 font-semibold mt-1 tracking-wider",
+              "group-hover:text-gray-700 transition-colors duration-300",
+              classes.subtext
+            )}>
               Caring Note
             </span>
           )}
