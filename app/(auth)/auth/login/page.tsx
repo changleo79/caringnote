@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import toast from "react-hot-toast"
-import { Heart, Mail, Lock, ArrowLeft } from "lucide-react"
+import { Mail, Lock, ArrowLeft, AlertCircle } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 
 export default function LoginPage() {
@@ -13,10 +13,30 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [serverConfigError, setServerConfigError] = useState(false)
+
+  // 서버 구성 상태 확인
+  useEffect(() => {
+    const checkServerConfig = async () => {
+      try {
+        const res = await fetch("/api/auth-check")
+        const data = await res.json()
+        
+        if (data.nextAuth?.status !== "✅ 정상") {
+          setServerConfigError(true)
+        }
+      } catch (error) {
+        console.error("서버 구성 확인 오류:", error)
+      }
+    }
+    
+    checkServerConfig()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setServerConfigError(false)
 
     try {
       const result = await signIn("credentials", {
@@ -28,10 +48,24 @@ export default function LoginPage() {
       if (result?.error) {
         console.error("로그인 오류:", result.error)
         
-        // 구체적인 오류 메시지 제공
-        if (result.error.includes("configuration") || result.error.includes("server")) {
-          toast.error("서버 설정 오류입니다. 관리자에게 문의하세요.")
-          console.error("NextAuth 설정 오류 - 환경 변수를 확인하세요.")
+        // 서버 구성 오류 감지
+        if (
+          result.error.includes("configuration") || 
+          result.error.includes("server") ||
+          result.error.includes("secret") ||
+          result.error.includes("NEXTAUTH")
+        ) {
+          setServerConfigError(true)
+          toast.error(
+            <div className="flex flex-col gap-1">
+              <span className="font-semibold">서버 구성 오류</span>
+              <span className="text-sm">NEXTAUTH_SECRET 환경 변수가 필요합니다.</span>
+              <span className="text-xs text-gray-500 mt-1">
+                Vercel Settings → Environment Variables 확인 필요
+              </span>
+            </div>,
+            { duration: 5000 }
+          )
         } else if (result.error.includes("CredentialsSignin")) {
           toast.error("이메일 또는 비밀번호가 올바르지 않습니다.")
         } else {
@@ -46,7 +80,13 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       console.error("로그인 예외:", error)
-      toast.error("로그인 중 오류가 발생했습니다. 네트워크를 확인해주세요.")
+      
+      // 네트워크 오류 또는 서버 오류
+      if (error.message?.includes("fetch") || error.message?.includes("network")) {
+        toast.error("네트워크 오류가 발생했습니다. 연결을 확인해주세요.")
+      } else {
+        toast.error("로그인 중 오류가 발생했습니다.")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -63,6 +103,24 @@ export default function LoginPage() {
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>홈으로</span>
         </Link>
+
+        {/* Server Config Warning */}
+        {serverConfigError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-900 mb-1">서버 구성 오류</h3>
+                <p className="text-sm text-red-700 mb-2">
+                  NEXTAUTH_SECRET 환경 변수가 설정되지 않았습니다.
+                </p>
+                <p className="text-xs text-red-600">
+                  관리자에게 문의하거나 Vercel 환경 변수를 확인하세요.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Logo/Title */}
         <div className="text-center mb-10">
@@ -118,7 +176,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || serverConfigError}
               className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-4 rounded-xl font-semibold text-base hover:from-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
@@ -126,6 +184,8 @@ export default function LoginPage() {
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                   로그인 중...
                 </span>
+              ) : serverConfigError ? (
+                "서버 구성 오류"
               ) : (
                 "로그인"
               )}
