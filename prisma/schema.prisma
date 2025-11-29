@@ -1,0 +1,307 @@
+// Prisma 스키마 파일
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 요양원 정보
+model CareCenter {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  phone       String?
+  email       String?
+  description String?  @db.Text
+  logoUrl     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 관계
+  members     User[]
+  residents   Resident[]
+  posts       Post[]
+  products    Product[]
+  
+  @@index([name])
+}
+
+// 사용자 (요양원 회원 또는 일반 회원)
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  password     String
+  name         String
+  phone        String?
+  role         UserRole  @default(FAMILY)
+  avatarUrl    String?
+  
+  // 요양원 연동 (일반 회원인 경우)
+  careCenterId String?
+  careCenter   CareCenter? @relation(fields: [careCenterId], references: [id])
+  
+  // 관계
+  accounts     Account[]
+  sessions     Session[]
+  posts        Post[]
+  comments     Comment[]
+  orders       Order[]
+  medicalRecords MedicalRecord[]
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([email])
+  @@index([careCenterId])
+}
+
+enum UserRole {
+  FAMILY      // 가족 (일반 회원)
+  CAREGIVER   // 요양원 직원
+  ADMIN       // 관리자
+}
+
+// NextAuth 관련
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// 입소자 정보 (부모님)
+model Resident {
+  id          String   @id @default(cuid())
+  name        String
+  birthDate   DateTime?
+  gender      String?
+  roomNumber  String?
+  photoUrl    String?
+  
+  careCenterId String
+  careCenter   CareCenter @relation(fields: [careCenterId], references: [id])
+  
+  // 관계
+  posts       Post[]
+  medicalRecords MedicalRecord[]
+  orders      Order[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([careCenterId])
+}
+
+// 게시글 (사진 공유 커뮤니티)
+model Post {
+  id          String   @id @default(cuid())
+  title       String?
+  content     String?  @db.Text
+  images      String?  // JSON 배열 형태로 저장
+  
+  careCenterId String
+  careCenter   CareCenter @relation(fields: [careCenterId], references: [id])
+  
+  residentId   String?
+  resident     Resident? @relation(fields: [residentId], references: [id])
+  
+  authorId     String
+  author       User     @relation(fields: [authorId], references: [id])
+  
+  category     PostCategory @default(Daily)
+  
+  comments     Comment[]
+  likes        PostLike[]
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([careCenterId])
+  @@index([authorId])
+  @@index([residentId])
+}
+
+enum PostCategory {
+  Daily        // 일상
+  Medical      // 의료
+  Event        // 행사
+  Announcement // 공지
+}
+
+// 댓글
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([postId])
+  @@index([authorId])
+}
+
+// 게시글 좋아요
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([postId, userId])
+  @@index([postId])
+}
+
+// 의료 기록
+model MedicalRecord {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.Text
+  recordDate  DateTime
+  category    MedicalCategory
+  
+  residentId  String
+  resident    Resident @relation(fields: [residentId], references: [id])
+  
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  
+  attachments String?  // JSON 배열 형태로 저장
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([residentId])
+  @@index([createdById])
+  @@index([recordDate])
+}
+
+enum MedicalCategory {
+  Treatment   // 진료
+  Medication  // 약물
+  Exam        // 검사
+  Symptom     // 증상
+  Other       // 기타
+}
+
+// 상품 (생필품 쇼핑몰)
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  price       Int      // 원 단위
+  imageUrl    String?
+  stock       Int      @default(0)
+  category    ProductCategory
+  
+  careCenterId String?
+  careCenter   CareCenter? @relation(fields: [careCenterId], references: [id])
+  
+  orderItems  OrderItem[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([careCenterId])
+  @@index([category])
+}
+
+enum ProductCategory {
+  Daily      // 일용품
+  Food       // 식품
+  Medical    // 의료용품
+  Clothes    // 의류
+  Other      // 기타
+}
+
+// 주문
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  status      OrderStatus @default(Pending)
+  totalAmount Int
+  
+  residentId  String
+  resident    Resident @relation(fields: [residentId], references: [id])
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  shippingAddress String?
+  notes           String?  @db.Text
+  
+  orderItems  OrderItem[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([residentId])
+  @@index([status])
+}
+
+enum OrderStatus {
+  Pending     // 주문 대기
+  Processing  // 처리 중
+  Shipped     // 배송 중
+  Delivered   // 배송 완료
+  Cancelled   // 취소됨
+}
+
+// 주문 항목
+model OrderItem {
+  id        String   @id @default(cuid())
+  quantity  Int
+  price     Int      // 주문 시점의 가격
+  
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  
+  @@index([orderId])
+  @@index([productId])
+}
+
