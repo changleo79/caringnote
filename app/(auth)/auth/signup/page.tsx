@@ -21,44 +21,94 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [careCenters, setCareCenters] = useState<any[]>([])
   const [loadingCareCenters, setLoadingCareCenters] = useState(true)
+  const [careCenterError, setCareCenterError] = useState<string | null>(null)
 
   // 요양원 목록 불러오기
   useEffect(() => {
     const loadCareCenters = async () => {
       setLoadingCareCenters(true)
+      setCareCenterError(null)
+      
       try {
+        console.log("🔍 요양원 목록 불러오기 시작...")
         const res = await fetch("/api/care-centers")
-        const data = await res.json()
         
-        if (data.error) {
-          console.error("Care centers API error:", data.error)
-          setCareCenters([])
-          return
+        if (!res.ok) {
+          throw new Error(`API 응답 오류: ${res.status} ${res.statusText}`)
         }
         
+        const data = await res.json()
+        console.log("📦 요양원 목록 API 응답:", data)
+        
+        // 오류 메시지가 있는 경우
+        if (data.error) {
+          console.error("❌ Care centers API error:", data.error)
+          setCareCenterError(data.error)
+          setCareCenters([])
+          
+          // 데이터베이스 연결 오류인 경우 재시도 안 함
+          if (data.code === 'P1001' || data.code === 'P1000') {
+            return
+          }
+        }
+        
+        // 배열인 경우
         if (Array.isArray(data)) {
+          console.log(`✅ 요양원 ${data.length}개 로드 완료`)
           setCareCenters(data)
           
+          // 요양원이 없으면 자동으로 시드 데이터 생성 시도 (개발 환경에서만)
           if (data.length === 0) {
+            console.log("⚠️ 요양원이 없음. 시드 데이터 생성 시도...")
             try {
-              await fetch("/api/care-centers/seed", { method: "POST" })
-              const res2 = await fetch("/api/care-centers")
-              const data2 = await res2.json()
-              if (Array.isArray(data2)) {
-                setCareCenters(data2)
+              const seedRes = await fetch("/api/care-centers/seed", { method: "POST" })
+              
+              // 403 오류는 프로덕션에서 정상적인 응답 (시드 API 비활성화)
+              if (seedRes.status === 403) {
+                console.log("ℹ️ 프로덕션 환경에서는 시드 API가 비활성화되어 있습니다.")
+                setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
+                return
               }
-            } catch (seedError) {
-              console.log("Seed data not available:", seedError)
+              
+              if (!seedRes.ok) {
+                throw new Error(`시드 API 오류: ${seedRes.status}`)
+              }
+              
+              const seedData = await seedRes.json()
+              
+              if (seedData.count > 0) {
+                console.log(`✅ 시드 데이터 생성 완료: ${seedData.count}개`)
+                // 다시 요양원 목록 불러오기
+                const res2 = await fetch("/api/care-centers")
+                const data2 = await res2.json()
+                if (Array.isArray(data2) && data2.length > 0) {
+                  setCareCenters(data2)
+                  setCareCenterError(null)
+                }
+              } else if (seedData.error) {
+                console.log("⚠️ 시드 데이터 생성 실패:", seedData.error)
+                setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
+              }
+            } catch (seedError: any) {
+              console.log("⚠️ 시드 데이터 생성 불가:", seedError.message)
+              // 시드 실패는 치명적이지 않음 - 사용자에게 안내만 표시
+              if (!careCenterError) {
+                setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
+              }
             }
           }
         } else if (data.careCenters && Array.isArray(data.careCenters)) {
+          // careCenters 속성이 있는 경우
+          console.log(`✅ 요양원 ${data.careCenters.length}개 로드 완료`)
           setCareCenters(data.careCenters)
         } else {
-          console.error("Invalid data format:", data)
+          console.error("❌ Invalid data format:", data)
+          setCareCenterError("요양원 목록 형식이 올바르지 않습니다.")
           setCareCenters([])
         }
-      } catch (error) {
-        console.error("Error fetching care centers:", error)
+      } catch (error: any) {
+        console.error("❌ Error fetching care centers:", error)
+        setCareCenterError(error.message || "요양원 목록을 불러오는데 실패했습니다.")
         setCareCenters([])
       } finally {
         setLoadingCareCenters(false)
@@ -199,6 +249,38 @@ export default function SignupPage() {
                 <label className="block text-sm font-black text-gray-900 mb-4">
                   요양원 선택
                 </label>
+                
+                {/* 오류 메시지 */}
+                {careCenterError && (
+                  <div className="mb-4 p-4 bg-red-50 border-2 border-red-200 rounded-xl">
+                    <p className="text-sm text-red-700 font-semibold mb-2">
+                      ⚠️ {careCenterError}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCareCenterError(null)
+                        setLoadingCareCenters(true)
+                        fetch("/api/care-centers")
+                          .then(res => res.json())
+                          .then(data => {
+                            if (Array.isArray(data)) {
+                              setCareCenters(data)
+                              setCareCenterError(null)
+                            } else if (data.error) {
+                              setCareCenterError(data.error)
+                            }
+                          })
+                          .catch(err => setCareCenterError(err.message))
+                          .finally(() => setLoadingCareCenters(false))
+                      }}
+                      className="text-xs text-red-600 hover:text-red-700 font-bold underline"
+                    >
+                      다시 시도
+                    </button>
+                  </div>
+                )}
+                
                 <div className="relative">
                   <Building2 className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                   <select
@@ -212,16 +294,23 @@ export default function SignupPage() {
                       {loadingCareCenters 
                         ? "요양원 목록을 불러오는 중..." 
                         : careCenters.length === 0
-                        ? "요양원이 없습니다. 요양원 직원으로 가입하세요"
+                        ? careCenterError || "요양원이 없습니다. 요양원 직원으로 가입하세요"
                         : "요양원을 선택하세요"}
                     </option>
                     {careCenters.map((center) => (
                       <option key={center.id} value={center.id}>
-                        {center.name}
+                        {center.name} {center.address ? `(${center.address.split(' ')[0]})` : ''}
                       </option>
                     ))}
                   </select>
                 </div>
+                
+                {/* 요양원 개수 표시 */}
+                {!loadingCareCenters && careCenters.length > 0 && (
+                  <p className="mt-2 text-xs text-gray-500 font-medium">
+                    총 {careCenters.length}개의 요양원이 있습니다
+                  </p>
+                )}
               </div>
             )}
 
