@@ -13,10 +13,30 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    letter-spacing: -0.01em;
   }
   
   html {
     font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  /* 스크롤바 스타일링 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
   }
 }
 
@@ -26,29 +46,64 @@
   }
   
   .gradient-primary {
-    @apply bg-gradient-to-br from-primary-500 to-primary-700;
+    @apply bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700;
   }
   
   .gradient-soft {
-    @apply bg-gradient-to-br from-primary-50 via-white to-accent-50;
+    @apply bg-gradient-to-br from-primary-50 via-white to-accent-50/50;
+  }
+  
+  .gradient-warm {
+    @apply bg-gradient-to-br from-amber-50 via-orange-50 to-pink-50;
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02];
+  }
+  
+  .glass-effect {
+    @apply bg-white/70 backdrop-blur-xl border border-white/50;
   }
   
   .input-focus {
-    @apply focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:shadow-sm;
+    @apply focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 focus:shadow-md focus:shadow-primary-500/10;
   }
   
   .btn-primary {
-    @apply bg-primary-600 text-white px-6 py-3 rounded-xl font-medium 
-           hover:bg-primary-700 active:scale-95 transition-all duration-200 
-           shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-gradient-to-r from-primary-600 via-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl font-semibold 
+           hover:from-primary-700 hover:via-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-200 
+           shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
   }
   
   .btn-secondary {
-    @apply bg-white text-primary-600 border-2 border-primary-600 px-6 py-3 rounded-xl font-medium 
-           hover:bg-primary-50 active:scale-95 transition-all duration-200;
+    @apply bg-white text-primary-600 border-2 border-primary-600 px-6 py-3 rounded-xl font-semibold 
+           hover:bg-primary-50 hover:border-primary-700 active:scale-[0.98] transition-all duration-200
+           shadow-sm hover:shadow-md;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px rgba(13, 138, 232, 0.2);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(13, 138, 232, 0.4);
   }
 }
