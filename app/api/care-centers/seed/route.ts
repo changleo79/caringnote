@@ -2,14 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
 // 개발/테스트 환경에서만 사용 가능한 시드 API
-export async function POST() {
-  // 프로덕션에서는 비활성화
-  if (process.env.NODE_ENV === 'production' && !process.env.ALLOW_SEED) {
-    return NextResponse.json(
-      { error: "프로덕션 환경에서는 시드 데이터를 생성할 수 없습니다." },
-      { status: 403 }
-    )
-  }
+async function createSeedData() {
 
   try {
     // 테스트용 요양원 데이터
@@ -70,4 +63,21 @@ export async function POST() {
       { status: 500 }
     )
   }
+}
+
+// POST 메서드
+export async function POST() {
+  // 프로덕션에서는 비활성화
+  if (process.env.NODE_ENV === 'production' && !process.env.ALLOW_SEED) {
+    return NextResponse.json(
+      { error: "프로덕션 환경에서는 시드 데이터를 생성할 수 없습니다." },
+      { status: 403 }
+    )
+  }
+  return createSeedData()
+}
+
+// GET 메서드 (브라우저에서 쉽게 접근 가능)
+export async function GET() {
+  return createSeedData()
 }
