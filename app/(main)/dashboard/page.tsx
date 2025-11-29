@@ -14,42 +14,53 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  // 최근 게시글, 의료 기록, 주문 정보 가져오기
-  const recentPosts = await prisma.post.findMany({
-    where: session.user.careCenterId
-      ? { careCenterId: session.user.careCenterId }
-      : undefined,
-    take: 5,
-    orderBy: { createdAt: "desc" },
-    include: {
-      author: {
-        select: { name: true, avatarUrl: true },
-      },
-      resident: {
-        select: { name: true },
-      },
-    },
-  }).catch(() => [])
+  // 최근 게시글, 의료 기록, 주문 정보 가져오기 (안전하게)
+  let recentPosts: any[] = []
+  let recentMedicalRecords: any[] = []
 
-  const recentMedicalRecords = await prisma.medicalRecord.findMany({
-    where: session.user.careCenterId
-      ? {
-          resident: {
-            careCenterId: session.user.careCenterId,
-          },
-        }
-      : undefined,
-    take: 5,
-    orderBy: { recordDate: "desc" },
-    include: {
-      resident: {
-        select: { name: true },
+  try {
+    recentPosts = await prisma.post.findMany({
+      where: session.user.careCenterId
+        ? { careCenterId: session.user.careCenterId }
+        : undefined,
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      include: {
+        author: {
+          select: { name: true, avatarUrl: true },
+        },
+        resident: {
+          select: { name: true },
+        },
       },
-      createdBy: {
-        select: { name: true },
+    })
+  } catch (error) {
+    console.error("Failed to fetch recent posts:", error)
+  }
+
+  try {
+    recentMedicalRecords = await prisma.medicalRecord.findMany({
+      where: session.user.careCenterId
+        ? {
+            resident: {
+              careCenterId: session.user.careCenterId,
+            },
+          }
+        : undefined,
+      take: 5,
+      orderBy: { recordDate: "desc" },
+      include: {
+        resident: {
+          select: { name: true },
+        },
+        createdBy: {
+          select: { name: true },
+        },
       },
-    },
-  }).catch(() => [])
+    })
+  } catch (error) {
+    console.error("Failed to fetch medical records:", error)
+  }
 
   return (
     <AppLayout>
