@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "요양원 케어 플랫폼",
@@ -17,7 +14,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <head>
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+        />
+      </head>
+      <body className="font-pretendard antialiased">
         {children}
         <Toaster 
           position="top-center"
@@ -26,10 +31,11 @@ export default function RootLayout({
             style: {
               background: '#fff',
               color: '#1f2937',
-              borderRadius: '12px',
-              boxShadow: '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
-              padding: '16px',
-              fontSize: '14px',
+              borderRadius: '16px',
+              boxShadow: '0 20px 60px -10px rgba(0, 0, 0, 0.15)',
+              padding: '18px 20px',
+              fontSize: '15px',
+              fontWeight: '500',
             },
             success: {
               iconTheme: {
@@ -49,4 +55,3 @@ export default function RootLayout({
     </html>
   );
 }
-
