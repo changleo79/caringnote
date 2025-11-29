@@ -28,10 +28,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  // NextAuth를 위한 추가 설정
-  env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  },
 }
 
 module.exports = nextConfig
