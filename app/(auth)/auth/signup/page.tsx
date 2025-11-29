@@ -19,10 +19,12 @@ export default function SignupPage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [careCenters, setCareCenters] = useState<any[]>([])
+  const [loadingCareCenters, setLoadingCareCenters] = useState(true)
 
   // 요양원 목록 불러오기
   useEffect(() => {
     const loadCareCenters = async () => {
+      setLoadingCareCenters(true)
       try {
         const res = await fetch("/api/care-centers")
         const data = await res.json()
@@ -30,7 +32,6 @@ export default function SignupPage() {
         // 에러가 포함된 경우도 처리
         if (data.error) {
           console.error("Care centers API error:", data.error)
-          // 오류가 있어도 빈 배열로 설정 (회원가입은 계속 가능)
           setCareCenters([])
           return
         }
@@ -38,6 +39,21 @@ export default function SignupPage() {
         // 배열인지 확인
         if (Array.isArray(data)) {
           setCareCenters(data)
+          
+          // 요양원이 없으면 시드 데이터 생성 시도
+          if (data.length === 0) {
+            try {
+              await fetch("/api/care-centers/seed", { method: "POST" })
+              // 시드 생성 후 다시 로드
+              const res2 = await fetch("/api/care-centers")
+              const data2 = await res2.json()
+              if (Array.isArray(data2)) {
+                setCareCenters(data2)
+              }
+            } catch (seedError) {
+              console.log("Seed data not available:", seedError)
+            }
+          }
         } else if (data.careCenters && Array.isArray(data.careCenters)) {
           setCareCenters(data.careCenters)
         } else {
@@ -46,8 +62,9 @@ export default function SignupPage() {
         }
       } catch (error) {
         console.error("Error fetching care centers:", error)
-        // 오류가 발생해도 빈 배열로 설정
         setCareCenters([])
+      } finally {
+        setLoadingCareCenters(false)
       }
     }
 
@@ -179,6 +196,9 @@ export default function SignupPage() {
               <div>
                 <label className="block text-sm font-semibold text-gray-800 mb-3">
                   요양원 선택
+                  {loadingCareCenters && (
+                    <span className="ml-2 text-xs text-gray-500">(로딩 중...)</span>
+                  )}
                 </label>
                 <div className="relative">
                   <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
@@ -186,9 +206,16 @@ export default function SignupPage() {
                     value={formData.careCenterId}
                     onChange={(e) => setFormData({ ...formData, careCenterId: e.target.value })}
                     required
-                    className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-300"
+                    disabled={loadingCareCenters}
+                    className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <option value="">요양원을 선택하세요</option>
+                    <option value="">
+                      {loadingCareCenters 
+                        ? "요양원 목록을 불러오는 중..." 
+                        : careCenters.length === 0
+                        ? "요양원이 없습니다. 요양원 직원으로 가입하세요"
+                        : "요양원을 선택하세요"}
+                    </option>
                     {careCenters.map((center) => (
                       <option key={center.id} value={center.id}>
                         {center.name}
@@ -196,6 +223,11 @@ export default function SignupPage() {
                     ))}
                   </select>
                 </div>
+                {careCenters.length === 0 && !loadingCareCenters && (
+                  <p className="mt-2 text-xs text-gray-500">
+                    요양원이 없습니다. 요양원 직원으로 가입하거나 관리자에게 문의하세요.
+                  </p>
+                )}
               </div>
             )}
 

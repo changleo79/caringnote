@@ -2,8 +2,36 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
+// 데이터베이스 연결 확인 함수
+async function checkDatabaseConnection() {
+  try {
+    await prisma.$connect()
+    return { connected: true }
+  } catch (error: any) {
+    console.error("Database connection error:", error)
+    return { 
+      connected: false, 
+      error: error.message || "데이터베이스 연결 실패",
+      code: error.code 
+    }
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // 데이터베이스 연결 확인
+    const dbCheck = await checkDatabaseConnection()
+    if (!dbCheck.connected) {
+      return NextResponse.json(
+        { 
+          error: "데이터베이스 연결 오류가 발생했습니다.",
+          hint: "DATABASE_URL 환경 변수를 확인하거나 관리자에게 문의하세요.",
+          code: dbCheck.code
+        },
+        { status: 503 }
+      )
+    }
+
     const body = await req.json()
     const { email, password, name, phone, role, careCenterId } = body
 
@@ -33,22 +61,38 @@ export async function POST(req: NextRequest) {
     }
 
     // 이메일 중복 확인
+    let existingUser
     try {
-      const existingUser = await prisma.user.findUnique({
+      existingUser = await prisma.user.findUnique({
         where: { email },
       })
-
-      if (existingUser) {
+    } catch (dbError: any) {
+      console.error("Database error (find user):", dbError)
+      
+      // Prisma 연결 오류 코드 처리
+      if (dbError.code === 'P1001' || dbError.code === 'P1000') {
         return NextResponse.json(
-          { error: "이미 등록된 이메일입니다." },
-          { status: 400 }
+          { 
+            error: "데이터베이스 연결 오류가 발생했습니다.",
+            hint: "데이터베이스 서버에 연결할 수 없습니다. DATABASE_URL을 확인하세요."
+          },
+          { status: 503 }
         )
       }
-    } catch (dbError) {
-      console.error("Database error (find user):", dbError)
+
       return NextResponse.json(
-        { error: "데이터베이스 연결 오류가 발생했습니다." },
+        { 
+          error: "데이터베이스 오류가 발생했습니다.",
+          hint: "잠시 후 다시 시도해주세요."
+        },
         { status: 500 }
+      )
+    }
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "이미 등록된 이메일입니다." },
+        { status: 400 }
       )
     }
 
@@ -72,8 +116,19 @@ export async function POST(req: NextRequest) {
             { status: 400 }
           )
         }
-      } catch (dbError) {
+      } catch (dbError: any) {
         console.error("Database error (find care center):", dbError)
+        
+        if (dbError.code === 'P1001' || dbError.code === 'P1000') {
+          return NextResponse.json(
+            { 
+              error: "데이터베이스 연결 오류가 발생했습니다.",
+              hint: "요양원 정보를 확인하는 중 오류가 발생했습니다."
+            },
+            { status: 503 }
+          )
+        }
+
         return NextResponse.json(
           { error: "요양원 정보를 확인하는 중 오류가 발생했습니다." },
           { status: 500 }
@@ -118,7 +173,7 @@ export async function POST(req: NextRequest) {
     } catch (createError: any) {
       console.error("User creation error:", createError)
       
-      // Prisma 에러 상세 처리
+      // Prisma 에러 코드별 처리
       if (createError.code === 'P2002') {
         return NextResponse.json(
           { error: "이미 등록된 이메일입니다." },
@@ -126,8 +181,28 @@ export async function POST(req: NextRequest) {
         )
       }
 
+      if (createError.code === 'P1001' || createError.code === 'P1000') {
+        return NextResponse.json(
+          { 
+            error: "데이터베이스 연결 오류가 발생했습니다.",
+            hint: "데이터베이스에 연결할 수 없습니다."
+          },
+          { status: 503 }
+        )
+      }
+
+      if (createError.code === 'P2025') {
+        return NextResponse.json(
+          { error: "관련 데이터를 찾을 수 없습니다." },
+          { status: 400 }
+        )
+      }
+
       return NextResponse.json(
-        { error: "회원가입 처리 중 오류가 발생했습니다." },
+        { 
+          error: "회원가입 처리 중 오류가 발생했습니다.",
+          hint: "잠시 후 다시 시도해주세요."
+        },
         { status: 500 }
       )
     }
@@ -142,10 +217,21 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Prisma 클라이언트가 초기화되지 않은 경우
+    if (!prisma || typeof prisma.user === 'undefined') {
+      return NextResponse.json(
+        { 
+          error: "데이터베이스 연결 오류가 발생했습니다.",
+          hint: "DATABASE_URL 환경 변수를 확인하거나 관리자에게 문의하세요."
+        },
+        { status: 503 }
+      )
+    }
+
     return NextResponse.json(
       { 
         error: "회원가입 중 오류가 발생했습니다.",
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        hint: "잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     )
