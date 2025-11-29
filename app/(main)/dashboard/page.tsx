@@ -5,7 +5,7 @@ import AppLayout from "@/components/layout/AppLayout"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { formatDate } from "@/lib/utils"
-import { Camera, Heart, ShoppingBag, Bell, Plus, ArrowRight, Image, Calendar } from "lucide-react"
+import { Camera, Heart, ShoppingBag, Bell, Plus, ArrowRight, ImageIcon, Calendar } from "lucide-react"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -150,7 +150,7 @@ export default async function DashboardPage() {
                   >
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-accent-400 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Image className="w-5 h-5 text-white" />
+                        <ImageIcon className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
