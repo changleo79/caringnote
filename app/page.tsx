@@ -83,8 +83,8 @@ export default function HomePage() {
             {/* Description - Enhanced with Visual Elements */}
             <div className="text-xl md:text-2xl text-gray-700 mb-16 max-w-4xl mx-auto leading-relaxed font-medium animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
               {/* Decorative Quote Marks */}
-              <div className="absolute -left-4 -top-2 text-6xl text-primary-200/40 font-serif leading-none">"</div>
-              <div className="absolute -right-4 -bottom-8 text-6xl text-accent-200/40 font-serif leading-none">"</div>
+              <div className="absolute -left-4 -top-2 text-6xl text-primary-200/40 font-serif leading-none">&ldquo;</div>
+              <div className="absolute -right-4 -bottom-8 text-6xl text-accent-200/40 font-serif leading-none">&rdquo;</div>
               
               <p className="relative z-10">
                 <span className="text-gray-600 relative">

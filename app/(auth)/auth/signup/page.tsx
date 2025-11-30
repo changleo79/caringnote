@@ -91,10 +91,7 @@ export default function SignupPage() {
               }
             } catch (seedError: any) {
               console.log("⚠️ 시드 데이터 생성 불가:", seedError.message)
-              // 시드 실패는 치명적이지 않음 - 사용자에게 안내만 표시
-              if (!careCenterError) {
-                setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
-              }
+              setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
             }
           }
         } else if (data.careCenters && Array.isArray(data.careCenters)) {
@@ -116,6 +113,7 @@ export default function SignupPage() {
     }
 
     loadCareCenters()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
