@@ -32,13 +32,13 @@ export default function BrandMark({ size = 80, className }: BrandMarkProps) {
       >
         <defs>
           <linearGradient id="brandMarkShine" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.5" />
-            <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.2" />
-            <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+            <stop offset="0%" stopColor="#ffffff" stopOpacity={0.5} />
+            <stop offset="50%" stopColor="#ffffff" stopOpacity={0.2} />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
           </linearGradient>
           <radialGradient id="brandMarkHighlight" cx="50%" cy="30%" r="50%">
-            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.6" />
-            <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+            <stop offset="0%" stopColor="#ffffff" stopOpacity={0.6} />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
           </radialGradient>
         </defs>
         
