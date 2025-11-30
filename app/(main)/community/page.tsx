@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
-import { Camera, Plus, ImageIcon, Heart, MessageCircle, User } from "lucide-react"
+import { Camera, Plus, Heart, MessageCircle } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 import { prisma } from "@/lib/prisma"
 import Image from "next/image"
@@ -19,10 +19,11 @@ export default async function CommunityPage() {
   let posts: any[] = []
   
   try {
-    if (session.user.careCenterId) {
+    const careCenterId = session.user.careCenterId
+    if (careCenterId) {
       const postsData = await prisma.post.findMany({
         where: {
-          careCenterId: session.user.careCenterId,
+          careCenterId: careCenterId,
         },
         include: {
           author: {
@@ -75,39 +76,38 @@ export default async function CommunityPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+      <div className="section-container py-10">
+        {/* Header - Notion 스타일 */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
               커뮤니티
             </h1>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               부모님의 일상을 함께 공유해보세요
             </p>
           </div>
           <Link
             href="/community/new"
-            className="btn-primary inline-flex items-center gap-2"
+            className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
           >
-            <Plus className="w-5 h-5" />
-            <span className="hidden sm:inline">게시글 작성</span>
-            <span className="sm:hidden">작성</span>
+            <Plus className="w-4 h-4" />
+            <span>게시글 작성</span>
           </Link>
         </div>
 
-        {/* Posts List */}
+        {/* Posts List - Notion 스타일 */}
         {posts.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {posts.map((post) => (
               <Link
                 key={post.id}
                 href={`/community/${post.id}`}
-                className="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden card-hover group"
+                className="card-notion overflow-hidden card-hover-linear group"
               >
                 {/* 이미지 */}
                 {post.images && post.images.length > 0 && (
-                  <div className="relative w-full aspect-square overflow-hidden bg-gray-100">
+                  <div className="relative w-full aspect-square overflow-hidden bg-neutral-100">
                     <Image
                       src={post.images[0]}
                       alt={post.title || "게시글 이미지"}
@@ -120,37 +120,37 @@ export default async function CommunityPage() {
                 
                 {/* 내용 */}
                 <div className="p-5">
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
                     {post.resident && (
-                      <span className="text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full font-medium">
+                      <span className="text-xs bg-primary-50 text-primary-700 px-2.5 py-1 rounded font-medium">
                         {post.resident.name}
                       </span>
                     )}
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-neutral-500">
                       {post.author.name}
                     </span>
                   </div>
                   
                   {post.title && (
-                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                    <h3 className="font-semibold text-neutral-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
                       {post.title}
                     </h3>
                   )}
                   
                   {post.content && (
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                    <p className="text-sm text-neutral-600 mb-4 line-clamp-2">
                       {post.content}
                     </p>
                   )}
 
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center justify-between text-sm text-neutral-500 pt-3 border-t border-neutral-100">
                     <span>{formatDate(post.createdAt)}</span>
                     <div className="flex items-center gap-3">
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1.5">
                         <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
                         {post._count.likes}
                       </span>
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1.5">
                         <MessageCircle className="w-4 h-4" />
                         {post._count.comments}
                       </span>
@@ -161,21 +161,21 @@ export default async function CommunityPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Camera className="w-12 h-12 text-primary-600" />
+          <div className="card-notion p-12 text-center">
+            <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Camera className="w-8 h-8 text-primary-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-neutral-900 mb-2">
               아직 게시글이 없습니다
             </h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            <p className="text-sm text-neutral-600 mb-6 max-w-md mx-auto">
               첫 번째 게시글을 작성하여 부모님의 일상을 가족들과 함께 공유해보세요
             </p>
             <Link
               href="/community/new"
-              className="btn-primary inline-flex items-center gap-2"
+              className="btn-linear-primary inline-flex items-center gap-2"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4" />
               첫 게시글 작성하기
             </Link>
           </div>

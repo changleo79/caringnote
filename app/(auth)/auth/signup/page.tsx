@@ -171,37 +171,32 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/40 flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* 배경 요소 */}
-      <div className="absolute top-20 left-10 w-40 h-40 bg-primary-300/20 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-      
-      <div className="max-w-lg w-full relative z-10">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
+      <div className="max-w-lg w-full">
         {/* Back to Home */}
         <Link 
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-8 transition-colors group font-medium"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-4 h-4" />
           <span>홈으로</span>
         </Link>
 
-        {/* Logo/Title - 프리미엄 디자인 */}
-        <div className="text-center mb-12">
-          <div className="mb-8 flex justify-center animate-fade-in-up">
-            <Logo variant="default" size="lg" />
+        {/* Logo/Title - Notion 스타일 */}
+        <div className="text-center mb-10">
+          <div className="mb-6 flex justify-center">
+            <Logo variant="default" size="md" />
           </div>
-          <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-4 tracking-tighter">
+          <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-2 tracking-tight">
             회원가입
           </h1>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50/80 backdrop-blur-sm text-primary-700 rounded-full text-sm font-bold">
-            <Sparkles className="w-4 h-4 text-primary-600" />
-            <span>새 계정을 만들어 시작하세요</span>
-          </div>
+          <p className="text-neutral-600">
+            새 계정을 만들어 시작하세요
+          </p>
         </div>
 
-        {/* Signup Form - 프리미엄 디자인 */}
-        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/10 p-10 md:p-12 border border-white/60">
+        {/* Signup Form - Notion 스타일 */}
+        <div className="card-notion p-8 md:p-10">
           <form onSubmit={handleSubmit} className="space-y-7">
             {/* 회원 유형 */}
             <div>
@@ -212,26 +207,26 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, role: "FAMILY" })}
-                  className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
+                  className={`p-5 rounded-lg border transition-all duration-200 ${
                     formData.role === "FAMILY"
-                      ? "border-primary-500 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-xl shadow-primary-500/20 scale-105"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                      ? "border-neutral-900 bg-neutral-900 text-white shadow-sm"
+                      : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 text-neutral-700"
                   }`}
                 >
-                  <User className={`w-7 h-7 mx-auto mb-3 ${formData.role === "FAMILY" ? "text-primary-600" : "text-gray-400"}`} />
-                  <span className="font-black text-sm">가족 회원</span>
+                  <User className={`w-6 h-6 mx-auto mb-2 ${formData.role === "FAMILY" ? "text-white" : "text-neutral-400"}`} />
+                  <span className="font-semibold text-sm">가족 회원</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, role: "CAREGIVER" })}
-                  className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
+                  className={`p-5 rounded-lg border transition-all duration-200 ${
                     formData.role === "CAREGIVER"
-                      ? "border-primary-500 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-xl shadow-primary-500/20 scale-105"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                      ? "border-neutral-900 bg-neutral-900 text-white shadow-sm"
+                      : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 text-neutral-700"
                   }`}
                 >
-                  <Building2 className={`w-7 h-7 mx-auto mb-3 ${formData.role === "CAREGIVER" ? "text-primary-600" : "text-gray-400"}`} />
-                  <span className="font-black text-sm">요양원 직원</span>
+                  <Building2 className={`w-6 h-6 mx-auto mb-2 ${formData.role === "CAREGIVER" ? "text-white" : "text-neutral-400"}`} />
+                  <span className="font-semibold text-sm">요양원 직원</span>
                 </button>
               </div>
             </div>
@@ -393,7 +388,7 @@ export default function SignupPage() {
                     }}
                     required
                     disabled={loadingCareCenters}
-                    className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                    className="input-vercel w-full pl-10 appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">
                       {loadingCareCenters 
@@ -434,7 +429,7 @@ export default function SignupPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="이름을 입력하세요"
                 />
               </div>
@@ -452,7 +447,7 @@ export default function SignupPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="your@email.com"
                 />
               </div>
@@ -469,7 +464,7 @@ export default function SignupPage() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="010-0000-0000"
                 />
               </div>
@@ -488,7 +483,7 @@ export default function SignupPage() {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
                   minLength={6}
-                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="최소 6자 이상"
                 />
               </div>
@@ -506,7 +501,7 @@ export default function SignupPage() {
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   required
-                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="비밀번호를 다시 입력하세요"
                 />
               </div>
@@ -515,7 +510,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-primary-600 via-primary-600 to-primary-700 text-white py-5 rounded-2xl font-black text-lg hover:from-primary-700 hover:via-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-300 shadow-2xl shadow-primary-500/40 hover:shadow-3xl hover:shadow-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-2"
+              className="btn-linear-primary w-full py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-3">
