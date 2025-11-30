@@ -57,10 +57,10 @@ export default function HomePage() {
                 <span className="absolute inset-0 text-gray-900/20 blur-md transform translate-x-1 translate-y-1">
                   케어링노트
                 </span>
-                <span className="relative block text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-blue-500 to-primary-600 animate-gradient bg-[length:200%_auto] drop-shadow-xl" 
+                <span className="relative block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-primary-400 to-blue-500 animate-gradient bg-[length:200%_auto] drop-shadow-xl" 
                       style={{
-                        textShadow: '0 4px 20px rgba(13, 138, 232, 0.4), 0 2px 10px rgba(59, 130, 246, 0.3)',
-                        WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.1)'
+                        textShadow: '0 4px 20px rgba(96, 165, 250, 0.5), 0 2px 10px rgba(59, 130, 246, 0.4)',
+                        WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.2)'
                       }}>
                   케어링노트
                 </span>
