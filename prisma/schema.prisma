@@ -50,6 +50,8 @@ model User {
   comments     Comment[]
   orders       Order[]
   medicalRecords MedicalRecord[]
+  residentFamilies ResidentFamily[]
+  notifications Notification[]
   
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -119,6 +121,7 @@ model Resident {
   posts       Post[]
   medicalRecords MedicalRecord[]
   orders      Order[]
+  residentFamilies ResidentFamily[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -303,5 +306,57 @@ model OrderItem {
   
   @@index([orderId])
   @@index([productId])
+}
+
+// 가족-입소자 연결 관계
+model ResidentFamily {
+  id           String   @id @default(cuid())
+  residentId   String
+  resident     Resident @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relationship String   // 부, 모, 자녀, 배우자, 형제, 자매, 기타
+  isApproved   Boolean  @default(false)
+  approvedById String?  // 승인한 CAREGIVER ID
+  approvedAt   DateTime?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@unique([residentId, userId])
+  @@index([residentId])
+  @@index([userId])
+  @@index([isApproved])
+}
+
+// 알림
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  content   String?          @db.Text
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relatedId String?          // 관련 게시글 ID, 의료기록 ID 등
+  relatedType String?        // Post, MedicalRecord, Order 등
+  isRead    Boolean          @default(false)
+  
+  createdAt DateTime         @default(now())
+  
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  PostCreated          // 게시글 작성
+  CommentCreated       // 댓글 작성
+  MedicalRecordCreated // 의료 기록 작성
+  OrderCreated         // 주문 생성
+  OrderStatusChanged   // 주문 상태 변경
+  FamilyRequest        // 가족 연결 요청
+  FamilyApproved       // 가족 연결 승인
+  FamilyRejected       // 가족 연결 거부
+  Other                // 기타
 }
 

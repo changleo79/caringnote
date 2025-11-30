@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { createNotificationForResidentFamily, createNotificationForCareCenter } from "@/lib/notifications"
 
 // 게시글 목록 조회
 export async function GET(req: NextRequest) {
@@ -137,6 +138,32 @@ export async function POST(req: NextRequest) {
         },
       },
     })
+
+    // 알림 생성
+    try {
+      if (residentId) {
+        // 입소자와 연결된 가족들에게 알림
+        await createNotificationForResidentFamily(residentId, {
+          type: "PostCreated",
+          title: `${post.resident?.name || "입소자"}님의 새로운 게시글이 올라왔습니다`,
+          content: post.title || post.content?.substring(0, 50) || "",
+          relatedId: post.id,
+          relatedType: "Post",
+        })
+      } else {
+        // 요양원 전체 회원에게 알림
+        await createNotificationForCareCenter(session.user.careCenterId, {
+          type: "PostCreated",
+          title: `${post.author.name}님이 새 게시글을 작성했습니다`,
+          content: post.title || post.content?.substring(0, 50) || "",
+          relatedId: post.id,
+          relatedType: "Post",
+        })
+      }
+    } catch (error) {
+      console.error("Error creating notification:", error)
+      // 알림 생성 실패해도 게시글은 성공적으로 생성되도록 함
+    }
 
     return NextResponse.json({
       ...post,

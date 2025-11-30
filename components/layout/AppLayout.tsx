@@ -15,20 +15,51 @@ import {
   Bell,
   Menu,
   X,
+  Settings,
+  ChevronDown,
+  Users,
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+
+  // 외부 클릭 시 메뉴 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   const navItems = [
     { href: "/dashboard", label: "홈", icon: Home },
     { href: "/community", label: "커뮤니티", icon: Camera },
     { href: "/medical", label: "의료 정보", icon: Heart },
     { href: "/shop", label: "쇼핑몰", icon: ShoppingBag },
-  ]
+    { 
+      href: "/residents", 
+      label: "입소자", 
+      icon: User,
+      show: session?.user?.role === "FAMILY" || session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
+    },
+    { 
+      href: "/care-center/members", 
+      label: "회원 관리", 
+      icon: Users,
+      show: session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
+    },
+  ].filter(item => item.show !== false) as Array<{ href: string; label: string; icon: any }>
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,20 +77,52 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </button>
 
               {/* 사용자 메뉴 */}
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2 text-sm text-gray-700">
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
                   <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-accent-400 rounded-full flex items-center justify-center">
                     <User className="w-4 h-4 text-white" />
                   </div>
-                  <span className="font-medium">{session?.user?.name}</span>
-                </div>
-                <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  title="로그아웃"
-                >
-                  <LogOut className="w-5 h-5" />
+                  <span className="hidden sm:block text-sm font-medium text-gray-700">
+                    {session?.user?.name}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
+
+                {/* 드롭다운 메뉴 */}
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                    <Link
+                      href="/profile/edit"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Settings className="w-4 h-4" />
+                      프로필 수정
+                    </Link>
+                    <Link
+                      href="/residents"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <User className="w-4 h-4" />
+                      입소자 관리
+                    </Link>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false)
+                        signOut({ callbackUrl: "/" })
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      로그아웃
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* 모바일 메뉴 버튼 */}
