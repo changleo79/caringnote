@@ -205,11 +205,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
         </aside>
 
-        {/* 메인 컨텐츠 */}
-        <main className="flex-1 min-h-[calc(100vh-56px)]">
+        {/* 메인 컨텐츠 (데스크톱) */}
+        <main className="hidden md:block flex-1 min-h-[calc(100vh-56px)]">
           {children}
         </main>
       </div>
+
+      {/* 메인 컨텐츠 (모바일) */}
+      <main className="md:hidden pb-20">
+        {children}
+      </main>
 
       {/* 하단 네비게이션 (모바일) - Linear 스타일 */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 md:hidden z-50 safe-area-inset-bottom">
@@ -245,11 +250,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           })}
         </div>
       </nav>
-
-      {/* 모바일 메인 컨텐츠 */}
-      <main className="md:hidden pb-20">
-        {children}
-      </main>
     </div>
   )
 }
