@@ -57,18 +57,12 @@ export default function SignupPage() {
           console.log(`✅ 요양원 ${data.length}개 로드 완료`)
           setCareCenters(data)
           
-          // 요양원이 없으면 자동으로 시드 데이터 생성 시도 (개발 환경에서만)
+          // 요양원이 없으면 자동으로 시드 데이터 생성 시도
           if (data.length === 0) {
             console.log("⚠️ 요양원이 없음. 시드 데이터 생성 시도...")
             try {
-              const seedRes = await fetch("/api/care-centers/seed", { method: "POST" })
-              
-              // 403 오류는 프로덕션에서 정상적인 응답 (시드 API 비활성화)
-              if (seedRes.status === 403) {
-                console.log("ℹ️ 프로덕션 환경에서는 시드 API가 비활성화되어 있습니다.")
-                setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
-                return
-              }
+              // GET 메서드 사용 (프로덕션에서도 작동)
+              const seedRes = await fetch("/api/care-centers/seed")
               
               if (!seedRes.ok) {
                 throw new Error(`시드 API 오류: ${seedRes.status}`)
@@ -76,7 +70,10 @@ export default function SignupPage() {
               
               const seedData = await seedRes.json()
               
-              if (seedData.count > 0) {
+              if (seedData.error) {
+                console.log("⚠️ 시드 데이터 생성 실패:", seedData.error)
+                // 오류가 있어도 버튼 표시를 위해 에러 메시지 설정
+              } else if (seedData.count > 0) {
                 console.log(`✅ 시드 데이터 생성 완료: ${seedData.count}개`)
                 // 다시 요양원 목록 불러오기
                 const res2 = await fetch("/api/care-centers")
@@ -84,14 +81,12 @@ export default function SignupPage() {
                 if (Array.isArray(data2) && data2.length > 0) {
                   setCareCenters(data2)
                   setCareCenterError(null)
+                  toast.success(`요양원 ${data2.length}개가 생성되었습니다!`)
+                  return
                 }
-              } else if (seedData.error) {
-                console.log("⚠️ 시드 데이터 생성 실패:", seedData.error)
-                setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
               }
             } catch (seedError: any) {
               console.log("⚠️ 시드 데이터 생성 불가:", seedError.message)
-              setCareCenterError("요양원이 없습니다. 관리자에게 문의하거나 요양원 직원으로 가입해주세요.")
             }
           }
         } else if (data.careCenters && Array.isArray(data.careCenters)) {
@@ -248,34 +243,76 @@ export default function SignupPage() {
                   {formData.role === "FAMILY" ? "요양원 선택" : "소속 요양원 선택"}
                 </label>
                 
-                {/* 오류 메시지 */}
-                {careCenterError && (
-                  <div className="mb-4 p-4 bg-red-50 border-2 border-red-200 rounded-xl">
-                    <p className="text-sm text-red-700 font-semibold mb-2">
-                      ⚠️ {careCenterError}
+                {/* 오류 메시지 또는 시드 생성 안내 */}
+                {(careCenterError || careCenters.length === 0) && (
+                  <div className="mb-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
+                    <p className="text-sm text-blue-700 font-semibold mb-3">
+                      {careCenterError ? `⚠️ ${careCenterError}` : "📋 요양원 목록이 비어있습니다. 테스트용 요양원을 생성해주세요."}
                     </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCareCenterError(null)
-                        setLoadingCareCenters(true)
-                        fetch("/api/care-centers")
-                          .then(res => res.json())
-                          .then(data => {
-                            if (Array.isArray(data)) {
-                              setCareCenters(data)
-                              setCareCenterError(null)
-                            } else if (data.error) {
-                              setCareCenterError(data.error)
+                    <div className="flex gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setLoadingCareCenters(true)
+                          setCareCenterError(null)
+                          
+                          try {
+                            // 시드 데이터 생성 (GET 메서드 사용)
+                            const seedRes = await fetch("/api/care-centers/seed")
+                            const seedData = await seedRes.json()
+                            
+                            if (seedData.error) {
+                              toast.error(seedData.error)
+                              setCareCenterError(seedData.error)
+                            } else if (seedData.count > 0) {
+                              toast.success(`✅ 요양원 ${seedData.count}개가 생성되었습니다!`)
+                              
+                              // 요양원 목록 다시 불러오기
+                              const res = await fetch("/api/care-centers")
+                              const data = await res.json()
+                              if (Array.isArray(data) && data.length > 0) {
+                                setCareCenters(data)
+                                setCareCenterError(null)
+                              }
                             }
-                          })
-                          .catch(err => setCareCenterError(err.message))
-                          .finally(() => setLoadingCareCenters(false))
-                      }}
-                      className="text-xs text-red-600 hover:text-red-700 font-bold underline"
-                    >
-                      다시 시도
-                    </button>
+                          } catch (error: any) {
+                            toast.error("요양원 생성 중 오류가 발생했습니다.")
+                            setCareCenterError(error.message)
+                          } finally {
+                            setLoadingCareCenters(false)
+                          }
+                        }}
+                        disabled={loadingCareCenters}
+                        className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-bold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        {loadingCareCenters ? "생성 중..." : "🎯 테스트용 요양원 생성"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCareCenterError(null)
+                          setLoadingCareCenters(true)
+                          fetch("/api/care-centers")
+                            .then(res => res.json())
+                            .then(data => {
+                              if (Array.isArray(data)) {
+                                setCareCenters(data)
+                                if (data.length > 0) {
+                                  setCareCenterError(null)
+                                }
+                              } else if (data.error) {
+                                setCareCenterError(data.error)
+                              }
+                            })
+                            .catch(err => setCareCenterError(err.message))
+                            .finally(() => setLoadingCareCenters(false))
+                        }}
+                        disabled={loadingCareCenters}
+                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        {loadingCareCenters ? "새로고침 중..." : "🔄 목록 새로고침"}
+                      </button>
+                    </div>
                   </div>
                 )}
                 
