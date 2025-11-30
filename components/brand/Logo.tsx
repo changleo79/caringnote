@@ -58,7 +58,7 @@ export default function Logo({
         {/* Inner Glow */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent rounded-2xl opacity-60"></div>
         
-        {/* 완전히 새로운 세련된 로고 - 노트북과 케어의 조화 */}
+        {/* 완전히 새로운 세련된 하트 로고 */}
         <svg
           viewBox="0 0 64 64"
           className={cn(
@@ -69,43 +69,68 @@ export default function Logo({
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            <linearGradient id="logoShine" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity={0.5} />
-              <stop offset="50%" stopColor="#ffffff" stopOpacity={0.2} />
+            <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity={1} />
+              <stop offset="50%" stopColor="#ffffff" stopOpacity={0.95} />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity={0.9} />
+            </linearGradient>
+            <linearGradient id="heartShine" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity={0.6} />
+              <stop offset="50%" stopColor="#ffffff" stopOpacity={0.3} />
               <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
             </linearGradient>
-            <radialGradient id="logoHighlight" cx="50%" cy="30%" r="50%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity={0.6} />
+            <radialGradient id="heartGlow" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity={0.5} />
               <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
             </radialGradient>
           </defs>
           
-          {/* 메인 노트북 디자인 - 모던하고 세련된 스타일 */}
-          <g transform="translate(8, 12)">
-            {/* 노트북 바탕 */}
-            <rect x="0" y="0" width="48" height="32" rx="4" ry="4" fill="white" opacity="0.95" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }} />
+          {/* 외부 글로우 */}
+          <circle cx="32" cy="32" r="28" fill="url(#heartGlow)" opacity="0.4" />
+          
+          {/* 메인 하트 - 세련되고 입체적인 디자인 */}
+          <g transform="translate(32, 32)">
+            {/* 하트 그림자 */}
+            <path
+              d="M-14,-8 C-14,-16 -8,-20 0,-20 C8,-20 14,-16 14,-8 C14,-2 6,4 0,12 C-6,4 -14,-2 -14,-8 Z"
+              fill="black"
+              opacity="0.15"
+              transform="translate(1, 2)"
+            />
             
-            {/* 화면 그라데이션 */}
-            <rect x="2" y="2" width="44" height="26" rx="3" fill="url(#logoShine)" />
+            {/* 메인 하트 */}
+            <path
+              d="M-14,-8 C-14,-16 -8,-20 0,-20 C8,-20 14,-16 14,-8 C14,-2 6,4 0,12 C-6,4 -14,-2 -14,-8 Z"
+              fill="url(#heartGradient)"
+              stroke="white"
+              strokeWidth="0.5"
+              strokeOpacity="0.3"
+            />
             
-            {/* 상단 바 */}
-            <rect x="6" y="6" width="36" height="4" rx="2" fill="white" opacity="0.3" />
+            {/* 하트 하이라이트 */}
+            <path
+              d="M-12,-9 C-12,-15 -7,-18 0,-18 C5,-18 9,-16 11,-12"
+              fill="url(#heartShine)"
+              opacity="0.8"
+            />
             
-            {/* 내용 라인들 - 케어 노트 느낌 */}
-            <line x1="8" y1="14" x2="32" y2="14" stroke="white" strokeWidth="2" opacity="0.4" strokeLinecap="round" />
-            <line x1="8" y1="18" x2="28" y2="18" stroke="white" strokeWidth="2" opacity="0.3" strokeLinecap="round" />
-            <line x1="8" y1="22" x2="30" y2="22" stroke="white" strokeWidth="2" opacity="0.3" strokeLinecap="round" />
-            
-            {/* 하트 아이콘 - 작고 세련되게 */}
-            <path d="M36 16c0-1.5 1-3 2.5-3 0.8 0 1.5 0.5 2 1.2 0.5-0.7 1.2-1.2 2-1.2 1.5 0 2.5 1.5 2.5 3 0 2-1.5 3-4 4.5-2.5-1.5-4-2.5-4-4.5z" 
-                  fill="white" opacity="0.5" />
+            {/* 작은 하트 (노트 아이콘) */}
+            <g transform="translate(2, -4) scale(0.35)">
+              <path
+                d="M-6,-2 C-6,-4 -3,-5 0,-5 C3,-5 6,-4 6,-2 C6,-1 3,1 0,4 C-3,1 -6,-1 -6,-2 Z"
+                fill="white"
+                opacity="0.6"
+              />
+            </g>
           </g>
           
-          {/* 하이라이트 효과 */}
-          <circle cx="32" cy="20" r="20" fill="url(#logoHighlight)" opacity="0.3" />
-          
-          {/* 글로우 효과 */}
-          <circle cx="32" cy="28" r="22" fill="white" opacity="0.1" />
+          {/* 반짝이는 효과 */}
+          <circle cx="24" cy="20" r="1.5" fill="white" opacity="0.7">
+            <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="40" cy="24" r="1" fill="white" opacity="0.5">
+            <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2.5s" repeatCount="indefinite" />
+          </circle>
         </svg>
       </div>
 
@@ -114,9 +139,9 @@ export default function Logo({
         <div className="flex flex-col">
           <span className={cn(
             "font-black tracking-tighter",
-            "bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 bg-clip-text text-transparent",
+            "bg-gradient-to-r from-primary-500 via-blue-500 to-primary-600 bg-clip-text text-transparent",
             "leading-none",
-            "group-hover:from-primary-700 group-hover:via-primary-600 group-hover:to-accent-700",
+            "group-hover:from-primary-400 group-hover:via-blue-400 group-hover:to-primary-500",
             "transition-all duration-500",
             "drop-shadow-sm",
             classes.text
