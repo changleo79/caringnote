@@ -22,13 +22,15 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const careCenterId = session.user.careCenterId
+
     // CAREGIVER는 승인 대기 중인 요청 목록 조회
     if (session.user.role === "CAREGIVER" || session.user.role === "ADMIN") {
       const requests = await prisma.residentFamily.findMany({
         where: {
           isApproved: false,
           resident: {
-            careCenterId: session.user.careCenterId,
+            careCenterId: careCenterId,
           },
         },
         include: {

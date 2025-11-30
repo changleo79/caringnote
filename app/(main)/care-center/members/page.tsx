@@ -54,9 +54,11 @@ export default async function CareCenterMembersPage() {
     )
   }
 
+  const careCenterId = session.user.careCenterId
+
   // 요양원 정보 조회
   const careCenter = await prisma.careCenter.findUnique({
-    where: { id: session.user.careCenterId },
+    where: { id: careCenterId },
     select: {
       id: true,
       name: true,
@@ -73,17 +75,17 @@ export default async function CareCenterMembersPage() {
   try {
     const [total, family, caregiver] = await Promise.all([
       prisma.user.count({
-        where: { careCenterId: session.user.careCenterId },
+        where: { careCenterId: careCenterId },
       }),
       prisma.user.count({
         where: {
-          careCenterId: session.user.careCenterId,
+          careCenterId: careCenterId,
           role: "FAMILY",
         },
       }),
       prisma.user.count({
         where: {
-          careCenterId: session.user.careCenterId,
+          careCenterId: careCenterId,
           role: "CAREGIVER",
         },
       }),
@@ -141,7 +143,7 @@ export default async function CareCenterMembersPage() {
         </div>
 
         {/* 회원 목록 */}
-        <MemberList careCenterId={session.user.careCenterId} userRole={session.user.role} />
+        <MemberList careCenterId={careCenterId} userRole={session.user.role} />
       </div>
     </AppLayout>
   )

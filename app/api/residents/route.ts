@@ -22,9 +22,11 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const careCenterId = session.user.careCenterId
+
     // FAMILY는 연결된 입소자만, CAREGIVER는 모든 입소자
     let whereClause: any = {
-      careCenterId: session.user.careCenterId,
+      careCenterId: careCenterId,
     }
 
     if (session.user.role === "FAMILY") {
@@ -102,6 +104,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const careCenterId = session.user.careCenterId
+
     const body = await req.json()
     const { name, birthDate, gender, roomNumber, photoUrl } = body
 
@@ -119,7 +123,7 @@ export async function POST(req: NextRequest) {
         gender: gender || null,
         roomNumber: roomNumber || null,
         photoUrl: photoUrl || null,
-        careCenterId: session.user.careCenterId,
+        careCenterId: careCenterId,
       },
     })
 

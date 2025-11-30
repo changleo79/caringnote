@@ -100,22 +100,25 @@ export default async function ResidentsPage() {
       residents = residentFamilies.map(rf => rf.resident)
     } else {
       // CAREGIVER는 모든 입소자 조회
-      residents = await prisma.resident.findMany({
-        where: {
-          careCenterId: session.user.careCenterId,
-        },
-        include: {
-          careCenter: {
-            select: {
-              id: true,
-              name: true,
+      const careCenterId = session.user.careCenterId
+      if (careCenterId) {
+        residents = await prisma.resident.findMany({
+          where: {
+            careCenterId: careCenterId,
+          },
+          include: {
+            careCenter: {
+              select: {
+                id: true,
+                name: true,
+              },
             },
           },
-        },
-        orderBy: {
-          name: "asc",
-        },
-      })
+          orderBy: {
+            name: "asc",
+          },
+        })
+      }
     }
   } catch (error) {
     console.error("Failed to fetch residents:", error)

@@ -107,6 +107,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const careCenterId = session.user.careCenterId
+
     // 이미지 배열을 JSON 문자열로 변환
     const imagesJson = images && Array.isArray(images) 
       ? JSON.stringify(images) 
@@ -117,7 +119,7 @@ export async function POST(req: NextRequest) {
         title: title || null,
         content: content || null,
         images: imagesJson,
-        careCenterId: session.user.careCenterId,
+        careCenterId: careCenterId,
         residentId: residentId || null,
         authorId: session.user.id!,
         category: category || "Daily",
