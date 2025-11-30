@@ -68,9 +68,9 @@ export default function NewResidentPage() {
   if (!session || (session.user.role !== "CAREGIVER" && session.user.role !== "ADMIN")) {
     return (
       <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <p className="text-gray-600">입소자 등록은 요양원 직원만 가능합니다.</p>
+        <div className="section-container py-10">
+          <div className="card-notion p-12 text-center">
+            <p className="text-neutral-600">입소자 등록은 요양원 직원만 가능합니다.</p>
           </div>
         </div>
       </AppLayout>
@@ -79,35 +79,35 @@ export default function NewResidentPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="section-container py-10">
         {/* Back Button */}
         <Link
           href="/residents"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-4 h-4" />
           <span>뒤로가기</span>
         </Link>
 
-        {/* Header */}
+        {/* Header - Notion 스타일 */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
             입소자 등록
           </h1>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             새로운 입소자 정보를 등록합니다
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12 space-y-6">
+        {/* Form - Notion 스타일 */}
+        <form onSubmit={handleSubmit} className="card-notion p-8 md:p-10 space-y-6">
           {/* 프로필 사진 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
+            <label className="block text-sm font-semibold text-neutral-900 mb-3">
               프로필 사진
             </label>
             <div className="flex items-center gap-6">
-              <div className="relative w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center">
+              <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-neutral-100 flex items-center justify-center">
                 {formData.photoUrl ? (
                   <Image
                     src={formData.photoUrl}
@@ -116,14 +116,14 @@ export default function NewResidentPage() {
                     className="object-cover"
                   />
                 ) : (
-                  <User className="w-12 h-12 text-white" />
+                  <User className="w-10 h-10 text-neutral-400" />
                 )}
               </div>
               <div className="flex-1">
                 <button
                   type="button"
                   onClick={handleAddImageUrl}
-                  className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-bold hover:bg-primary-700 transition-colors inline-flex items-center gap-2"
+                  className="btn-linear-secondary inline-flex items-center gap-2"
                 >
                   <Upload className="w-4 h-4" />
                   이미지 URL 추가
@@ -132,7 +132,7 @@ export default function NewResidentPage() {
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, photoUrl: "" })}
-                    className="ml-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-300 transition-colors inline-flex items-center gap-2"
+                    className="ml-2 btn-linear-ghost inline-flex items-center gap-2"
                   >
                     <X className="w-4 h-4" />
                     제거
@@ -144,41 +144,41 @@ export default function NewResidentPage() {
 
           {/* 이름 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              이름 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              이름 <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+              className="input-vercel w-full"
               placeholder="이름을 입력하세요"
             />
           </div>
 
           {/* 생년월일 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
               생년월일
             </label>
             <input
               type="date"
               value={formData.birthDate}
               onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
-              className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+              className="input-vercel w-full"
             />
           </div>
 
           {/* 성별 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
               성별
             </label>
             <select
               value={formData.gender}
               onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-              className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+              className="input-vercel w-full"
             >
               <option value="">선택하세요</option>
               <option value="남성">남성</option>
@@ -188,31 +188,31 @@ export default function NewResidentPage() {
 
           {/* 호실 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
               호실
             </label>
             <input
               type="text"
               value={formData.roomNumber}
               onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
-              className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+              className="input-vercel w-full"
               placeholder="예: 101"
             />
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex gap-4 pt-4">
+          <div className="flex gap-3 pt-4">
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 btn-primary inline-flex items-center justify-center gap-2"
+              className="flex-1 btn-linear-primary inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="w-5 h-5" />
+              <Save className="w-4 h-4" />
               {isLoading ? "등록 중..." : "등록하기"}
             </button>
             <Link
               href="/residents"
-              className="px-6 py-3.5 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300 transition-colors"
+              className="btn-linear-secondary inline-flex items-center justify-center gap-2"
             >
               취소
             </Link>
@@ -222,4 +222,3 @@ export default function NewResidentPage() {
     </AppLayout>
   )
 }
-

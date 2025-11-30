@@ -22,37 +22,90 @@ export default async function MedicalPage() {
     redirect("/auth/login")
   }
 
+  const isFamily = session.user.role === "FAMILY"
+  const isCaregiver = session.user.role === "CAREGIVER" || session.user.role === "ADMIN"
+
+  // 연결된 입소자 ID 목록 (가족회원의 경우)
+  let connectedResidentIds: string[] = []
+
+  if (isFamily) {
+    try {
+      const residentFamilies = await prisma.residentFamily.findMany({
+        where: {
+          userId: session.user.id!,
+          isApproved: true,
+        },
+        select: {
+          residentId: true,
+        },
+      })
+      connectedResidentIds = residentFamilies.map(rf => rf.residentId)
+    } catch (error) {
+      console.error("Failed to fetch connected residents:", error)
+    }
+  }
+
   // 의료 기록 목록 가져오기
   let records: any[] = []
   
   try {
-    const careCenterId = session.user.careCenterId
-    if (careCenterId) {
-      records = await prisma.medicalRecord.findMany({
-        where: {
-          resident: {
-            careCenterId: careCenterId,
+    if (isFamily) {
+      // 가족회원: 연결된 입소자의 의료 기록만
+      if (connectedResidentIds.length > 0) {
+        records = await prisma.medicalRecord.findMany({
+          where: {
+            residentId: { in: connectedResidentIds },
           },
-        },
-        include: {
-          resident: {
-            select: {
-              id: true,
-              name: true,
+          include: {
+            resident: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            createdBy: {
+              select: {
+                id: true,
+                name: true,
+              },
             },
           },
-          createdBy: {
-            select: {
-              id: true,
-              name: true,
+          orderBy: {
+            recordDate: "desc",
+          },
+          take: 100,
+        })
+      }
+    } else {
+      // 요양원직원: 요양원 전체 의료 기록
+      const careCenterId = session.user.careCenterId
+      if (careCenterId) {
+        records = await prisma.medicalRecord.findMany({
+          where: {
+            resident: {
+              careCenterId: careCenterId,
             },
           },
-        },
-        orderBy: {
-          recordDate: "desc",
-        },
-        take: 100,
-      })
+          include: {
+            resident: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            createdBy: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            recordDate: "desc",
+          },
+          take: 100,
+        })
+      }
     }
   } catch (error) {
     console.error("Failed to fetch medical records:", error)
@@ -68,16 +121,18 @@ export default async function MedicalPage() {
               의료 정보
             </h1>
             <p className="text-neutral-600">
-              부모님의 건강 상태를 투명하게 확인하세요
+              {isFamily ? "연결된 입소자의 건강 상태를 확인하세요" : "부모님의 건강 상태를 투명하게 확인하세요"}
             </p>
           </div>
-          <Link
-            href="/medical/new"
-            className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
-          >
-            <Plus className="w-4 h-4" />
-            <span>의료 기록 작성</span>
-          </Link>
+          {isCaregiver && (
+            <Link
+              href="/medical/new"
+              className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4" />
+              <span>의료 기록 작성</span>
+            </Link>
+          )}
         </div>
 
         {/* Records List - Notion 스타일 */}
@@ -125,15 +180,19 @@ export default async function MedicalPage() {
               아직 의료 기록이 없습니다
             </h2>
             <p className="text-sm text-neutral-600 mb-6 max-w-md mx-auto">
-              첫 번째 의료 기록을 작성하여 부모님의 건강 정보를 관리해보세요
+              {isFamily
+                ? "연결된 입소자의 의료 기록이 아직 없습니다"
+                : "첫 번째 의료 기록을 작성하여 부모님의 건강 정보를 관리해보세요"}
             </p>
-            <Link
-              href="/medical/new"
-              className="btn-linear-primary inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              첫 의료 기록 작성하기
-            </Link>
+            {isCaregiver && (
+              <Link
+                href="/medical/new"
+                className="btn-linear-primary inline-flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                첫 의료 기록 작성하기
+              </Link>
+            )}
           </div>
         )}
       </div>

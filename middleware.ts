@@ -24,6 +24,20 @@ export default withAuth(
       }
     }
 
+    // CAREGIVER/ADMIN 전용 페이지 - 게시글 작성
+    if (pathname === "/community/new") {
+      if (userRole !== "CAREGIVER" && userRole !== "ADMIN") {
+        return NextResponse.redirect(new URL("/community", req.url))
+      }
+    }
+
+    // CAREGIVER/ADMIN 전용 페이지 - 의료 기록 작성
+    if (pathname === "/medical/new") {
+      if (userRole !== "CAREGIVER" && userRole !== "ADMIN") {
+        return NextResponse.redirect(new URL("/medical", req.url))
+      }
+    }
+
     return NextResponse.next()
   },
   {

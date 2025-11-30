@@ -62,12 +62,12 @@ export default async function MedicalRecordDetailPage({
   if (!record) {
     return (
       <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+        <div className="section-container py-10">
+          <div className="card-notion p-12 text-center">
+            <h2 className="text-xl font-bold text-neutral-900 mb-2">
               의료 기록을 찾을 수 없습니다
             </h2>
-            <Link href="/medical" className="btn-primary inline-flex items-center gap-2 mt-4">
+            <Link href="/medical" className="btn-linear-primary inline-flex items-center gap-2 mt-6">
               <ArrowLeft className="w-4 h-4" />
               의료 정보로 돌아가기
             </Link>
@@ -79,49 +79,49 @@ export default async function MedicalRecordDetailPage({
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="section-container py-10">
         {/* Back Button */}
         <Link
           href="/medical"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-4 h-4" />
           <span>뒤로가기</span>
         </Link>
 
-        {/* Record Content */}
-        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden">
+        {/* Record Content - Notion 스타일 */}
+        <div className="card-notion overflow-hidden">
           {/* Header */}
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-6 md:p-8 border-b border-neutral-200">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <span className="text-sm bg-red-100 text-red-700 px-3 py-1 rounded-full font-medium mb-3 inline-block">
+                <span className="text-xs bg-red-50 text-red-700 px-2.5 py-1 rounded font-medium mb-3 inline-block">
                   {categoryLabels[record.category] || record.category}
                 </span>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{record.title}</h1>
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <User className="w-4 h-4" />
-                    <span>{record.resident.name} {record.resident.roomNumber ? `(${record.resident.roomNumber})` : ""}</span>
+                <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 mb-3">{record.title}</h1>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600">
+                  <div className="flex items-center gap-1.5">
+                    <User className="w-4 h-4 text-neutral-400" />
+                    <span>{record.resident.name} {record.resident.roomNumber ? `(${record.resident.roomNumber}호실)` : ""}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-neutral-400" />
                     <span>{formatDate(record.recordDate)}</span>
                   </div>
                 </div>
               </div>
-              <FileText className="w-8 h-8 text-red-400" />
+              <FileText className="w-6 h-6 text-neutral-400 flex-shrink-0" />
             </div>
-            <div className="text-sm text-gray-500">
+            <div className="text-xs text-neutral-500">
               작성자: {record.createdBy.name} • {formatDate(record.createdAt)}
             </div>
           </div>
 
           {/* Content */}
-          <div className="p-6">
+          <div className="p-6 md:p-8">
             {record.content && (
               <div className="prose max-w-none">
-                <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                <p className="text-neutral-700 whitespace-pre-wrap leading-relaxed">
                   {record.content}
                 </p>
               </div>
@@ -129,8 +129,8 @@ export default async function MedicalRecordDetailPage({
 
             {/* Attachments */}
             {record.attachments && record.attachments.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <h3 className="text-sm font-semibold text-gray-800 mb-3">첨부파일</h3>
+              <div className="mt-8 pt-6 border-t border-neutral-200">
+                <h3 className="text-sm font-semibold text-neutral-900 mb-3">첨부파일</h3>
                 <div className="space-y-2">
                   {record.attachments.map((attachment: string, index: number) => (
                     <a
@@ -138,7 +138,7 @@ export default async function MedicalRecordDetailPage({
                       href={attachment}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors text-sm text-gray-700"
+                      className="block p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors text-sm text-neutral-700 border border-neutral-200"
                     >
                       {attachment}
                     </a>

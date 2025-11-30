@@ -89,35 +89,35 @@ export default function NewMedicalRecordPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="section-container py-10">
         {/* Back Button */}
         <Link
           href="/medical"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-4 h-4" />
           <span>뒤로가기</span>
         </Link>
 
-        {/* Header */}
+        {/* Header - Notion 스타일 */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
             새 의료 기록 작성
           </h1>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             부모님의 건강 정보를 투명하게 기록해보세요
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12 space-y-6">
+        {/* Form - Notion 스타일 */}
+        <form onSubmit={handleSubmit} className="card-notion p-8 md:p-10 space-y-6">
           {/* 입소자 선택 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              입소자 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              입소자 <span className="text-red-600">*</span>
             </label>
             {loadingResidents ? (
-              <div className="w-full px-4 py-3.5 border border-gray-200 rounded-xl bg-gray-50 text-gray-500">
+              <div className="input-vercel w-full bg-neutral-50 text-neutral-500">
                 입소자 목록 로딩 중...
               </div>
             ) : (
@@ -125,7 +125,7 @@ export default function NewMedicalRecordPage() {
                 value={formData.residentId}
                 onChange={(e) => setFormData({ ...formData, residentId: e.target.value })}
                 required
-                className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900"
+                className="input-vercel w-full"
               >
                 <option value="">입소자를 선택하세요</option>
                 {residents.map((resident) => (
@@ -139,30 +139,30 @@ export default function NewMedicalRecordPage() {
 
           {/* 기록 날짜 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              기록 날짜 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              기록 날짜 <span className="text-red-600">*</span>
             </label>
             <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 type="date"
                 value={formData.recordDate}
                 onChange={(e) => setFormData({ ...formData, recordDate: e.target.value })}
                 required
-                className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900"
+                className="input-vercel w-full pl-10"
               />
             </div>
           </div>
 
           {/* 카테고리 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
               카테고리
             </label>
             <select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900"
+              className="input-vercel w-full"
             >
               <option value="Treatment">진료</option>
               <option value="Medication">약물</option>
@@ -174,45 +174,45 @@ export default function NewMedicalRecordPage() {
 
           {/* 제목 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              제목 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              제목 <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              className="input-vercel w-full"
               placeholder="의료 기록 제목을 입력하세요"
             />
           </div>
 
           {/* 내용 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
               내용
             </label>
             <textarea
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               rows={8}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 resize-none"
+              className="input-vercel w-full resize-none"
               placeholder="의료 기록 내용을 입력하세요..."
             />
           </div>
 
-          {/* Submit Button */}
-          <div className="flex gap-4 pt-4">
+          {/* Submit Buttons */}
+          <div className="flex gap-3 pt-4">
             <Link
               href="/medical"
-              className="btn-secondary flex-1 text-center"
+              className="btn-linear-secondary flex-1 text-center"
             >
               취소
             </Link>
             <button
               type="submit"
               disabled={isLoading}
-              className="btn-primary flex-1 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
+              className="flex-1 btn-linear-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "작성 중..." : "의료 기록 작성"}
             </button>

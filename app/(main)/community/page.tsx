@@ -15,60 +15,138 @@ export default async function CommunityPage() {
     redirect("/auth/login")
   }
 
+  const isFamily = session.user.role === "FAMILY"
+  const isCaregiver = session.user.role === "CAREGIVER" || session.user.role === "ADMIN"
+
+  // 연결된 입소자 ID 목록 (가족회원의 경우)
+  let connectedResidentIds: string[] = []
+
+  if (isFamily) {
+    try {
+      const residentFamilies = await prisma.residentFamily.findMany({
+        where: {
+          userId: session.user.id!,
+          isApproved: true,
+        },
+        select: {
+          residentId: true,
+        },
+      })
+      connectedResidentIds = residentFamilies.map(rf => rf.residentId)
+    } catch (error) {
+      console.error("Failed to fetch connected residents:", error)
+    }
+  }
+
   // 게시글 목록 가져오기
   let posts: any[] = []
   
   try {
-    const careCenterId = session.user.careCenterId
-    if (careCenterId) {
-      const postsData = await prisma.post.findMany({
-        where: {
-          careCenterId: careCenterId,
-        },
-        include: {
-          author: {
-            select: {
-              id: true,
-              name: true,
-              avatarUrl: true,
+    if (isFamily) {
+      // 가족회원: 연결된 입소자의 게시글만
+      if (connectedResidentIds.length > 0) {
+        const postsData = await prisma.post.findMany({
+          where: {
+            residentId: { in: connectedResidentIds },
+          },
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+              },
+            },
+            resident: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            _count: {
+              select: {
+                comments: true,
+                likes: true,
+              },
             },
           },
-          resident: {
-            select: {
-              id: true,
-              name: true,
-            },
+          orderBy: {
+            createdAt: "desc",
           },
-          _count: {
-            select: {
-              comments: true,
-              likes: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 50,
-      })
-
-      // 좋아요 여부 확인
-      posts = await Promise.all(
-        postsData.map(async (post) => {
-          const isLiked = await prisma.postLike.findFirst({
-            where: {
-              postId: post.id,
-              userId: session.user.id!,
-            },
-          })
-
-          return {
-            ...post,
-            images: post.images ? JSON.parse(post.images) : [],
-            isLiked: !!isLiked,
-          }
+          take: 50,
         })
-      )
+
+        // 좋아요 여부 확인
+        posts = await Promise.all(
+          postsData.map(async (post) => {
+            const isLiked = await prisma.postLike.findFirst({
+              where: {
+                postId: post.id,
+                userId: session.user.id!,
+              },
+            })
+
+            return {
+              ...post,
+              images: post.images ? JSON.parse(post.images) : [],
+              isLiked: !!isLiked,
+            }
+          })
+        )
+      }
+    } else {
+      // 요양원직원: 요양원 전체 게시글
+      const careCenterId = session.user.careCenterId
+      if (careCenterId) {
+        const postsData = await prisma.post.findMany({
+          where: {
+            careCenterId: careCenterId,
+          },
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+              },
+            },
+            resident: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            _count: {
+              select: {
+                comments: true,
+                likes: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 50,
+        })
+
+        // 좋아요 여부 확인
+        posts = await Promise.all(
+          postsData.map(async (post) => {
+            const isLiked = await prisma.postLike.findFirst({
+              where: {
+                postId: post.id,
+                userId: session.user.id!,
+              },
+            })
+
+            return {
+              ...post,
+              images: post.images ? JSON.parse(post.images) : [],
+              isLiked: !!isLiked,
+            }
+          })
+        )
+      }
     }
   } catch (error) {
     console.error("Failed to fetch posts:", error)
@@ -84,16 +162,18 @@ export default async function CommunityPage() {
               커뮤니티
             </h1>
             <p className="text-neutral-600">
-              부모님의 일상을 함께 공유해보세요
+              {isFamily ? "연결된 입소자의 일상을 확인하세요" : "부모님의 일상을 함께 공유해보세요"}
             </p>
           </div>
-          <Link
-            href="/community/new"
-            className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
-          >
-            <Plus className="w-4 h-4" />
-            <span>게시글 작성</span>
-          </Link>
+          {isCaregiver && (
+            <Link
+              href="/community/new"
+              className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4" />
+              <span>게시글 작성</span>
+            </Link>
+          )}
         </div>
 
         {/* Posts List - Notion 스타일 */}
@@ -148,11 +228,11 @@ export default async function CommunityPage() {
                     <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1.5">
                         <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
-                        {post._count.likes}
+                        {post._count?.likes || 0}
                       </span>
                       <span className="flex items-center gap-1.5">
                         <MessageCircle className="w-4 h-4" />
-                        {post._count.comments}
+                        {post._count?.comments || 0}
                       </span>
                     </div>
                   </div>
@@ -169,15 +249,19 @@ export default async function CommunityPage() {
               아직 게시글이 없습니다
             </h2>
             <p className="text-sm text-neutral-600 mb-6 max-w-md mx-auto">
-              첫 번째 게시글을 작성하여 부모님의 일상을 가족들과 함께 공유해보세요
+              {isFamily 
+                ? "연결된 입소자의 게시글이 아직 없습니다"
+                : "첫 번째 게시글을 작성하여 부모님의 일상을 가족들과 함께 공유해보세요"}
             </p>
-            <Link
-              href="/community/new"
-              className="btn-linear-primary inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              첫 게시글 작성하기
-            </Link>
+            {isCaregiver && (
+              <Link
+                href="/community/new"
+                className="btn-linear-primary inline-flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                첫 게시글 작성하기
+              </Link>
+            )}
           </div>
         )}
       </div>

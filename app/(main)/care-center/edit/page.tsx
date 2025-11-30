@@ -133,10 +133,10 @@ export default function CareCenterEditPage() {
   if (isLoading) {
     return (
       <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
+        <div className="section-container py-10">
+          <div className="card-notion p-12 text-center">
             <Loader2 className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600">요양원 정보를 불러오는 중...</p>
+            <p className="text-neutral-600">요양원 정보를 불러오는 중...</p>
           </div>
         </div>
       </AppLayout>
@@ -145,41 +145,40 @@ export default function CareCenterEditPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
+      <div className="section-container py-10">
+        {/* Header - Notion 스타일 */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
               요양원 정보 수정
             </h1>
-            <p className="text-gray-600">요양원 기본 정보를 수정합니다.</p>
+            <p className="text-neutral-600">요양원 기본 정보를 수정합니다.</p>
           </div>
           <Link
             href="/care-center"
-            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-colors inline-flex items-center gap-2"
+            className="btn-linear-secondary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">돌아가기</span>
-            <span className="sm:hidden">취소</span>
+            <ArrowLeft className="w-4 h-4" />
+            <span>돌아가기</span>
           </Link>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12">
+        {/* Form - Notion 스타일 */}
+        <form onSubmit={handleSubmit} className="card-notion p-8 md:p-10">
           <div className="space-y-6 max-w-2xl">
             {/* 요양원 이름 */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2">
-                요양원 이름 <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                요양원 이름 <span className="text-red-600">*</span>
               </label>
               <div className="relative">
-                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="요양원 이름을 입력하세요"
                 />
               </div>
@@ -187,17 +186,17 @@ export default function CareCenterEditPage() {
 
             {/* 주소 */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2">
-                주소 <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                주소 <span className="text-red-600">*</span>
               </label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   required
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="요양원 주소를 입력하세요"
                 />
               </div>
@@ -205,16 +204,16 @@ export default function CareCenterEditPage() {
 
             {/* 전화번호 */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2">
+              <label className="block text-sm font-semibold text-neutral-900 mb-2">
                 전화번호
               </label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="02-1234-5678"
                 />
               </div>
@@ -222,16 +221,16 @@ export default function CareCenterEditPage() {
 
             {/* 이메일 */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2">
+              <label className="block text-sm font-semibold text-neutral-900 mb-2">
                 이메일
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                  className="input-vercel w-full pl-10"
                   placeholder="example@example.com"
                 />
               </div>
@@ -239,33 +238,33 @@ export default function CareCenterEditPage() {
 
             {/* 로고 URL */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2">
+              <label className="block text-sm font-semibold text-neutral-900 mb-2">
                 로고 URL
               </label>
               <input
                 type="url"
                 value={formData.logoUrl}
                 onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                className="input-vercel w-full"
                 placeholder="https://example.com/logo.png"
               />
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-neutral-500">
                 로고 이미지의 URL을 입력하세요. (추후 파일 업로드 기능 추가 예정)
               </p>
             </div>
 
             {/* 설명 */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2">
+              <label className="block text-sm font-semibold text-neutral-900 mb-2">
                 설명
               </label>
               <div className="relative">
-                <FileText className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+                <FileText className="absolute left-3 top-3 w-5 h-5 text-neutral-400" />
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={6}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium resize-none"
+                  className="input-vercel w-full pl-10 resize-none"
                   placeholder="요양원에 대한 설명을 입력하세요"
                 />
               </div>
@@ -276,23 +275,23 @@ export default function CareCenterEditPage() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="flex-1 btn-primary inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 btn-linear-primary inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     저장 중...
                   </>
                 ) : (
                   <>
-                    <Building2 className="w-5 h-5" />
+                    <Building2 className="w-4 h-4" />
                     저장하기
                   </>
                 )}
               </button>
               <Link
                 href="/care-center"
-                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-colors inline-flex items-center justify-center"
+                className="btn-linear-secondary inline-flex items-center justify-center gap-2"
               >
                 취소
               </Link>
@@ -303,4 +302,3 @@ export default function CareCenterEditPage() {
     </AppLayout>
   )
 }
-

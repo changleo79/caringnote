@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react"
 import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import toast from "react-hot-toast"
-import { ArrowLeft, Lock, Save, Eye, EyeOff } from "lucide-react"
+import { ArrowLeft, Lock, Eye, EyeOff } from "lucide-react"
 
 export default function PasswordChangePage() {
   const router = useRouter()
@@ -79,32 +79,32 @@ export default function PasswordChangePage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="section-container py-10">
         {/* Back Button */}
         <Link
           href="/profile/edit"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-4 h-4" />
           <span>뒤로가기</span>
         </Link>
 
-        {/* Header */}
+        {/* Header - Notion 스타일 */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
             비밀번호 변경
           </h1>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             보안을 위해 정기적으로 비밀번호를 변경해주세요
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12 space-y-6">
+        {/* Form - Notion 스타일 */}
+        <form onSubmit={handleSubmit} className="card-notion p-8 md:p-10 space-y-6">
           {/* 현재 비밀번호 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              현재 비밀번호 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              현재 비밀번호 <span className="text-red-600">*</span>
             </label>
             <div className="relative">
               <input
@@ -112,13 +112,13 @@ export default function PasswordChangePage() {
                 value={formData.currentPassword}
                 onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
                 required
-                className="w-full px-4 py-3.5 pr-12 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                className="input-vercel w-full pr-12"
                 placeholder="현재 비밀번호를 입력하세요"
               />
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
               >
                 {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -127,8 +127,8 @@ export default function PasswordChangePage() {
 
           {/* 새 비밀번호 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              새 비밀번호 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              새 비밀번호 <span className="text-red-600">*</span>
             </label>
             <div className="relative">
               <input
@@ -137,26 +137,26 @@ export default function PasswordChangePage() {
                 onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
                 required
                 minLength={6}
-                className="w-full px-4 py-3.5 pr-12 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                className="input-vercel w-full pr-12"
                 placeholder="새 비밀번호를 입력하세요 (6자 이상)"
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
               >
                 {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-neutral-500">
               6자 이상의 비밀번호를 입력해주세요
             </p>
           </div>
 
           {/* 새 비밀번호 확인 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              새 비밀번호 확인 <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+              새 비밀번호 확인 <span className="text-red-600">*</span>
             </label>
             <div className="relative">
               <input
@@ -165,37 +165,37 @@ export default function PasswordChangePage() {
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 required
                 minLength={6}
-                className="w-full px-4 py-3.5 pr-12 border-2 border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 font-medium"
+                className="input-vercel w-full pr-12"
                 placeholder="새 비밀번호를 다시 입력하세요"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
               >
                 {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
             {formData.confirmPassword && formData.newPassword !== formData.confirmPassword && (
-              <p className="mt-2 text-xs text-red-500">
+              <p className="mt-2 text-xs text-red-600">
                 비밀번호가 일치하지 않습니다
               </p>
             )}
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex gap-4 pt-4">
+          <div className="flex gap-3 pt-4">
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 btn-primary inline-flex items-center justify-center gap-2"
+              className="flex-1 btn-linear-primary inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Lock className="w-5 h-5" />
+              <Lock className="w-4 h-4" />
               {isLoading ? "변경 중..." : "비밀번호 변경"}
             </button>
             <Link
               href="/profile/edit"
-              className="px-6 py-3.5 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300 transition-colors"
+              className="btn-linear-secondary inline-flex items-center justify-center gap-2"
             >
               취소
             </Link>
@@ -205,4 +205,3 @@ export default function PasswordChangePage() {
     </AppLayout>
   )
 }
-

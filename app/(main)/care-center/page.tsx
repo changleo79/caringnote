@@ -83,15 +83,15 @@ export default async function CareCenterPage() {
   if (!careCenter) {
     return (
       <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Building2 className="w-12 h-12 text-primary-600" />
+        <div className="section-container py-10">
+          <div className="card-notion p-12 text-center">
+            <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Building2 className="w-8 h-8 text-primary-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-neutral-900 mb-2">
               요양원 정보가 필요합니다
             </h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            <p className="text-sm text-neutral-600 mb-6 max-w-md mx-auto">
               {session.user.role === "FAMILY"
                 ? "입소자와 연결되어 있지 않아 요양원 정보를 확인할 수 없습니다. 먼저 입소자와 연결해주세요."
                 : "요양원 정보를 설정하여 서비스를 시작할 수 있습니다."}
@@ -100,16 +100,16 @@ export default async function CareCenterPage() {
               <div className="flex gap-3 justify-center">
                 <Link
                   href="/care-center/edit"
-                  className="btn-primary inline-flex items-center gap-2"
+                  className="btn-linear-primary inline-flex items-center gap-2"
                 >
-                  <Building2 className="w-5 h-5" />
+                  <Building2 className="w-4 h-4" />
                   요양원 정보 설정하기
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-colors inline-flex items-center gap-2"
+                  className="btn-linear-secondary inline-flex items-center gap-2"
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  <ArrowLeft className="w-4 h-4" />
                   대시보드로
                 </Link>
               </div>
@@ -117,7 +117,7 @@ export default async function CareCenterPage() {
             {session.user.role === "FAMILY" && (
               <Link
                 href="/residents"
-                className="btn-primary inline-flex items-center gap-2"
+                className="btn-linear-primary inline-flex items-center gap-2"
               >
                 입소자 연결하기
               </Link>
@@ -134,14 +134,14 @@ export default async function CareCenterPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
+      <div className="section-container py-10">
+        {/* Header - Notion 스타일 */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
               요양원 정보
             </h1>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               {session.user.role === "FAMILY"
                 ? "입소자가 속한 요양원 정보"
                 : "요양원 기본 정보"}
@@ -150,20 +150,19 @@ export default async function CareCenterPage() {
           {canEdit && (
             <Link
               href={`/care-center/edit`}
-              className="btn-primary inline-flex items-center gap-2"
+              className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
             >
-              <Edit className="w-5 h-5" />
-              <span className="hidden sm:inline">정보 수정</span>
-              <span className="sm:hidden">수정</span>
+              <Edit className="w-4 h-4" />
+              <span>정보 수정</span>
             </Link>
           )}
         </div>
 
-        {/* 요양원 정보 카드 */}
-        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden">
+        {/* 요양원 정보 카드 - Notion 스타일 */}
+        <div className="card-notion overflow-hidden">
           {/* 로고 섹션 */}
           {careCenter.logoUrl && (
-            <div className="relative w-full h-48 bg-gradient-to-br from-primary-100 to-accent-100">
+            <div className="relative w-full h-48 bg-neutral-100">
               <Image
                 src={careCenter.logoUrl}
                 alt={careCenter.name}
@@ -180,7 +179,7 @@ export default async function CareCenterPage() {
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-3">
                 <Building2 className="w-6 h-6 text-primary-600" />
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                <h2 className="text-2xl md:text-3xl font-bold text-neutral-900">
                   {careCenter.name}
                 </h2>
               </div>
@@ -191,10 +190,10 @@ export default async function CareCenterPage() {
               {/* 주소 */}
               {careCenter.address && (
                 <div className="flex items-start gap-4">
-                  <MapPin className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-neutral-400 mt-1 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">주소</p>
-                    <p className="text-gray-900 font-medium">{careCenter.address}</p>
+                    <p className="text-sm text-neutral-500 mb-1">주소</p>
+                    <p className="text-neutral-900 font-medium">{careCenter.address}</p>
                   </div>
                 </div>
               )}
@@ -202,9 +201,9 @@ export default async function CareCenterPage() {
               {/* 전화번호 */}
               {careCenter.phone && (
                 <div className="flex items-start gap-4">
-                  <Phone className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+                  <Phone className="w-5 h-5 text-neutral-400 mt-1 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">전화번호</p>
+                    <p className="text-sm text-neutral-500 mb-1">전화번호</p>
                     <a
                       href={`tel:${careCenter.phone}`}
                       className="text-primary-600 hover:text-primary-700 font-medium"
@@ -218,9 +217,9 @@ export default async function CareCenterPage() {
               {/* 이메일 */}
               {careCenter.email && (
                 <div className="flex items-start gap-4">
-                  <Mail className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+                  <Mail className="w-5 h-5 text-neutral-400 mt-1 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">이메일</p>
+                    <p className="text-sm text-neutral-500 mb-1">이메일</p>
                     <a
                       href={`mailto:${careCenter.email}`}
                       className="text-primary-600 hover:text-primary-700 font-medium"
@@ -234,10 +233,10 @@ export default async function CareCenterPage() {
               {/* 설명 */}
               {careCenter.description && (
                 <div className="flex items-start gap-4">
-                  <FileText className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+                  <FileText className="w-5 h-5 text-neutral-400 mt-1 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="text-sm text-gray-500 mb-2">설명</p>
-                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                    <p className="text-sm text-neutral-500 mb-2">설명</p>
+                    <p className="text-neutral-700 whitespace-pre-wrap leading-relaxed">
                       {careCenter.description}
                     </p>
                   </div>
@@ -246,7 +245,7 @@ export default async function CareCenterPage() {
             </div>
 
             {/* 하단 정보 */}
-            <div className="mt-8 pt-8 border-t border-gray-100 text-sm text-gray-500">
+            <div className="mt-8 pt-8 border-t border-neutral-200 text-sm text-neutral-500">
               <p>
                 등록일: {new Date(careCenter.createdAt).toLocaleDateString('ko-KR', {
                   year: 'numeric',
@@ -270,4 +269,3 @@ export default async function CareCenterPage() {
     </AppLayout>
   )
 }
-

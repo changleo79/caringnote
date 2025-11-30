@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import AppLayout from "@/components/layout/AppLayout"
 import toast from "react-hot-toast"
-import { Bell, Trash2, Check, CheckCheck, AlertCircle, Heart, MessageCircle, ShoppingBag, Users, X } from "lucide-react"
+import { Bell, Trash2, Check, CheckCheck, AlertCircle, Heart, MessageCircle, ShoppingBag, Users } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 import Link from "next/link"
 
@@ -21,15 +21,15 @@ const notificationIcons: Record<string, any> = {
 }
 
 const notificationColors: Record<string, string> = {
-  PostCreated: "bg-blue-100 text-blue-600",
-  CommentCreated: "bg-green-100 text-green-600",
+  PostCreated: "bg-primary-100 text-primary-600",
+  CommentCreated: "bg-emerald-100 text-emerald-600",
   MedicalRecordCreated: "bg-red-100 text-red-600",
   OrderCreated: "bg-purple-100 text-purple-600",
-  OrderStatusChanged: "bg-orange-100 text-orange-600",
+  OrderStatusChanged: "bg-amber-100 text-amber-600",
   FamilyRequest: "bg-primary-100 text-primary-600",
-  FamilyApproved: "bg-green-100 text-green-600",
-  FamilyRejected: "bg-gray-100 text-gray-600",
-  Other: "bg-gray-100 text-gray-600",
+  FamilyApproved: "bg-emerald-100 text-emerald-600",
+  FamilyRejected: "bg-neutral-100 text-neutral-600",
+  Other: "bg-neutral-100 text-neutral-600",
 }
 
 export default function NotificationsPage() {
@@ -148,25 +148,23 @@ export default function NotificationsPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+      <div className="section-container py-10">
+        {/* Header - Notion 스타일 */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
               알림
             </h1>
-            <p className="text-gray-600">
-              {unreadCount > 0 && (
-                <span className="text-primary-600 font-semibold">
-                  읽지 않은 알림 {unreadCount}개
-                </span>
-              )}
-            </p>
+            {unreadCount > 0 && (
+              <p className="text-primary-600 font-medium">
+                읽지 않은 알림 {unreadCount}개
+              </p>
+            )}
           </div>
           {unreadCount > 0 && (
             <button
               onClick={handleMarkAllAsRead}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-bold hover:bg-primary-700 transition-colors inline-flex items-center gap-2"
+              className="btn-linear-primary inline-flex items-center justify-center gap-2 flex-shrink-0 whitespace-nowrap"
             >
               <CheckCheck className="w-4 h-4" />
               모두 읽음
@@ -174,41 +172,41 @@ export default function NotificationsPage() {
           )}
         </div>
 
-        {/* 필터 */}
+        {/* 필터 - Notion 스타일 */}
         <div className="mb-6 flex gap-2">
           <button
             onClick={() => setFilter("all")}
-            className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
               filter === "all"
-                ? "bg-primary-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                ? "bg-neutral-900 text-white"
+                : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
             }`}
           >
             전체
           </button>
           <button
             onClick={() => setFilter("unread")}
-            className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors inline-flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors inline-flex items-center gap-2 ${
               filter === "unread"
-                ? "bg-primary-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                ? "bg-neutral-900 text-white"
+                : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
             }`}
           >
             읽지 않음
             {unreadCount > 0 && (
-              <span className="bg-white text-primary-600 px-2 py-0.5 rounded-full text-xs">
+              <span className="bg-white text-neutral-900 px-2 py-0.5 rounded-full text-xs font-bold">
                 {unreadCount}
               </span>
             )}
           </button>
         </div>
 
-        {/* 알림 목록 */}
+        {/* 알림 목록 - Notion 스타일 */}
         {isLoading ? (
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12">
+          <div className="card-notion p-12">
             <div className="text-center py-16">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-              <p className="mt-4 text-gray-600">알림을 불러오는 중...</p>
+              <p className="mt-4 text-neutral-600">알림을 불러오는 중...</p>
             </div>
           </div>
         ) : filteredNotifications.length > 0 ? (
@@ -220,25 +218,25 @@ export default function NotificationsPage() {
               return (
                 <div
                   key={notification.id}
-                  className={`bg-white rounded-2xl shadow-soft border border-gray-100 p-5 hover:shadow-md transition-all ${
-                    !notification.isRead ? "border-primary-200 bg-primary-50/30" : ""
+                  className={`card-notion p-5 ${
+                    !notification.isRead ? "bg-primary-50/50 border-primary-200" : ""
                   }`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${colorClass}`}>
-                      <Icon className="w-6 h-6" />
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${colorClass}`}>
+                      <Icon className="w-5 h-5" />
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-4 mb-2">
                         <div className="flex-1">
-                          <h3 className={`font-bold text-gray-900 mb-1 ${!notification.isRead ? "text-primary-700" : ""}`}>
+                          <h3 className={`font-semibold text-neutral-900 mb-1 ${!notification.isRead ? "text-primary-900" : ""}`}>
                             {notification.title}
                           </h3>
                           {notification.content && (
-                            <p className="text-sm text-gray-600 mb-2">{notification.content}</p>
+                            <p className="text-sm text-neutral-600 mb-2">{notification.content}</p>
                           )}
-                          <p className="text-xs text-gray-500">{formatDate(notification.createdAt)}</p>
+                          <p className="text-xs text-neutral-500">{formatDate(notification.createdAt)}</p>
                         </div>
 
                         {!notification.isRead && (
@@ -250,17 +248,17 @@ export default function NotificationsPage() {
                         {!notification.isRead && (
                           <button
                             onClick={() => handleMarkAsRead(notification.id)}
-                            className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-200 transition-colors inline-flex items-center gap-1"
+                            className="px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-xs font-semibold hover:bg-neutral-200 transition-colors inline-flex items-center gap-1.5"
                           >
-                            <Check className="w-3 h-3" />
+                            <Check className="w-3.5 h-3.5" />
                             읽음
                           </button>
                         )}
                         <button
                           onClick={() => handleDelete(notification.id)}
-                          className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors inline-flex items-center gap-1"
+                          className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-semibold hover:bg-red-100 transition-colors inline-flex items-center gap-1.5"
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className="w-3.5 h-3.5" />
                           삭제
                         </button>
                       </div>
@@ -271,14 +269,14 @@ export default function NotificationsPage() {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Bell className="w-12 h-12 text-primary-600" />
+          <div className="card-notion p-12 text-center">
+            <div className="w-16 h-16 bg-neutral-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Bell className="w-8 h-8 text-neutral-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-neutral-900 mb-2">
               알림이 없습니다
             </h2>
-            <p className="text-gray-600">
+            <p className="text-sm text-neutral-600">
               {filter === "unread" ? "읽지 않은 알림이 없습니다." : "알림 내역이 없습니다."}
             </p>
           </div>
