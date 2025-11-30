@@ -88,6 +88,11 @@
   .animate-glow {
     animation: glow 2s ease-in-out infinite alternate;
   }
+  
+  .animate-gradient {
+    animation: gradient 3s ease infinite;
+    background-size: 200% 200%;
+  }
 }
 
 @keyframes float {
@@ -105,5 +110,23 @@
   }
   to {
     box-shadow: 0 0 30px rgba(13, 138, 232, 0.4);
+  }
+}
+
+@keyframes underline {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }

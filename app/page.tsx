@@ -28,31 +28,73 @@ export default function HomePage() {
               <span className="tracking-wide">부모님의 따뜻한 하루를 함께합니다</span>
             </div>
             
-            {/* Premium Logo */}
-            <div className="mb-10 animate-fade-in-up" style={{ animationDelay: '0.08s' }}>
-              <Logo variant="icon" size="lg" className="mx-auto" />
-            </div>
-            
-            {/* Main Heading - 프리미엄 타이포그래피 */}
-            <div className="mb-10 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-gray-900 mb-8 tracking-tighter leading-none">
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 animate-gradient bg-[length:200%_auto] drop-shadow-sm">
-                  케어링노트
-                </span>
-              </h1>
-              <div className="inline-block px-6 py-2.5 bg-gradient-to-r from-primary-50 to-accent-50 rounded-full border border-primary-200/50">
-                <p className="text-xl md:text-2xl lg:text-3xl text-gray-800 font-bold tracking-tight">
-                  요양원 케어 플랫폼
-                </p>
+            {/* Premium Logo with Enhanced Design */}
+            <div className="mb-12 animate-fade-in-up" style={{ animationDelay: '0.08s' }}>
+              <div className="relative inline-block">
+                {/* Outer Glow Ring */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-400/30 via-accent-400/30 to-primary-400/30 rounded-3xl blur-2xl scale-125 animate-pulse-slow"></div>
+                {/* Logo Container with 3D Effect */}
+                <div className="relative transform hover:scale-110 transition-transform duration-700 ease-out">
+                  <Logo variant="icon" size="lg" className="mx-auto relative z-10" />
+                  {/* Floating Particles */}
+                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-primary-400 rounded-full animate-float opacity-70" style={{ animationDelay: '0.5s' }}></div>
+                  <div className="absolute -bottom-2 -left-2 w-2 h-2 bg-accent-400 rounded-full animate-float opacity-60" style={{ animationDelay: '1s' }}></div>
+                </div>
               </div>
             </div>
             
-            {/* Description - 더 세련된 스타일 */}
-            <p className="text-xl md:text-2xl text-gray-700 mb-16 max-w-4xl mx-auto leading-relaxed font-medium animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
-              <span className="text-gray-600">요양원에 계신 부모님의 일상을 가족과 함께 공유하고,</span>
-              <br className="hidden md:block" />
-              <span className="bg-gradient-to-r from-primary-700 to-accent-700 bg-clip-text text-transparent font-semibold">건강한 생활을 지원하는 통합 소통 플랫폼</span>입니다.
-            </p>
+            {/* Main Heading - Enhanced Typography with Depth */}
+            <div className="mb-12 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-gray-900 mb-8 tracking-tighter leading-none relative">
+                {/* Text Shadow for Depth */}
+                <span className="absolute inset-0 text-gray-900/20 blur-md transform translate-x-1 translate-y-1">
+                  케어링노트
+                </span>
+                <span className="relative block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 animate-gradient bg-[length:200%_auto] drop-shadow-xl" 
+                      style={{
+                        textShadow: '0 4px 20px rgba(13, 138, 232, 0.3), 0 2px 10px rgba(240, 115, 63, 0.2)',
+                        WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.1)'
+                      }}>
+                  케어링노트
+                </span>
+              </h1>
+              {/* Enhanced Subtitle Card */}
+              <div className="relative inline-block group">
+                {/* Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-100 via-accent-100 to-primary-100 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                {/* Card */}
+                <div className="relative px-8 py-3.5 bg-white/90 backdrop-blur-xl rounded-2xl border-2 border-primary-200/60 shadow-xl shadow-primary-500/20 transform group-hover:scale-105 transition-all duration-300">
+                  <p className="text-xl md:text-2xl lg:text-3xl text-gray-800 font-bold tracking-tight relative">
+                    요양원 케어 플랫폼
+                    {/* Decorative Line */}
+                    <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent via-primary-500 to-transparent"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Description - Enhanced with Visual Elements */}
+            <div className="text-xl md:text-2xl text-gray-700 mb-16 max-w-4xl mx-auto leading-relaxed font-medium animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
+              {/* Decorative Quote Marks */}
+              <div className="absolute -left-4 -top-2 text-6xl text-primary-200/40 font-serif leading-none">"</div>
+              <div className="absolute -right-4 -bottom-8 text-6xl text-accent-200/40 font-serif leading-none">"</div>
+              
+              <p className="relative z-10">
+                <span className="text-gray-600 relative">
+                  요양원에 계신 부모님의 일상을 가족과 함께 공유하고,
+                  {/* Decorative Dot */}
+                  <span className="absolute -right-3 top-0 w-2 h-2 bg-primary-400 rounded-full opacity-60 animate-pulse"></span>
+                </span>
+                <br className="hidden md:block" />
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-primary-700 via-accent-600 to-primary-700 bg-clip-text text-transparent font-semibold bg-[length:200%_auto] animate-gradient">
+                    건강한 생활을 지원하는 통합 소통 플랫폼
+                  </span>
+                  {/* Underline Animation */}
+                  <span className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-1000 animate-[underline_2s_ease-in-out_forwards]"></span>
+                </span>입니다.
+              </p>
+            </div>
             
             {/* CTA Buttons - 프리미엄 스타일 */}
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
@@ -95,55 +137,125 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {/* Feature 1 - 프리미엄 카드 */}
-            <div className="group bg-white/90 backdrop-blur-sm rounded-3xl p-10 card-hover border border-gray-100/80 relative overflow-hidden shadow-soft">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            {/* Feature 1 - Enhanced Premium Card */}
+            <div className="group relative">
+              {/* Outer Glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-blue-500/10 to-transparent rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:scale-110"></div>
               
-              <div className="relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center mb-8 shadow-xl shadow-blue-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                  <Camera className="w-10 h-10 text-white" />
+              {/* Card Container */}
+              <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-10 border border-gray-100/80 shadow-2xl shadow-blue-500/10 transform transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-3xl group-hover:shadow-blue-500/30 overflow-hidden">
+                {/* Pattern Overlay */}
+                <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500" 
+                     style={{
+                       backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
+                       backgroundSize: '24px 24px'
+                     }}></div>
+                
+                {/* Gradient Overlay on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Icon with 3D Effect */}
+                  <div className="relative mb-8">
+                    {/* Icon Shadow */}
+                    <div className="absolute inset-0 bg-blue-600/30 rounded-3xl blur-xl transform scale-110 group-hover:scale-125 transition-transform duration-500"></div>
+                    {/* Icon Container */}
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-500/40 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border-2 border-white/20">
+                      {/* Inner Glow */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-3xl"></div>
+                      <Camera className="w-10 h-10 text-white relative z-10 drop-shadow-lg" />
+                    </div>
+                    {/* Floating Particles */}
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full animate-float opacity-60"></div>
+                    <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-blue-300 rounded-full animate-float opacity-50" style={{ animationDelay: '0.5s' }}></div>
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-gray-900 mb-4 tracking-tight relative">
+                    사진 공유
+                    {/* Decorative Line */}
+                    <span className="absolute left-0 bottom-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed text-[15px] font-medium relative z-10">
+                    요양원에서 부모님의 일상을 사진으로 공유하고, 가족들과 댓글로 소통하며 추억을 나누세요.
+                  </p>
                 </div>
-                <h3 className="text-3xl font-black text-gray-900 mb-4 tracking-tight">사진 공유</h3>
-                <p className="text-gray-600 leading-relaxed text-[15px] font-medium">
-                  요양원에서 부모님의 일상을 사진으로 공유하고, 가족들과 댓글로 소통하며 추억을 나누세요.
-                </p>
+                
+                {/* Bottom Accent Line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-b-3xl"></div>
               </div>
-              
-              <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="group bg-white/90 backdrop-blur-sm rounded-3xl p-10 card-hover border border-gray-100/80 relative overflow-hidden shadow-soft">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            {/* Feature 2 - Enhanced Premium Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-400/20 via-pink-500/10 to-transparent rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:scale-110"></div>
               
-              <div className="relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-3xl flex items-center justify-center mb-8 shadow-xl shadow-red-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                  <Heart className="w-10 h-10 text-white fill-white" />
+              <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-10 border border-gray-100/80 shadow-2xl shadow-red-500/10 transform transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-3xl group-hover:shadow-red-500/30 overflow-hidden">
+                <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500" 
+                     style={{
+                       backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
+                       backgroundSize: '24px 24px'
+                     }}></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-red-50/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="relative mb-8">
+                    <div className="absolute inset-0 bg-red-600/30 rounded-3xl blur-xl transform scale-110 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-red-500/40 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border-2 border-white/20">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-3xl"></div>
+                      <Heart className="w-10 h-10 text-white relative z-10 fill-white drop-shadow-lg" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full animate-float opacity-60"></div>
+                    <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-pink-300 rounded-full animate-float opacity-50" style={{ animationDelay: '0.5s' }}></div>
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-gray-900 mb-4 tracking-tight relative">
+                    의료 정보
+                    <span className="absolute left-0 bottom-0 w-12 h-1 bg-gradient-to-r from-red-500 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed text-[15px] font-medium relative z-10">
+                    건강 상태와 진료 기록을 투명하게 공유하여, 언제든지 부모님의 건강을 확인하고 안심하세요.
+                  </p>
                 </div>
-                <h3 className="text-3xl font-black text-gray-900 mb-4 tracking-tight">의료 정보</h3>
-                <p className="text-gray-600 leading-relaxed text-[15px] font-medium">
-                  건강 상태와 진료 기록을 투명하게 공유하여, 언제든지 부모님의 건강을 확인하고 안심하세요.
-                </p>
+                
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-pink-600 to-rose-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-b-3xl"></div>
               </div>
-              
-              <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-pink-600 to-rose-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
             </div>
 
-            {/* Feature 3 */}
-            <div className="group bg-white/90 backdrop-blur-sm rounded-3xl p-10 card-hover border border-gray-100/80 relative overflow-hidden shadow-soft">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            {/* Feature 3 - Enhanced Premium Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-emerald-500/10 to-transparent rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:scale-110"></div>
               
-              <div className="relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center mb-8 shadow-xl shadow-green-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                  <ShoppingBag className="w-10 h-10 text-white" />
+              <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-10 border border-gray-100/80 shadow-2xl shadow-green-500/10 transform transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-3xl group-hover:shadow-green-500/30 overflow-hidden">
+                <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500" 
+                     style={{
+                       backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
+                       backgroundSize: '24px 24px'
+                     }}></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-50/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="relative mb-8">
+                    <div className="absolute inset-0 bg-green-600/30 rounded-3xl blur-xl transform scale-110 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-green-500/40 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border-2 border-white/20">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-3xl"></div>
+                      <ShoppingBag className="w-10 h-10 text-white relative z-10 drop-shadow-lg" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-float opacity-60"></div>
+                    <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-emerald-300 rounded-full animate-float opacity-50" style={{ animationDelay: '0.5s' }}></div>
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-gray-900 mb-4 tracking-tight relative">
+                    생필품 구매
+                    <span className="absolute left-0 bottom-0 w-12 h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed text-[15px] font-medium relative z-10">
+                    필요한 생필품을 앱에서 쉽게 구매하고, 요양원으로 직접 배송받아 더욱 편리하게 관리하세요.
+                  </p>
                 </div>
-                <h3 className="text-3xl font-black text-gray-900 mb-4 tracking-tight">생필품 구매</h3>
-                <p className="text-gray-600 leading-relaxed text-[15px] font-medium">
-                  필요한 생필품을 앱에서 쉽게 구매하고, 요양원으로 직접 배송받아 더욱 편리하게 관리하세요.
-                </p>
+                
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-green-500 via-emerald-600 to-teal-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-b-3xl"></div>
               </div>
-              
-              <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-green-500 via-emerald-600 to-teal-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
             </div>
           </div>
         </div>
