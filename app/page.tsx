@@ -4,19 +4,26 @@ import Logo from "@/components/brand/Logo";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen gradient-soft overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-orange-50/20 overflow-hidden relative">
+      {/* 고급 배경 패턴 및 레이어 */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+      
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* 배경 그라데이션 레이어 - 더 세련된 조합 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-transparent to-accent-500/8"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(13,138,232,0.08),transparent_60%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(240,115,63,0.06),transparent_50%)]"></div>
+        {/* 다층 배경 그라데이션 - 더 세련된 조합 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-accent-500/8"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(13,138,232,0.12),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(240,115,63,0.10),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(139,92,246,0.06),transparent_70%)]"></div>
         
-        {/* Floating Elements - 더 부드럽고 세련된 배치 */}
-        <div className="absolute top-20 left-10 w-40 h-40 bg-primary-300/25 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent-300/25 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-blue-300/20 rounded-full blur-2xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/3 right-1/4 w-28 h-28 bg-purple-300/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }}></div>
+        {/* 고급 Floating Elements - 더 동적이고 세련된 배치 */}
+        <div className="absolute top-10 left-5 w-56 h-56 bg-gradient-to-br from-primary-400/20 to-blue-300/15 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-10 right-5 w-72 h-72 bg-gradient-to-br from-accent-400/20 to-orange-300/15 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute top-1/2 left-1/3 w-48 h-48 bg-gradient-to-br from-purple-300/15 to-pink-300/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-1/4 right-1/3 w-40 h-40 bg-gradient-to-br from-cyan-300/12 to-blue-300/8 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }}></div>
+        
+        {/* 메쉬 그라데이션 오버레이 */}
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_48%,rgba(255,255,255,0.03)_49%,rgba(255,255,255,0.03)_51%,transparent_52%)]"></div>
         
         <div className="container mx-auto px-4 py-24 md:py-36 relative z-10">
           <div className="max-w-6xl mx-auto text-center">

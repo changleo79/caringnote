@@ -73,11 +73,11 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // 요양원 확인 (일반 회원인 경우)
-    if (role === "FAMILY") {
+    // 요양원 확인 (가족 회원 및 요양원 직원)
+    if (role === "FAMILY" || role === "CAREGIVER") {
       if (!careCenterId) {
         return NextResponse.json(
-          { error: "가족 회원은 요양원을 선택해야 합니다." },
+          { error: role === "FAMILY" ? "가족 회원은 요양원을 선택해야 합니다." : "요양원 직원은 소속 요양원을 선택해야 합니다." },
           { status: 400 }
         )
       }
@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
 
     // 사용자 생성
     try {
-      console.log("👤 사용자 생성 시도:", { email, name, role, careCenterId: role === "FAMILY" ? careCenterId : null })
+      console.log("👤 사용자 생성 시도:", { email, name, role, careCenterId })
       
       const user = await prisma.user.create({
         data: {
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
           name,
           phone: phone || null,
           role: role || "FAMILY",
-          careCenterId: role === "FAMILY" ? careCenterId : null,
+          careCenterId: (role === "FAMILY" || role === "CAREGIVER") ? careCenterId : null,
         },
       })
 

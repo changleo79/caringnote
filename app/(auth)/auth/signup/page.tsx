@@ -131,7 +131,7 @@ export default function SignupPage() {
       return
     }
 
-    if (formData.role === "FAMILY" && !formData.careCenterId) {
+    if ((formData.role === "FAMILY" || formData.role === "CAREGIVER") && !formData.careCenterId) {
       toast.error("요양원을 선택해주세요.")
       return
     }
@@ -243,11 +243,11 @@ export default function SignupPage() {
               </div>
             </div>
 
-            {/* 요양원 선택 */}
-            {formData.role === "FAMILY" && (
+            {/* 요양원 선택 - 가족회원 및 요양원 직원 모두 */}
+            {(formData.role === "FAMILY" || formData.role === "CAREGIVER") && (
               <div>
                 <label className="block text-sm font-black text-gray-900 mb-4">
-                  요양원 선택
+                  {formData.role === "FAMILY" ? "요양원 선택" : "소속 요양원 선택"}
                 </label>
                 
                 {/* 오류 메시지 */}
@@ -294,8 +294,8 @@ export default function SignupPage() {
                       {loadingCareCenters 
                         ? "요양원 목록을 불러오는 중..." 
                         : careCenters.length === 0
-                        ? careCenterError || "요양원이 없습니다. 요양원 직원으로 가입하세요"
-                        : "요양원을 선택하세요"}
+                        ? careCenterError || (formData.role === "FAMILY" ? "요양원이 없습니다. 먼저 요양원을 등록해주세요" : "요양원이 없습니다. 먼저 요양원을 등록해주세요")
+                        : formData.role === "FAMILY" ? "요양원을 선택하세요" : "소속 요양원을 선택하세요"}
                     </option>
                     {careCenters.map((center) => (
                       <option key={center.id} value={center.id}>
