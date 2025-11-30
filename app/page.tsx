@@ -103,39 +103,59 @@ export default function HomePage() {
               </p>
             </div>
             
-            {/* CTA Buttons - 프리미엄 스타일 */}
+            {/* CTA Buttons - 초세련 스타일 */}
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
               <Link
                 href="/auth/signup"
-                className="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-primary-600 via-primary-600 to-primary-700 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:from-primary-700 hover:via-primary-700 hover:to-primary-800 transition-all duration-300 shadow-2xl shadow-primary-500/40 hover:shadow-3xl hover:shadow-primary-500/50 hover:scale-105 overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-primary-600 via-primary-600 to-primary-700 text-white px-12 py-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-2xl shadow-primary-500/40 hover:shadow-3xl hover:shadow-primary-500/50 hover:scale-105 overflow-hidden border-2 border-primary-500/20"
               >
+                {/* 애니메이션 배경 */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 bg-[length:200%_100%] animate-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_30%,rgba(255,255,255,0.1)_50%,transparent_70%)] translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                
                 <span className="relative z-10 flex items-center gap-2.5">
                   무료로 시작하기
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-700 to-primary-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Link>
               <Link
                 href="/auth/login"
-                className="inline-flex items-center justify-center gap-3 bg-white/90 backdrop-blur-sm text-primary-600 border-2 border-primary-600/80 px-12 py-5 rounded-2xl font-bold text-lg hover:bg-primary-50 hover:border-primary-700 hover:scale-105 transition-all duration-300 shadow-lg shadow-primary-500/10"
+                className="group relative inline-flex items-center justify-center gap-3 bg-white/95 backdrop-blur-xl text-primary-600 border-2 border-primary-600/60 px-12 py-5 rounded-2xl font-bold text-lg hover:bg-primary-50/80 hover:border-primary-700 hover:scale-105 transition-all duration-300 shadow-xl shadow-primary-500/10 hover:shadow-2xl hover:shadow-primary-500/20 overflow-hidden"
               >
-                로그인
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative z-10">로그인</span>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section - 프리미엄 디자인 */}
-      <section className="py-32 bg-white/80 backdrop-blur-sm relative">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.015]"></div>
+      {/* Features Section - 초세련 디자인 */}
+      <section className="py-32 relative overflow-hidden">
+        {/* 세련된 배경 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50/50 to-white"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.03]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(13,138,232,0.05),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(240,115,63,0.04),transparent_50%)]"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-24">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 tracking-tighter">
-              모든 것이
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 mt-2">
-                한 곳에서
+            {/* 섹션 배지 */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50/80 rounded-full border border-primary-100/60 mb-6">
+              <Sparkles className="w-4 h-4 text-primary-600" />
+              <span className="text-sm font-bold text-primary-700 tracking-wide">핵심 기능</span>
+            </div>
+            
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 tracking-tighter relative">
+              <span className="relative inline-block">
+                <span className="absolute inset-0 text-gray-200 blur-xl opacity-50">모든 것이</span>
+                모든 것이
+              </span>
+              <span className="block mt-3 relative">
+                <span className="absolute inset-0 text-gray-200 blur-xl opacity-50">한 곳에서</span>
+                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600">
+                  한 곳에서
+                </span>
               </span>
             </h2>
             <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
@@ -268,18 +288,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Benefits Section - 프리미엄 디자인 */}
-      <section className="py-32 gradient-soft relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(13,138,232,0.06),transparent_60%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(240,115,63,0.04),transparent_60%)]"></div>
+      {/* Benefits Section - 초세련 디자인 */}
+      <section className="py-32 relative overflow-hidden bg-gradient-to-b from-slate-50 via-blue-50/20 to-white">
+        {/* 고급 배경 요소 */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.02]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(13,138,232,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(240,115,63,0.06),transparent_60%)]"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-200/10 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid md:grid-cols-2 gap-20 max-w-7xl mx-auto items-center">
             <div className="animate-fade-in-up">
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-8 tracking-tighter leading-tight">
-                쉽고 간편하게
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 mt-3">
-                  시작하세요
+              {/* 섹션 배지 */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50/80 rounded-full border border-primary-100/60 mb-6">
+                <Sparkles className="w-4 h-4 text-primary-600" />
+                <span className="text-sm font-bold text-primary-700 tracking-wide">시작하기</span>
+              </div>
+              
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-8 tracking-tighter leading-tight relative">
+                <span className="relative inline-block">
+                  <span className="absolute inset-0 text-gray-200 blur-xl opacity-40">쉽고 간편하게</span>
+                  쉽고 간편하게
+                </span>
+                <span className="block mt-3 relative">
+                  <span className="absolute inset-0 text-gray-200 blur-xl opacity-40">시작하세요</span>
+                  <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600">
+                    시작하세요
+                  </span>
                 </span>
               </h2>
               <p className="text-xl text-gray-700 mb-12 leading-relaxed font-medium">
@@ -287,31 +323,46 @@ export default function HomePage() {
                 직관적인 인터페이스로 누구나 쉽게 사용할 수 있습니다.
               </p>
               <div className="space-y-6">
-                <div className="flex items-start gap-5 group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-md shadow-primary-500/10">
-                    <Users className="w-8 h-8 text-primary-700" />
-                  </div>
-                  <div>
-                    <h4 className="font-black text-gray-900 mb-2 text-xl">요양원 선택 가입</h4>
-                    <p className="text-gray-600 text-[15px] leading-relaxed font-medium">요양원을 선택하면 바로 연결됩니다</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-5 group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-200 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-md shadow-amber-500/10">
-                    <Bell className="w-8 h-8 text-orange-700" />
-                  </div>
-                  <div>
-                    <h4 className="font-black text-gray-900 mb-2 text-xl">실시간 알림</h4>
-                    <p className="text-gray-600 text-[15px] leading-relaxed font-medium">중요한 소식을 놓치지 마세요</p>
+                <div className="group relative">
+                  <div className="flex items-start gap-5 p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-100/80 hover:bg-white/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div className="relative flex-shrink-0">
+                      <div className="absolute inset-0 bg-primary-200/30 rounded-2xl blur-lg group-hover:scale-125 transition-transform duration-500"></div>
+                      <div className="relative w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30 group-hover:scale-110 transition-transform duration-300 border-2 border-white/30">
+                        <Users className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-black text-gray-900 mb-2 text-xl">요양원 선택 가입</h4>
+                      <p className="text-gray-600 text-[15px] leading-relaxed font-medium">요양원을 선택하면 바로 연결됩니다</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start gap-5 group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-green-200 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/10">
-                    <Shield className="w-8 h-8 text-green-700" />
+                <div className="group relative">
+                  <div className="flex items-start gap-5 p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-100/80 hover:bg-white/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div className="relative flex-shrink-0">
+                      <div className="absolute inset-0 bg-amber-200/30 rounded-2xl blur-lg group-hover:scale-125 transition-transform duration-500"></div>
+                      <div className="relative w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300 border-2 border-white/30">
+                        <Bell className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-black text-gray-900 mb-2 text-xl">실시간 알림</h4>
+                      <p className="text-gray-600 text-[15px] leading-relaxed font-medium">중요한 소식을 놓치지 마세요</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-black text-gray-900 mb-2 text-xl">안전한 정보 관리</h4>
-                    <p className="text-gray-600 text-[15px] leading-relaxed font-medium">개인정보와 의료 정보를 안전하게 보관합니다</p>
+                </div>
+                <div className="group relative">
+                  <div className="flex items-start gap-5 p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-100/80 hover:bg-white/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div className="relative flex-shrink-0">
+                      <div className="absolute inset-0 bg-emerald-200/30 rounded-2xl blur-lg group-hover:scale-125 transition-transform duration-500"></div>
+                      <div className="relative w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300 border-2 border-white/30">
+                        <Shield className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-black text-gray-900 mb-2 text-xl">안전한 정보 관리</h4>
+                      <p className="text-gray-600 text-[15px] leading-relaxed font-medium">개인정보와 의료 정보를 안전하게 보관합니다</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -350,28 +401,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section - 프리미엄 디자인 */}
+      {/* CTA Section - 초세련 디자인 */}
       <section className="py-32 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.12),transparent_60%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(240,115,63,0.15),transparent_60%)]"></div>
-        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        {/* 고급 배경 요소 */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(240,115,63,0.18),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent-400/10 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter">
-            지금 바로 시작해보세요
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter relative">
+            <span className="absolute inset-0 text-white/20 blur-2xl">지금 바로 시작해보세요</span>
+            <span className="relative">지금 바로 시작해보세요</span>
           </h2>
           <p className="text-xl md:text-2xl text-primary-100 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
             가족들과 함께 부모님의 행복한 일상을 공유하고, 건강한 생활을 지원하세요.
           </p>
           <Link
             href="/auth/signup"
-            className="group inline-flex items-center gap-3 bg-white text-primary-700 px-12 py-6 rounded-2xl font-black text-xl hover:bg-primary-50 hover:scale-105 transition-all duration-300 shadow-3xl hover:shadow-4xl relative overflow-hidden"
+            className="group relative inline-flex items-center gap-3 bg-white text-primary-700 px-14 py-6 rounded-2xl font-black text-xl hover:scale-110 transition-all duration-300 shadow-3xl hover:shadow-4xl overflow-hidden border-2 border-white/20"
           >
+            {/* 애니메이션 배경 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-50 via-white to-primary-50 bg-[length:200%_100%] animate-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_30%,rgba(13,138,232,0.1)_50%,transparent_70%)] translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+            
             <span className="relative z-10 flex items-center gap-3">
               무료로 시작하기
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </Link>
         </div>
       </section>
