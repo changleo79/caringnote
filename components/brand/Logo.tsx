@@ -16,22 +16,22 @@ export default function Logo({
 }: LogoProps) {
   const sizeClasses = {
     sm: {
+      icon: "w-8 h-8",
+      text: "text-lg",
+      subtext: "text-xs",
+      container: "gap-2"
+    },
+    md: {
       icon: "w-10 h-10",
       text: "text-xl",
       subtext: "text-xs",
       container: "gap-2.5"
     },
-    md: {
-      icon: "w-12 h-12",
-      text: "text-2xl",
-      subtext: "text-xs",
-      container: "gap-3"
-    },
     lg: {
-      icon: "w-16 h-16",
-      text: "text-4xl",
+      icon: "w-14 h-14",
+      text: "text-3xl",
       subtext: "text-sm",
-      container: "gap-4"
+      container: "gap-3"
     }
   }
 
@@ -44,115 +44,46 @@ export default function Logo({
       classes.container,
       className
     )}>
-      {/* Icon Container - 프리미엄 디자인 */}
+      {/* Icon Container - Notion/Linear 스타일 미니멀 */}
       <div className={cn(
         "relative flex items-center justify-center",
-        "bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500",
-        "rounded-2xl shadow-xl shadow-primary-500/30",
-        "transform transition-all duration-500 ease-out",
-        "hover:scale-110 hover:shadow-2xl hover:shadow-primary-500/40 hover:rotate-2",
-        "group",
-        "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/20 before:to-transparent before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-500",
+        "bg-neutral-900 rounded-lg",
+        "transform transition-all duration-200 ease-out",
+        "hover:bg-neutral-800 hover:scale-105 active:scale-95",
+        "shadow-notion hover:shadow-notion-lg",
         classes.icon
       )}>
-        {/* Inner Glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent rounded-2xl opacity-60"></div>
-        
-        {/* 초세련된 밝은 하트 로고 */}
+        {/* 하트 아이콘 - 미니멀하고 깔끔한 디자인 */}
         <svg
-          viewBox="0 0 64 64"
+          viewBox="0 0 24 24"
           className={cn(
-            "relative z-10 text-white fill-white drop-shadow-2xl",
-            "transform transition-transform duration-500 group-hover:scale-110",
-            size === "sm" ? "w-6 h-6" : size === "md" ? "w-7 h-7" : "w-9 h-9"
+            "relative z-10 text-white fill-white",
+            "transition-transform duration-200",
+            size === "sm" ? "w-5 h-5" : size === "md" ? "w-6 h-6" : "w-8 h-8"
           )}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <defs>
-            <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity={1} />
-              <stop offset="50%" stopColor="#ffffff" stopOpacity={1} />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity={0.98} />
-            </linearGradient>
-            <linearGradient id="heartShine" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity={1} />
-              <stop offset="40%" stopColor="#ffffff" stopOpacity={0.8} />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
-            </linearGradient>
-            <radialGradient id="heartGlow" cx="45%" cy="35%" r="70%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity={0.8} />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
-            </radialGradient>
-            <linearGradient id="heartReflection" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity={0.9} />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity={0.3} />
-            </linearGradient>
-          </defs>
-          
-          {/* 외부 글로우 - 더 밝게 */}
-          <circle cx="32" cy="32" r="30" fill="url(#heartGlow)" opacity="0.6" />
-          
-          {/* 메인 하트 - 밝고 깔끔한 디자인 */}
-          <g transform="translate(32, 32)">
-            {/* 메인 하트 - 밝은 흰색 */}
-            <path
-              d="M-15,-9 C-15,-17 -8,-21 0,-21 C8,-21 15,-17 15,-9 C15,-2 7,5 0,13 C-7,5 -15,-2 -15,-9 Z"
-              fill="url(#heartGradient)"
-              stroke="white"
-              strokeWidth="1"
-              strokeOpacity="0.5"
-            />
-            
-            {/* 상단 하이라이트 - 더 강하게 */}
-            <path
-              d="M-13,-10 C-13,-16 -7,-19 0,-19 C5,-19 9,-17 11,-13"
-              fill="url(#heartShine)"
-              opacity="1"
-            />
-            
-            {/* 반사 효과 */}
-            <ellipse cx="-8" cy="-11" rx="4" ry="6" fill="url(#heartReflection)" opacity="0.7" transform="rotate(-15)" />
-            
-            {/* 작은 하트 (노트 아이콘) - 더 밝게 */}
-            <g transform="translate(3, -5) scale(0.4)">
-              <path
-                d="M-6,-2 C-6,-4 -3,-5 0,-5 C3,-5 6,-4 6,-2 C6,-1 3,1 0,4 C-3,1 -6,-1 -6,-2 Z"
-                fill="white"
-                opacity="0.9"
-              />
-            </g>
-          </g>
-          
-          {/* 반짝이는 효과 - 더 밝고 많게 */}
-          <circle cx="22" cy="18" r="2" fill="white" opacity="0.9">
-            <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="42" cy="22" r="1.5" fill="white" opacity="0.8">
-            <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.3s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="28" cy="28" r="1" fill="white" opacity="0.7">
-            <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2.7s" repeatCount="indefinite" />
-          </circle>
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            fill="currentColor"
+          />
         </svg>
       </div>
 
-      {/* Text - 프리미엄 타이포그래피 */}
+      {/* Text - Notion 스타일 타이포그래피 */}
       {variant !== "icon" && (
         <div className="flex flex-col">
           <span className={cn(
-            "font-black tracking-tighter",
-            "bg-gradient-to-r from-blue-400 via-primary-400 to-blue-500 bg-clip-text text-transparent",
+            "font-bold tracking-tight",
+            "text-neutral-900",
             "leading-none",
-            "group-hover:from-blue-300 group-hover:via-primary-300 group-hover:to-blue-400",
-            "transition-all duration-500",
             classes.text
           )}>
             케어링노트
           </span>
           {size === "lg" && (
             <span className={cn(
-              "text-gray-600 font-semibold mt-1 tracking-wider",
-              "group-hover:text-gray-700 transition-colors duration-300",
+              "text-neutral-600 font-medium mt-0.5",
               classes.subtext
             )}>
               Caring Note
