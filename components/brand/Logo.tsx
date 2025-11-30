@@ -145,7 +145,6 @@ export default function Logo({
             "leading-none",
             "group-hover:from-blue-300 group-hover:via-primary-300 group-hover:to-blue-400",
             "transition-all duration-500",
-            "drop-shadow-sm",
             classes.text
           )}>
             케어링노트

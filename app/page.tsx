@@ -53,15 +53,7 @@ export default function HomePage() {
             {/* Main Heading - Enhanced Typography with Depth */}
             <div className="mb-12 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-gray-900 mb-8 tracking-tighter leading-none relative">
-                {/* Text Shadow for Depth */}
-                <span className="absolute inset-0 text-gray-900/20 blur-md transform translate-x-1 translate-y-1">
-                  케어링노트
-                </span>
-                <span className="relative block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-primary-400 to-blue-500 animate-gradient bg-[length:200%_auto] drop-shadow-xl" 
-                      style={{
-                        textShadow: '0 4px 20px rgba(96, 165, 250, 0.5), 0 2px 10px rgba(59, 130, 246, 0.4)',
-                        WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.2)'
-                      }}>
+                <span className="relative block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-primary-400 to-blue-500 animate-gradient bg-[length:200%_auto]">
                   케어링노트
                 </span>
               </h1>
@@ -97,8 +89,6 @@ export default function HomePage() {
                   <span className="bg-gradient-to-r from-primary-700 via-accent-600 to-primary-700 bg-clip-text text-transparent font-semibold bg-[length:200%_auto] animate-gradient">
                     건강한 생활을 지원하는 통합 소통 플랫폼
                   </span>
-                  {/* Underline Animation */}
-                  <span className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-1000 animate-[underline_2s_ease-in-out_forwards]"></span>
                 </span>입니다.
               </p>
             </div>
