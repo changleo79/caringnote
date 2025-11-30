@@ -15,12 +15,57 @@ export default async function ResidentsPage() {
     redirect("/auth/login")
   }
 
-  if (!session.user.careCenterId) {
+  // 요양원 정보 확인 (FAMILY는 연결된 입소자의 요양원 확인)
+  let hasCareCenter = false
+  if (session.user.role === "ADMIN" || session.user.role === "CAREGIVER") {
+    hasCareCenter = !!session.user.careCenterId
+  } else if (session.user.role === "FAMILY") {
+    // FAMILY는 연결된 입소자가 있는지 확인
+    try {
+      const residentFamily = await prisma.residentFamily.findFirst({
+        where: {
+          userId: session.user.id!,
+          isApproved: true,
+        },
+      })
+      hasCareCenter = !!residentFamily
+    } catch (error) {
+      console.error("Failed to check resident family:", error)
+    }
+  }
+
+  if (!hasCareCenter) {
     return (
       <AppLayout>
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <p className="text-gray-600">요양원 정보가 필요합니다.</p>
+            <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Building2 className="w-12 h-12 text-primary-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              요양원 정보가 필요합니다
+            </h2>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              {session.user.role === "FAMILY"
+                ? "입소자와 연결되어 있지 않아 입소자 정보를 확인할 수 없습니다. 먼저 입소자와 연결해주세요."
+                : "요양원 정보를 설정하여 서비스를 시작할 수 있습니다."}
+            </p>
+            {session.user.role === "FAMILY" ? (
+              <Link
+                href="/care-center"
+                className="btn-primary inline-flex items-center gap-2"
+              >
+                요양원 정보 확인하기
+              </Link>
+            ) : (
+              <Link
+                href="/care-center"
+                className="btn-primary inline-flex items-center gap-2"
+              >
+                <Building2 className="w-5 h-5" />
+                요양원 정보 설정하기
+              </Link>
+            )}
           </div>
         </div>
       </AppLayout>

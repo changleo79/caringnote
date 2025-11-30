@@ -18,6 +18,7 @@ import {
   Settings,
   ChevronDown,
   Users,
+  Building2,
 } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
 
@@ -52,6 +53,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       label: "입소자", 
       icon: User,
       show: session?.user?.role === "FAMILY" || session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
+    },
+    { 
+      href: "/care-center", 
+      label: "요양원 정보", 
+      icon: Building2,
+      show: true // 모든 사용자에게 표시
     },
     { 
       href: "/care-center/members", 

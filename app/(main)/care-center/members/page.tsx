@@ -5,6 +5,7 @@ import AppLayout from "@/components/layout/AppLayout"
 import { prisma } from "@/lib/prisma"
 import { Users, User, Building2, Mail, Phone, Calendar, Shield } from "lucide-react"
 import MemberList from "./MemberList"
+import Link from "next/link"
 
 export default async function CareCenterMembersPage() {
   const session = await getServerSession(authOptions)
@@ -31,7 +32,22 @@ export default async function CareCenterMembersPage() {
       <AppLayout>
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
-            <p className="text-gray-600">요양원 정보가 필요합니다.</p>
+            <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Building2 className="w-12 h-12 text-primary-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              요양원 정보가 필요합니다
+            </h2>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              요양원 정보를 설정하여 회원 관리를 시작할 수 있습니다.
+            </p>
+            <Link
+              href="/care-center"
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <Building2 className="w-5 h-5" />
+              요양원 정보 설정하기
+            </Link>
           </div>
         </div>
       </AppLayout>
