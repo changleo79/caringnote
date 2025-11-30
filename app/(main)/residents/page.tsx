@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
-import { Plus, User, Calendar, MapPin, Edit, Trash2, Users } from "lucide-react"
+import { Plus, User, Calendar, MapPin, Edit, Trash2, Users, Building2 } from "lucide-react"
 import Image from "next/image"
 import ResidentActions from "./ResidentActions"
 

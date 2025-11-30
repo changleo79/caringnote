@@ -17,10 +17,6 @@ export default function MemberList({
   const [filterRole, setFilterRole] = useState<string>("ALL") // ALL, FAMILY, CAREGIVER
   const [searchQuery, setSearchQuery] = useState("")
 
-  useEffect(() => {
-    loadMembers()
-  }, [careCenterId, filterRole])
-
   const loadMembers = async () => {
     setIsLoading(true)
     try {
@@ -28,21 +24,22 @@ export default function MemberList({
       if (filterRole !== "ALL") {
         url += `?role=${filterRole}`
       }
-
       const res = await fetch(url)
-      const data = await res.json()
-
       if (res.ok) {
-        setMembers(data)
-      } else {
-        console.error("Failed to load members:", data.error)
+        const data = await res.json()
+        setMembers(data.members || data || [])
       }
     } catch (error) {
-      console.error("Error loading members:", error)
+      console.error("Failed to load members:", error)
     } finally {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadMembers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [careCenterId, filterRole])
 
   // 검색 필터링
   const filteredMembers = members.filter(member => {
