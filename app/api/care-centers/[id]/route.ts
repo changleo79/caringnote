@@ -19,7 +19,7 @@ export async function GET(
     }
 
     // 요양원 직원만 자신의 요양원 정보를 조회할 수 있음
-    if (session.user.role !== "CAREGIVER" || !session.user.careCenterId) {
+    if (session.user.role !== "CAREGIVER") {
       return NextResponse.json(
         { error: "요양원 직원만 접근할 수 있습니다." },
         { status: 403 }
@@ -113,7 +113,7 @@ export async function PATCH(
     }
 
     // 요양원 직원만 수정 가능
-    if (session.user.role !== "CAREGIVER" || !session.user.careCenterId) {
+    if (session.user.role !== "CAREGIVER") {
       return NextResponse.json(
         { error: "요양원 직원만 수정할 수 있습니다." },
         { status: 403 }
