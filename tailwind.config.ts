@@ -126,12 +126,15 @@ const config: Config = {
         '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.05em' }],
       },
       boxShadow: {
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'soft-lg': '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
-        'soft-xl': '0 20px 60px -15px rgba(0, 0, 0, 0.15)',
+        'soft': '0 4px 20px 0 rgba(0, 0, 0, 0.08), 0 2px 8px 0 rgba(0, 0, 0, 0.04)',
+        'soft-lg': '0 15px 40px -5px rgba(0, 0, 0, 0.12), 0 6px 16px -3px rgba(0, 0, 0, 0.08)',
+        'soft-xl': '0 25px 60px -10px rgba(0, 0, 0, 0.18), 0 10px 25px -5px rgba(0, 0, 0, 0.12)',
         'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        'glow': '0 0 20px rgba(13, 138, 232, 0.3)',
-        'glow-lg': '0 0 40px rgba(13, 138, 232, 0.4)',
+        'glow': '0 0 30px rgba(13, 138, 232, 0.4)',
+        'glow-lg': '0 0 50px rgba(13, 138, 232, 0.5)',
+        'app': '0 4px 20px 0 rgba(0, 0, 0, 0.08), 0 2px 8px 0 rgba(0, 0, 0, 0.04)',
+        'app-lg': '0 15px 40px -5px rgba(0, 0, 0, 0.12), 0 6px 16px -3px rgba(0, 0, 0, 0.08)',
+        'app-xl': '0 25px 60px -10px rgba(0, 0, 0, 0.18), 0 10px 25px -5px rgba(0, 0, 0, 0.12)',
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out',
@@ -176,6 +179,7 @@ const config: Config = {
       borderRadius: {
         '4xl': '2rem',
         '5xl': '2.5rem',
+        '6xl': '3rem',
       },
       backdropBlur: {
         'xs': '2px',

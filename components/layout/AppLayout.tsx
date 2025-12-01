@@ -32,30 +32,30 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 상단 네비게이션 */}
-      <header className="bg-white border-b border-neutral-200 sticky top-0 z-50 shadow-sm">
+      {/* 상단 네비게이션 - 앱다운 느낌 */}
+      <header className="bg-white/80 backdrop-blur-xl border-b border-neutral-100 sticky top-0 z-50 shadow-app">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             <Logo variant="default" size="md" href="/dashboard" />
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* 알림 */}
-              <button className="relative p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors">
+              <button className="relative p-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-2xl transition-all duration-300 hover:scale-110">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full border-2 border-white"></span>
               </button>
 
               {/* 사용자 메뉴 */}
               <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2 text-sm text-neutral-700">
-                  <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-accent-400 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                <div className="hidden sm:flex items-center gap-3 text-sm text-neutral-700 px-4 py-2 bg-neutral-50 rounded-2xl">
+                  <div className="w-10 h-10 bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30">
+                    <User className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-medium">{session?.user?.name}</span>
+                  <span className="font-bold">{session?.user?.name}</span>
                 </div>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="p-2 text-neutral-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-3 text-neutral-600 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 hover:scale-110"
                   title="로그아웃"
                 >
                   <LogOut className="w-5 h-5" />
@@ -65,7 +65,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               {/* 모바일 메뉴 버튼 */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors"
+                className="md:hidden p-3 text-neutral-600 hover:bg-neutral-100 rounded-2xl transition-all duration-300"
               >
                 {mobileMenuOpen ? (
                   <X className="w-6 h-6" />
@@ -77,10 +77,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* 모바일 메뉴 (드롭다운) */}
+        {/* 모바일 메뉴 (드롭다운) - 앱다운 느낌 */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-neutral-200 bg-white">
-            <nav className="container mx-auto px-4 py-2 space-y-1">
+          <div className="md:hidden border-t border-neutral-100 bg-white/95 backdrop-blur-xl">
+            <nav className="container mx-auto px-4 py-3 space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
@@ -90,14 +90,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
+                      "flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300",
                       isActive
-                        ? "bg-primary-50 text-primary-600 font-semibold"
-                        : "text-neutral-600 hover:bg-neutral-50"
+                        ? "bg-gradient-to-r from-primary-50 to-primary-100 text-primary-700 font-bold shadow-md shadow-primary-100/50"
+                        : "text-neutral-600 hover:bg-neutral-50 hover:scale-[1.02]"
                     )}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span>{item.label}</span>
+                    <Icon className={cn("w-6 h-6", isActive && "scale-110")} />
+                    <span className="text-base">{item.label}</span>
                   </Link>
                 )
               })}
@@ -106,9 +106,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      {/* 하단 네비게이션 (모바일) */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 md:hidden z-50 shadow-lg">
-        <div className="flex justify-around items-center h-16 safe-area-inset-bottom">
+      {/* 하단 네비게이션 (모바일) - 앱다운 느낌 */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-neutral-100 md:hidden z-50 shadow-app-xl">
+        <div className="flex justify-around items-center h-20 safe-area-inset-bottom px-2">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
@@ -117,21 +117,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center flex-1 h-full transition-all",
+                  "flex flex-col items-center justify-center flex-1 h-full transition-all duration-300",
                   isActive
                     ? "text-primary-600"
                     : "text-neutral-400 hover:text-neutral-600"
                 )}
               >
                 <div className={cn(
-                  "p-2 rounded-xl transition-all",
-                  isActive && "bg-primary-50"
+                  "p-3 rounded-2xl transition-all duration-300 mb-1",
+                  isActive 
+                    ? "bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/30 scale-110" 
+                    : "hover:bg-neutral-100"
                 )}>
-                  <Icon className="w-6 h-6" />
+                  <Icon className={cn("w-6 h-6", isActive && "text-white")} />
                 </div>
                 <span className={cn(
-                  "text-xs mt-1",
-                  isActive && "font-semibold"
+                  "text-xs font-semibold",
+                  isActive && "text-primary-600"
                 )}>
                   {item.label}
                 </span>
@@ -141,10 +143,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </nav>
 
-      {/* 사이드바 (데스크톱) */}
+      {/* 사이드바 (데스크톱) - 앱다운 느낌 */}
       <div className="hidden md:flex">
-        <aside className="w-64 bg-white border-r border-neutral-200 min-h-[calc(100vh-64px)] sticky top-16">
-          <nav className="p-4 space-y-1">
+        <aside className="w-72 bg-white/50 backdrop-blur-xl border-r border-neutral-100 min-h-[calc(100vh-80px)] sticky top-20">
+          <nav className="p-6 space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
@@ -153,17 +155,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-xl transition-all group",
+                    "flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group",
                     isActive
-                      ? "bg-gradient-to-r from-primary-50 to-primary-50/50 text-primary-700 font-semibold shadow-sm"
-                      : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+                      ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white font-bold shadow-xl shadow-primary-500/30 scale-[1.02]"
+                      : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 hover:scale-[1.01]"
                   )}
                 >
                   <Icon className={cn(
-                    "w-5 h-5 transition-transform",
+                    "w-6 h-6 transition-transform duration-300",
                     isActive && "scale-110"
                   )} />
-                  <span>{item.label}</span>
+                  <span className="text-base">{item.label}</span>
                 </Link>
               )
             })}
@@ -171,7 +173,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </aside>
 
         {/* 메인 컨텐츠 */}
-        <main className="flex-1 pb-4">
+        <main className="flex-1 pb-6">
           {children}
         </main>
       </div>
