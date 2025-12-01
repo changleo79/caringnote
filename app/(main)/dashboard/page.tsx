@@ -65,83 +65,85 @@ export default async function DashboardPage() {
   return (
     <AppLayout>
       <div className="container mx-auto px-4 py-10 max-w-7xl">
-        {/* Welcome Section - 프리미엄 디자인 */}
-        <div className="mb-10">
-          <div className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl p-10 md:p-14 text-white shadow-soft-xl overflow-hidden">
+        {/* Welcome Section - 앱다운 느낌 */}
+        <div className="mb-12">
+          <div className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl p-12 md:p-16 text-white shadow-app-xl overflow-hidden">
             {/* 배경 패턴 */}
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent_60%)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.15),transparent_60%)]"></div>
             
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
-                <Sparkles className="w-5 h-5 text-primary-100" />
-                <span className="text-sm font-semibold text-primary-100">오늘도 좋은 하루 되세요</span>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-2xl">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-sm font-bold text-white/90">오늘도 좋은 하루 되세요</span>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3 tracking-tight">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tight">
                 안녕하세요, {session.user.name}님
               </h1>
-              <p className="text-lg md:text-xl text-primary-50 font-medium">
+              <p className="text-xl md:text-2xl text-white/90 font-semibold">
                 부모님의 건강한 하루를 함께합니다
               </p>
             </div>
           </div>
         </div>
 
-        {/* Quick Actions - 프리미엄 카드 */}
-        <div className={`grid grid-cols-2 ${session.user.role === "CAREGIVER" ? "md:grid-cols-5" : "md:grid-cols-4"} gap-5 mb-10`}>
+        {/* Quick Actions - 앱다운 느낌 */}
+        <div className={`grid grid-cols-2 ${session.user.role === "CAREGIVER" ? "md:grid-cols-5" : "md:grid-cols-4"} gap-6 mb-12`}>
           <Link
             href="/community/new"
-            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+            className="group bg-white rounded-3xl p-8 shadow-app-lg border border-neutral-100 card-hover relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-blue-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                <Camera className="w-8 h-8 text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center mb-6 shadow-xl shadow-blue-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Camera className="w-10 h-10 text-white" />
               </div>
-              <p className="font-black text-gray-900 mb-1.5 text-lg">사진 공유</p>
-              <p className="text-xs text-gray-500 font-medium">일상 기록하기</p>
+              <p className="font-black text-neutral-900 mb-2 text-xl">사진 공유</p>
+              <p className="text-sm text-neutral-500 font-semibold">일상 기록하기</p>
             </div>
           </Link>
 
           <Link
             href="/medical/new"
-            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+            className="group bg-white rounded-3xl p-8 shadow-app-lg border border-neutral-100 card-hover relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-red-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-red-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                <Heart className="w-8 h-8 text-white fill-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl shadow-red-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Heart className="w-10 h-10 text-white fill-white" />
               </div>
-              <p className="font-black text-gray-900 mb-1.5 text-lg">의료 기록</p>
-              <p className="text-xs text-gray-500 font-medium">건강 정보 기록</p>
+              <p className="font-black text-neutral-900 mb-2 text-xl">의료 기록</p>
+              <p className="text-sm text-neutral-500 font-semibold">건강 정보 기록</p>
             </div>
           </Link>
 
           <Link
             href="/shop"
-            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+            className="group bg-white rounded-3xl p-8 shadow-app-lg border border-neutral-100 card-hover relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-green-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                <ShoppingBag className="w-8 h-8 text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl shadow-green-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <ShoppingBag className="w-10 h-10 text-white" />
               </div>
-              <p className="font-black text-gray-900 mb-1.5 text-lg">생필품 구매</p>
-              <p className="text-xs text-gray-500 font-medium">필요한 물품 주문</p>
+              <p className="font-black text-neutral-900 mb-2 text-xl">생필품 구매</p>
+              <p className="text-sm text-neutral-500 font-semibold">필요한 물품 주문</p>
             </div>
           </Link>
 
           <Link
             href="/notifications"
-            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+            className="group bg-white rounded-3xl p-8 shadow-app-lg border border-neutral-100 card-hover relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-amber-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                <Bell className="w-8 h-8 text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl shadow-amber-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Bell className="w-10 h-10 text-white" />
               </div>
-              <p className="font-black text-gray-900 mb-1.5 text-lg">알림</p>
-              <p className="text-xs text-gray-500 font-medium">새 소식 확인</p>
+              <p className="font-black text-neutral-900 mb-2 text-xl">알림</p>
+              <p className="text-sm text-neutral-500 font-semibold">새 소식 확인</p>
             </div>
           </Link>
 
@@ -149,65 +151,65 @@ export default async function DashboardPage() {
           {session.user.role === "CAREGIVER" && (
             <Link
               href="/care-center/edit"
-              className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+              className="group bg-white rounded-3xl p-8 shadow-app-lg border border-neutral-100 card-hover relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-purple-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                  <Building2 className="w-8 h-8 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl shadow-purple-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                  <Building2 className="w-10 h-10 text-white" />
                 </div>
-                <p className="font-black text-gray-900 mb-1.5 text-lg">요양원 정보</p>
-                <p className="text-xs text-gray-500 font-medium">정보 수정하기</p>
+                <p className="font-black text-neutral-900 mb-2 text-xl">요양원 정보</p>
+                <p className="text-sm text-neutral-500 font-semibold">정보 수정하기</p>
               </div>
             </Link>
           )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* 최근 커뮤니티 - 프리미엄 디자인 */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft-lg border border-gray-100/80 overflow-hidden">
-            <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50/30 to-transparent">
-              <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <Camera className="w-5 h-5 text-white" />
+          {/* 최근 커뮤니티 - 앱다운 느낌 */}
+          <div className="bg-white rounded-3xl shadow-app-lg border border-neutral-100 overflow-hidden">
+            <div className="p-8 border-b border-neutral-100 flex items-center justify-between bg-gradient-to-r from-blue-50/50 to-transparent">
+              <h2 className="text-2xl font-black text-neutral-900 flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                  <Camera className="w-6 h-6 text-white" />
                 </div>
                 최근 커뮤니티
               </h2>
               <Link
                 href="/community"
-                className="text-sm text-primary-600 hover:text-primary-700 font-bold flex items-center gap-1.5 group/link"
+                className="text-sm text-primary-600 hover:text-primary-700 font-bold flex items-center gap-2 group/link px-4 py-2 rounded-xl hover:bg-primary-50 transition-all duration-300"
               >
                 더보기
                 <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="p-6 md:p-8 space-y-4">
+            <div className="p-8 space-y-4">
               {recentPosts.length > 0 ? (
                 recentPosts.map((post) => (
                   <Link
                     key={post.id}
                     href={`/community/${post.id}`}
-                    className="block p-5 bg-gradient-to-r from-gray-50 to-white rounded-2xl hover:from-blue-50 hover:to-blue-50/50 transition-all duration-300 group border border-gray-100 hover:border-blue-200 hover:shadow-md"
+                    className="block p-6 bg-gradient-to-r from-neutral-50 to-white rounded-2xl hover:from-blue-50 hover:to-blue-50/50 transition-all duration-300 group border border-neutral-100 hover:border-blue-200 hover:shadow-lg hover:-translate-y-1"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-primary-400 via-primary-500 to-accent-400 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                        <ImageIcon className="w-6 h-6 text-white" />
+                      <div className="w-14 h-14 bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary-500/30 group-hover:scale-110 transition-transform duration-300">
+                        <ImageIcon className="w-7 h-7 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-3">
                           {post.resident && (
-                            <span className="text-xs bg-primary-100 text-primary-700 px-3 py-1 rounded-full font-bold">
+                            <span className="text-xs bg-primary-100 text-primary-700 px-3 py-1.5 rounded-full font-bold">
                               {post.resident.name}
                             </span>
                           )}
-                          <span className="text-xs text-gray-500 font-medium">
+                          <span className="text-xs text-neutral-500 font-semibold">
                             {post.author.name}
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-gray-900 truncate group-hover:text-primary-600 transition-colors mb-1">
+                        <p className="text-base font-bold text-neutral-900 truncate group-hover:text-primary-600 transition-colors mb-2">
                           {post.title || "제목 없음"}
                         </p>
-                        <p className="text-xs text-gray-500 font-medium">
+                        <p className="text-xs text-neutral-500 font-semibold">
                           {formatDate(post.createdAt)}
                         </p>
                       </div>
@@ -234,45 +236,45 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* 최근 의료 기록 - 프리미엄 디자인 */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft-lg border border-gray-100/80 overflow-hidden">
-            <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-red-50/30 to-transparent">
-              <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/20">
-                  <Heart className="w-5 h-5 text-white fill-white" />
+          {/* 최근 의료 기록 - 앱다운 느낌 */}
+          <div className="bg-white rounded-3xl shadow-app-lg border border-neutral-100 overflow-hidden">
+            <div className="p-8 border-b border-neutral-100 flex items-center justify-between bg-gradient-to-r from-red-50/50 to-transparent">
+              <h2 className="text-2xl font-black text-neutral-900 flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30">
+                  <Heart className="w-6 h-6 text-white fill-white" />
                 </div>
                 최근 의료 기록
               </h2>
               <Link
                 href="/medical"
-                className="text-sm text-red-600 hover:text-red-700 font-bold flex items-center gap-1.5 group/link"
+                className="text-sm text-red-600 hover:text-red-700 font-bold flex items-center gap-2 group/link px-4 py-2 rounded-xl hover:bg-red-50 transition-all duration-300"
               >
                 더보기
                 <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="p-6 md:p-8 space-y-4">
+            <div className="p-8 space-y-4">
               {recentMedicalRecords.length > 0 ? (
                 recentMedicalRecords.map((record) => (
                   <Link
                     key={record.id}
                     href={`/medical/${record.id}`}
-                    className="block p-5 bg-gradient-to-r from-red-50/30 to-white rounded-2xl hover:from-red-50 hover:to-red-50/50 transition-all duration-300 group border border-red-100 hover:border-red-200 hover:shadow-md"
+                    className="block p-6 bg-gradient-to-r from-red-50/50 to-white rounded-2xl hover:from-red-50 hover:to-red-50/50 transition-all duration-300 group border border-red-100 hover:border-red-200 hover:shadow-lg hover:-translate-y-1"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-xs bg-red-100 text-red-700 px-3 py-1.5 rounded-full font-bold">
                             {record.category}
                           </span>
-                          <span className="text-xs text-gray-500 font-medium">
+                          <span className="text-xs text-neutral-500 font-semibold">
                             {record.resident.name}
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors mb-2">
+                        <p className="text-base font-bold text-neutral-900 group-hover:text-red-600 transition-colors mb-2">
                           {record.title}
                         </p>
-                        <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium">
+                        <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-semibold">
                           <Calendar className="w-3.5 h-3.5" />
                           {formatDate(record.recordDate)}
                         </div>
