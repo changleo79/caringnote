@@ -54,13 +54,22 @@ export default function EditCareCenterPage() {
           })
         } else {
           console.error("요양원 정보 불러오기 실패:", data)
-          toast.error(data.error || "요양원 정보를 불러오는데 실패했습니다.")
-          // 요양원이 없으면 계속 진행 (나중에 저장 시 생성됨)
-          if (data.error?.includes("찾을 수 없습니다")) {
+          // 요양원이 없으면 빈 폼으로 계속 진행 (저장 시 자동 생성됨)
+          if (res.status === 404 || data.error?.includes("찾을 수 없습니다")) {
+            console.log("요양원이 없음 - 빈 폼으로 진행")
             // 빈 폼으로 계속 진행
+            setFormData({
+              name: "",
+              address: "",
+              phone: "",
+              email: "",
+              description: "",
+              logoUrl: "",
+            })
             setLoadingData(false)
             return
           }
+          toast.error(data.error || "요양원 정보를 불러오는데 실패했습니다.")
           router.push("/dashboard")
         }
       } catch (error: any) {
