@@ -34,7 +34,7 @@ export async function GET(
       )
     }
 
-    const careCenter = await prisma.careCenter.findUnique({
+    let careCenter = await prisma.careCenter.findUnique({
       where: { id: params.id },
       select: {
         id: true,
@@ -47,11 +47,41 @@ export async function GET(
       },
     })
 
+    // 요양원이 없으면 자동으로 생성
     if (!careCenter) {
-      return NextResponse.json(
-        { error: "요양원을 찾을 수 없습니다." },
-        { status: 404 }
-      )
+      // 사용자 정보 가져오기
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { name: true },
+      })
+
+      // 기본 요양원 정보로 생성
+      careCenter = await prisma.careCenter.create({
+        data: {
+          id: params.id,
+          name: `${user?.name || "요양원"}의 요양원`,
+          address: "주소를 입력해주세요",
+          phone: null,
+          email: null,
+          description: null,
+          logoUrl: null,
+        },
+        select: {
+          id: true,
+          name: true,
+          address: true,
+          phone: true,
+          email: true,
+          description: true,
+          logoUrl: true,
+        },
+      })
+
+      // 사용자의 careCenterId 업데이트
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { careCenterId: params.id },
+      })
     }
 
     return NextResponse.json(careCenter)
@@ -106,27 +136,70 @@ export async function PATCH(
       )
     }
 
-    // 요양원 정보 업데이트
-    const updatedCareCenter = await prisma.careCenter.update({
+    // 요양원이 존재하는지 확인
+    let careCenter = await prisma.careCenter.findUnique({
       where: { id: params.id },
-      data: {
-        name,
-        address,
-        phone: phone || null,
-        email: email || null,
-        description: description || null,
-        logoUrl: logoUrl || null,
-      },
-      select: {
-        id: true,
-        name: true,
-        address: true,
-        phone: true,
-        email: true,
-        description: true,
-        logoUrl: true,
-      },
     })
+
+    let updatedCareCenter
+
+    // 요양원이 없으면 생성
+    if (!careCenter) {
+      // 사용자 정보 가져오기
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { name: true },
+      })
+
+      updatedCareCenter = await prisma.careCenter.create({
+        data: {
+          id: params.id,
+          name,
+          address,
+          phone: phone || null,
+          email: email || null,
+          description: description || null,
+          logoUrl: logoUrl || null,
+        },
+        select: {
+          id: true,
+          name: true,
+          address: true,
+          phone: true,
+          email: true,
+          description: true,
+          logoUrl: true,
+        },
+      })
+
+      // 사용자의 careCenterId 업데이트
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { careCenterId: params.id },
+      })
+    } else {
+      // 요양원이 있으면 업데이트
+      updatedCareCenter = await prisma.careCenter.update({
+        where: { id: params.id },
+        data: {
+          name,
+          address,
+          phone: phone || null,
+          email: email || null,
+          description: description || null,
+          logoUrl: logoUrl || null,
+        },
+        select: {
+          id: true,
+          name: true,
+          address: true,
+          phone: true,
+          email: true,
+          description: true,
+          logoUrl: true,
+        },
+      })
+    }
 
     return NextResponse.json({
       message: "요양원 정보가 수정되었습니다.",
