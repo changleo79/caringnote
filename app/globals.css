@@ -190,8 +190,15 @@
   
   .btn-ghost {
     @apply bg-transparent text-neutral-600 px-6 py-3 rounded-xl font-bold 
-           hover:bg-neutral-100/80 active:scale-95 transition-all duration-500
-           backdrop-blur-sm;
+           transition-all duration-500 backdrop-blur-sm;
+  }
+  
+  .btn-ghost:hover {
+    background: rgba(245, 245, 245, 0.8);
+  }
+  
+  .btn-ghost:active {
+    transform: scale(0.95);
   }
   
   /* 프리미엄 입력 필드 */
@@ -211,8 +218,6 @@
   
   .input-vercel:focus {
     outline: none;
-    ring: 4px;
-    ring-color: rgba(13, 138, 232, 0.3);
     border-color: rgb(13, 138, 232);
     background: white;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 4px rgba(13, 138, 232, 0.2);
@@ -348,15 +353,23 @@
   
   /* 앱다운 느낌의 입력 필드 포커스 */
   .input-focus-linear {
-    @apply focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:ring-offset-0 focus:border-primary-500;
     @apply transition-all duration-300;
+  }
+  
+  .input-focus-linear:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(13, 138, 232, 0.2);
+    border-color: rgb(13, 138, 232);
   }
   
   /* 기존 호환성 - input-focus (유지) */
   .input-focus {
-    @apply focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 
-           focus:shadow-lg focus:shadow-primary-500/10;
     @apply transition-all duration-300;
+  }
+  
+  .input-focus:focus {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 4px rgba(13, 138, 232, 0.2);
+    border-color: rgb(13, 138, 232);
   }
   
   /* 프리미엄 애니메이션 효과 */
