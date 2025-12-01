@@ -31,7 +31,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-primary-50/20 to-neutral-50">
       {/* 상단 네비게이션 - 프리미엄 느낌 */}
       <header className="bg-white/90 backdrop-blur-2xl border-b border-white/40 sticky top-0 z-50 shadow-app-lg">
         <div className="container mx-auto px-4">
@@ -145,7 +145,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* 사이드바 (데스크톱) - 프리미엄 느낌 */}
       <div className="hidden md:flex">
-        <aside className="w-72 bg-white/70 backdrop-blur-2xl border-r border-white/40 min-h-[calc(100vh-80px)] sticky top-20">
+        <aside className="w-80 bg-gradient-to-b from-white/90 via-primary-50/20 to-white/90 backdrop-blur-2xl border-r-2 border-primary-200/30 min-h-[calc(100vh-80px)] sticky top-20 shadow-xl shadow-primary-100/30">
           <nav className="p-6 space-y-3">
             {navItems.map((item) => {
               const Icon = item.icon
