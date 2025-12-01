@@ -82,12 +82,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-primary-50/30 flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
         {/* Back to Home */}
         <Link 
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/80"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>홈으로</span>
@@ -111,53 +111,53 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Logo/Title - Notion 스타일 */}
-        <div className="text-center mb-10">
-          <div className="mb-6 flex justify-center">
+        {/* Logo/Title - 앱다운 느낌 */}
+        <div className="text-center mb-12">
+          <div className="mb-8 flex justify-center">
             <Logo variant="default" size="md" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-2 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-black text-neutral-900 mb-3 tracking-tight">
             로그인
           </h1>
-          <p className="text-neutral-600">
+          <p className="text-lg text-neutral-600 font-semibold">
             케어링노트에 오신 것을 환영합니다
           </p>
         </div>
 
-        {/* Login Form - Notion 스타일 */}
-        <div className="card-notion p-8 md:p-10">
+        {/* Login Form - 앱다운 느낌 */}
+        <div className="bg-white rounded-3xl shadow-app-xl border border-neutral-100 p-10 md:p-12">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-neutral-900 mb-2">
+              <label htmlFor="email" className="block text-sm font-bold text-neutral-900 mb-3">
                 이메일
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="input-vercel w-full pl-10"
+                  className="input-vercel w-full pl-12"
                   placeholder="your@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-neutral-900 mb-2">
+              <label htmlFor="password" className="block text-sm font-bold text-neutral-900 mb-3">
                 비밀번호
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="input-vercel w-full pl-10"
+                  className="input-vercel w-full pl-12"
                   placeholder="비밀번호를 입력하세요"
                 />
               </div>
@@ -166,11 +166,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading || serverConfigError}
-              className="btn-linear-primary w-full py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-linear-primary w-full py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed mt-8"
             >
               {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span className="flex items-center justify-center gap-3">
+                  <span className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></span>
                   로그인 중...
                 </span>
               ) : serverConfigError ? (
@@ -181,12 +181,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-neutral-200">
-            <p className="text-center text-sm text-neutral-600">
+          <div className="mt-10 pt-8 border-t border-neutral-100">
+            <p className="text-center text-base text-neutral-600 font-semibold">
               계정이 없으신가요?{" "}
               <Link 
                 href="/auth/signup" 
-                className="text-neutral-900 hover:text-neutral-700 font-semibold transition-colors"
+                className="text-primary-600 hover:text-primary-700 font-bold transition-colors underline-offset-4 hover:underline"
               >
                 회원가입
               </Link>
