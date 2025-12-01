@@ -53,97 +53,115 @@
 }
 
 @layer components {
-  /* 앱다운 느낌의 카드 */
+  /* 프리미엄 카드 - 글래스모피즘 */
   .card-notion {
-    @apply bg-white rounded-3xl border border-neutral-100;
-    @apply transition-all duration-300 ease-out;
-    @apply hover:border-neutral-200 hover:shadow-xl hover:shadow-neutral-200/50;
-    @apply hover:-translate-y-1;
+    @apply bg-white/80 backdrop-blur-xl rounded-3xl border border-white/20;
+    @apply transition-all duration-500 ease-out;
+    @apply hover:border-white/40 hover:shadow-2xl hover:shadow-neutral-200/60;
+    @apply hover:-translate-y-2 hover:scale-[1.01];
+    @apply shadow-xl shadow-neutral-100/50;
   }
   
-  /* 앱 스타일 카드 - 더 부드러운 느낌 */
+  /* 프리미엄 앱 스타일 카드 */
   .card-app {
-    @apply bg-white rounded-3xl;
-    @apply shadow-lg shadow-neutral-100/50;
-    @apply border border-neutral-100/50;
-    @apply transition-all duration-300 ease-out;
-    @apply hover:shadow-2xl hover:shadow-neutral-200/50;
-    @apply hover:-translate-y-1;
+    @apply bg-gradient-to-br from-white via-white to-neutral-50/30 rounded-3xl;
+    @apply shadow-2xl shadow-neutral-200/40;
+    @apply border border-white/60;
+    @apply transition-all duration-500 ease-out;
+    @apply hover:shadow-3xl hover:shadow-neutral-300/50;
+    @apply hover:-translate-y-2 hover:scale-[1.02];
+    @apply backdrop-blur-sm;
   }
   
-  /* 앱다운 느낌의 버튼 */
+  /* 글래스 카드 */
+  .card-glass {
+    @apply bg-white/70 backdrop-blur-2xl rounded-3xl;
+    @apply border border-white/30;
+    @apply shadow-2xl shadow-black/5;
+    @apply transition-all duration-500;
+  }
+  
+  /* 프리미엄 버튼 */
   .btn-linear {
     @apply inline-flex items-center justify-center;
-    @apply px-6 py-3.5 rounded-2xl;
-    @apply font-semibold text-base;
-    @apply transition-all duration-300 ease-out;
+    @apply px-8 py-4 rounded-2xl;
+    @apply font-bold text-base;
+    @apply transition-all duration-500 ease-out;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
     @apply active:scale-95;
+    @apply relative overflow-hidden;
   }
   
   .btn-linear-primary {
     @apply btn-linear;
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white;
-    @apply hover:from-primary-600 hover:to-primary-700;
-    @apply shadow-lg shadow-primary-500/30;
-    @apply hover:shadow-xl hover:shadow-primary-500/40;
-    @apply hover:-translate-y-0.5;
+    @apply bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white;
+    @apply hover:from-primary-600 hover:via-primary-700 hover:to-primary-800;
+    @apply shadow-2xl shadow-primary-500/40;
+    @apply hover:shadow-3xl hover:shadow-primary-600/50;
+    @apply hover:-translate-y-1 hover:scale-[1.02];
+    @apply before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0;
+    @apply before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700;
   }
   
   .btn-linear-secondary {
     @apply btn-linear;
-    @apply bg-white text-neutral-900 border-2 border-neutral-200;
-    @apply hover:bg-neutral-50 hover:border-neutral-300;
-    @apply shadow-md shadow-neutral-100/50;
-    @apply hover:shadow-lg hover:shadow-neutral-200/50;
-    @apply hover:-translate-y-0.5;
+    @apply bg-white/90 backdrop-blur-sm text-neutral-900 border-2 border-neutral-200/80;
+    @apply hover:bg-white hover:border-neutral-300;
+    @apply shadow-xl shadow-neutral-100/60;
+    @apply hover:shadow-2xl hover:shadow-neutral-200/70;
+    @apply hover:-translate-y-1 hover:scale-[1.02];
   }
   
   .btn-linear-ghost {
     @apply btn-linear;
     @apply bg-transparent text-neutral-600;
-    @apply hover:bg-neutral-100 active:bg-neutral-200;
+    @apply hover:bg-neutral-100/80 active:bg-neutral-200/80;
     @apply rounded-xl;
+    @apply backdrop-blur-sm;
   }
   
-  /* 앱다운 느낌의 버튼 - 기존 호환성 유지 */
+  /* 프리미엄 버튼 - 기존 호환성 유지 */
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white 
-           px-8 py-4 rounded-2xl font-bold text-base
-           hover:from-primary-600 hover:to-primary-700 
-           active:scale-95 transition-all duration-300 
-           shadow-xl shadow-primary-500/30 
-           hover:shadow-2xl hover:shadow-primary-500/40
-           hover:-translate-y-1
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+    @apply bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white 
+           px-10 py-5 rounded-2xl font-black text-lg
+           hover:from-primary-600 hover:via-primary-700 hover:to-primary-800 
+           active:scale-95 transition-all duration-500 
+           shadow-2xl shadow-primary-500/40 
+           hover:shadow-3xl hover:shadow-primary-600/50
+           hover:-translate-y-1 hover:scale-[1.02]
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+           relative overflow-hidden;
+    @apply before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0;
+    @apply before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700;
   }
   
   .btn-secondary {
-    @apply bg-white text-primary-600 border-2 border-primary-200 
-           px-8 py-4 rounded-2xl font-bold text-base
-           hover:bg-primary-50 hover:border-primary-300 
-           active:scale-95 transition-all duration-300
-           shadow-lg shadow-neutral-100/50 
-           hover:shadow-xl hover:shadow-neutral-200/50
-           hover:-translate-y-1;
+    @apply bg-white/90 backdrop-blur-sm text-primary-600 border-2 border-primary-200/80 
+           px-10 py-5 rounded-2xl font-black text-lg
+           hover:bg-white hover:border-primary-300 
+           active:scale-95 transition-all duration-500
+           shadow-xl shadow-neutral-100/60 
+           hover:shadow-2xl hover:shadow-neutral-200/70
+           hover:-translate-y-1 hover:scale-[1.02];
   }
   
   .btn-ghost {
-    @apply bg-transparent text-neutral-600 px-6 py-3 rounded-xl font-semibold 
-           hover:bg-neutral-100 active:scale-95 transition-all duration-300;
+    @apply bg-transparent text-neutral-600 px-6 py-3 rounded-xl font-bold 
+           hover:bg-neutral-100/80 active:scale-95 transition-all duration-500
+           backdrop-blur-sm;
   }
   
-  /* 앱다운 느낌의 입력 필드 */
+  /* 프리미엄 입력 필드 */
   .input-vercel {
-    @apply w-full px-5 py-4;
-    @apply bg-neutral-50 border-2 border-neutral-200 rounded-2xl;
-    @apply text-neutral-900 text-base;
-    @apply transition-all duration-300;
-    @apply focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500;
-    @apply focus:bg-white;
+    @apply w-full px-6 py-5;
+    @apply bg-white/80 backdrop-blur-sm border-2 border-neutral-200/80 rounded-2xl;
+    @apply text-neutral-900 text-base font-medium;
+    @apply transition-all duration-500;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-500/30 focus:border-primary-500;
+    @apply focus:bg-white focus:shadow-xl focus:shadow-primary-500/20;
     @apply placeholder:text-neutral-400;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
-    @apply hover:border-neutral-300;
+    @apply hover:border-neutral-300 hover:bg-white/90;
   }
   
   /* 섹션 컨테이너 */
@@ -172,42 +190,56 @@
     @apply bg-gradient-to-br from-primary-50 via-white to-primary-50/50;
   }
   
-  /* 앱다운 느낌의 부드러운 그림자 */
+  /* 프리미엄 그림자 */
   .shadow-notion {
     box-shadow: 
+      0 4px 20px 0 rgba(0, 0, 0, 0.06),
       0 2px 8px 0 rgba(0, 0, 0, 0.04),
-      0 1px 3px 0 rgba(0, 0, 0, 0.08);
+      0 0 0 1px rgba(0, 0, 0, 0.02);
   }
   
   .shadow-notion-lg {
     box-shadow: 
-      0 10px 30px -5px rgba(0, 0, 0, 0.1),
-      0 4px 12px -2px rgba(0, 0, 0, 0.08);
+      0 20px 50px -10px rgba(0, 0, 0, 0.15),
+      0 8px 20px -4px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.03);
   }
   
   .shadow-notion-xl {
     box-shadow: 
-      0 20px 50px -10px rgba(0, 0, 0, 0.15),
-      0 8px 20px -4px rgba(0, 0, 0, 0.1);
+      0 30px 70px -15px rgba(0, 0, 0, 0.2),
+      0 12px 30px -6px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.04);
   }
   
-  /* 앱 스타일 그림자 - 더 부드러운 느낌 */
+  /* 프리미엄 앱 스타일 그림자 */
   .shadow-app {
     box-shadow: 
-      0 4px 20px 0 rgba(0, 0, 0, 0.08),
-      0 2px 8px 0 rgba(0, 0, 0, 0.04);
+      0 8px 30px 0 rgba(0, 0, 0, 0.1),
+      0 4px 12px 0 rgba(0, 0, 0, 0.06),
+      0 0 0 1px rgba(255, 255, 255, 0.5);
   }
   
   .shadow-app-lg {
     box-shadow: 
-      0 15px 40px -5px rgba(0, 0, 0, 0.12),
-      0 6px 16px -3px rgba(0, 0, 0, 0.08);
+      0 25px 60px -10px rgba(0, 0, 0, 0.18),
+      0 10px 25px -5px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.6);
   }
   
   .shadow-app-xl {
     box-shadow: 
-      0 25px 60px -10px rgba(0, 0, 0, 0.18),
-      0 10px 25px -5px rgba(0, 0, 0, 0.12);
+      0 35px 80px -15px rgba(0, 0, 0, 0.25),
+      0 15px 35px -8px rgba(0, 0, 0, 0.18),
+      0 0 0 1px rgba(255, 255, 255, 0.7);
+  }
+  
+  /* 3D 그림자 효과 */
+  .shadow-3d {
+    box-shadow: 
+      0 20px 60px -15px rgba(0, 0, 0, 0.3),
+      0 8px 20px -5px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
   
   /* 기존 호환성 - shadow-soft (유지) */
@@ -223,21 +255,33 @@
     @apply shadow-app-xl;
   }
   
-  /* 앱다운 느낌의 카드 호버 효과 */
+  /* 프리미엄 카드 호버 효과 */
   .card-hover-linear {
-    @apply transition-all duration-300 ease-out;
-    @apply hover:shadow-app-lg hover:-translate-y-2 hover:scale-[1.02];
+    @apply transition-all duration-500 ease-out;
+    @apply hover:shadow-3d hover:-translate-y-3 hover:scale-[1.03];
+    @apply hover:border-white/60;
   }
   
   /* 기존 호환성 - card-hover (유지) */
   .card-hover {
-    @apply transition-all duration-300 ease-out;
-    @apply hover:shadow-app-lg hover:-translate-y-2 hover:scale-[1.02];
+    @apply transition-all duration-500 ease-out;
+    @apply hover:shadow-3d hover:-translate-y-3 hover:scale-[1.03];
+    @apply hover:border-white/60;
   }
   
-  /* Glass effect - Vercel 스타일 */
+  /* 프리미엄 글래스 효과 */
   .glass-effect {
-    @apply bg-white/80 backdrop-blur-xl border border-neutral-200/50;
+    @apply bg-white/70 backdrop-blur-2xl border border-white/30;
+    @apply shadow-2xl shadow-black/5;
+  }
+  
+  /* 그라데이션 배경 */
+  .gradient-premium {
+    @apply bg-gradient-to-br from-white via-neutral-50/50 to-primary-50/30;
+  }
+  
+  .gradient-card {
+    @apply bg-gradient-to-br from-white/90 via-white/80 to-neutral-50/40;
   }
   
   /* 앱다운 느낌의 입력 필드 포커스 */
