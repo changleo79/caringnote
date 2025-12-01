@@ -33,12 +33,15 @@ export default function EditCareCenterPage() {
         return
       }
 
-      // careCenterId가 없으면 임시 ID 생성 (나중에 API에서 실제 ID로 생성됨)
+      // careCenterId가 없으면 사용자 ID를 사용 (API에서 자동 생성됨)
       const careCenterId = session.user.careCenterId || session.user.id
 
       try {
+        console.log("요양원 정보 불러오기 시도:", { careCenterId, userId: session.user.id, hasCareCenterId: !!session.user.careCenterId })
         const res = await fetch(`/api/care-centers/${careCenterId}`)
         const data = await res.json()
+
+        console.log("요양원 정보 응답:", { status: res.status, ok: res.ok, data })
 
         if (res.ok) {
           setFormData({
@@ -50,7 +53,14 @@ export default function EditCareCenterPage() {
             logoUrl: data.logoUrl || "",
           })
         } else {
+          console.error("요양원 정보 불러오기 실패:", data)
           toast.error(data.error || "요양원 정보를 불러오는데 실패했습니다.")
+          // 요양원이 없으면 계속 진행 (나중에 저장 시 생성됨)
+          if (data.error?.includes("찾을 수 없습니다")) {
+            // 빈 폼으로 계속 진행
+            setLoadingData(false)
+            return
+          }
           router.push("/dashboard")
         }
       } catch (error: any) {
