@@ -297,26 +297,31 @@
     @apply transition-all duration-300;
   }
   
-  /* 부드러운 애니메이션 효과 */
+  /* 프리미엄 애니메이션 효과 */
   .animate-in {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.6s ease-out;
   }
   
   .animate-in-up {
-    animation: fadeInUp 0.6s ease-out;
+    animation: fadeInUp 0.8s ease-out;
   }
   
   .animate-in-down {
-    animation: fadeInDown 0.6s ease-out;
+    animation: fadeInDown 0.8s ease-out;
   }
   
   .animate-scale-in {
-    animation: scaleIn 0.3s ease-out;
+    animation: scaleIn 0.5s ease-out;
   }
   
-  /* 미묘한 플로팅 애니메이션 */
+  /* 부드러운 플로팅 애니메이션 */
   .animate-float-subtle {
-    animation: floatSubtle 6s ease-in-out infinite;
+    animation: floatSubtle 8s ease-in-out infinite;
+  }
+  
+  /* 펄스 효과 */
+  .animate-pulse-premium {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   
   /* 그라데이션 텍스트 효과 */
@@ -401,6 +406,19 @@
   50% {
     background-position: 100% 50%;
   }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
 }
 
 /* 부드러운 스크롤 */
