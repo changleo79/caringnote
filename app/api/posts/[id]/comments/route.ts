@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { createNotification } from "@/lib/notifications"
 
 // 댓글 목록 조회
 export async function GET(
@@ -88,27 +87,6 @@ export async function POST(
         },
       },
     })
-
-    // 게시글 작성자에게 댓글 알림 (본인 댓글이 아닌 경우)
-    try {
-      const post = await prisma.post.findUnique({
-        where: { id: params.id },
-        select: { authorId: true },
-      })
-
-      if (post && post.authorId !== session.user.id) {
-        await createNotification({
-          userId: post.authorId,
-          type: "CommentCreated",
-          title: `${comment.author.name}님이 댓글을 남겼습니다`,
-          content: content.trim().substring(0, 50),
-          relatedId: params.id,
-          relatedType: "Post",
-        })
-      }
-    } catch (error) {
-      console.error("Error creating notification:", error)
-    }
 
     return NextResponse.json(comment, { status: 201 })
   } catch (error: any) {

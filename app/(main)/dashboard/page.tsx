@@ -5,7 +5,7 @@ import AppLayout from "@/components/layout/AppLayout"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { formatDate } from "@/lib/utils"
-import { Camera, Heart, ShoppingBag, Bell, Plus, ArrowRight, ImageIcon, Calendar, MessageCircle } from "lucide-react"
+import { Camera, Heart, ShoppingBag, Bell, Plus, ArrowRight, ImageIcon, Calendar, Sparkles, Building2 } from "lucide-react"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -14,330 +14,265 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const isFamily = session.user.role === "FAMILY"
-  const isCaregiver = session.user.role === "CAREGIVER" || session.user.role === "ADMIN"
-
-  // 연결된 입소자 ID 목록 (가족회원의 경우)
-  let connectedResidentIds: string[] = []
-
-  if (isFamily) {
-    try {
-      const residentFamilies = await prisma.residentFamily.findMany({
-        where: {
-          userId: session.user.id!,
-          isApproved: true,
-        },
-        select: {
-          residentId: true,
-        },
-      })
-      connectedResidentIds = residentFamilies.map(rf => rf.residentId)
-    } catch (error) {
-      console.error("Failed to fetch connected residents:", error)
-    }
-  }
-
   // 최근 게시글, 의료 기록 가져오기
   let recentPosts: any[] = []
   let recentMedicalRecords: any[] = []
 
   try {
-    if (isFamily) {
-      // 가족회원: 연결된 입소자의 게시글만
-      if (connectedResidentIds.length > 0) {
-        recentPosts = await prisma.post.findMany({
-          where: {
-            residentId: { in: connectedResidentIds },
-          },
-          take: 5,
-          orderBy: { createdAt: "desc" },
-          include: {
-            author: {
-              select: { name: true, avatarUrl: true },
-            },
-            resident: {
-              select: { name: true },
-            },
-            _count: {
-              select: {
-                likes: true,
-                comments: true,
-              },
-            },
-          },
-        })
-
-        // 좋아요 여부 확인
-        recentPosts = await Promise.all(
-          recentPosts.map(async (post) => {
-            const isLiked = await prisma.postLike.findFirst({
-              where: {
-                postId: post.id,
-                userId: session.user.id!,
-              },
-            })
-            return {
-              ...post,
-              isLiked: !!isLiked,
-            }
-          })
-        )
-      }
-    } else {
-      // 요양원직원: 요양원 전체 게시글
-      recentPosts = await prisma.post.findMany({
-        where: session.user.careCenterId
-          ? { careCenterId: session.user.careCenterId }
-          : undefined,
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        include: {
-          author: {
-            select: { name: true, avatarUrl: true },
-          },
-          resident: {
-            select: { name: true },
-          },
+    recentPosts = await prisma.post.findMany({
+      where: session.user.careCenterId
+        ? { careCenterId: session.user.careCenterId }
+        : undefined,
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      include: {
+        author: {
+          select: { name: true, avatarUrl: true },
         },
-      })
-    }
+        resident: {
+          select: { name: true },
+        },
+      },
+    })
   } catch (error) {
     console.error("Failed to fetch recent posts:", error)
   }
 
   try {
-    if (isFamily) {
-      // 가족회원: 연결된 입소자의 의료 기록만
-      if (connectedResidentIds.length > 0) {
-        recentMedicalRecords = await prisma.medicalRecord.findMany({
-          where: {
-            residentId: { in: connectedResidentIds },
-          },
-          take: 5,
-          orderBy: { recordDate: "desc" },
-          include: {
+    recentMedicalRecords = await prisma.medicalRecord.findMany({
+      where: session.user.careCenterId
+        ? {
             resident: {
-              select: { name: true },
+              careCenterId: session.user.careCenterId,
             },
-            createdBy: {
-              select: { name: true },
-            },
-          },
-        })
-      }
-    } else {
-      // 요양원직원: 요양원 전체 의료 기록
-      recentMedicalRecords = await prisma.medicalRecord.findMany({
-        where: session.user.careCenterId
-          ? {
-              resident: {
-                careCenterId: session.user.careCenterId,
-              },
-            }
-          : undefined,
-        take: 5,
-        orderBy: { recordDate: "desc" },
-        include: {
-          resident: {
-            select: { name: true },
-          },
-          createdBy: {
-            select: { name: true },
-          },
+          }
+        : undefined,
+      take: 5,
+      orderBy: { recordDate: "desc" },
+      include: {
+        resident: {
+          select: { name: true },
         },
-      })
-    }
+        createdBy: {
+          select: { name: true },
+        },
+      },
+    })
   } catch (error) {
     console.error("Failed to fetch medical records:", error)
   }
 
   return (
     <AppLayout>
-      <div className="section-container py-10">
-        {/* Welcome Section - Notion 스타일 */}
+      <div className="container mx-auto px-4 py-10 max-w-7xl">
+        {/* Welcome Section - 프리미엄 디자인 */}
         <div className="mb-10">
-          <div className="card-notion p-8 md:p-10 bg-neutral-50 border-neutral-200">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-3 tracking-tight">
-              안녕하세요, {session.user.name}님
-            </h1>
-            <p className="text-lg text-neutral-600">
-              {isFamily ? "연결된 입소자의 소식을 확인하세요" : "부모님의 건강한 하루를 함께합니다"}
-            </p>
+          <div className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl p-10 md:p-14 text-white shadow-soft-xl overflow-hidden">
+            {/* 배경 패턴 */}
+            <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent_60%)]"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <Sparkles className="w-5 h-5 text-primary-100" />
+                <span className="text-sm font-semibold text-primary-100">오늘도 좋은 하루 되세요</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3 tracking-tight">
+                안녕하세요, {session.user.name}님
+              </h1>
+              <p className="text-lg md:text-xl text-primary-50 font-medium">
+                부모님의 건강한 하루를 함께합니다
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Quick Actions - 요양원직원만 표시 */}
-        {isCaregiver && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <Link
-              href="/community/new"
-              className="card-notion p-6 card-hover-linear group text-center"
-            >
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4 mx-auto group-hover:bg-primary-200 transition-colors">
-                <Camera className="w-6 h-6 text-primary-600" />
+        {/* Quick Actions - 프리미엄 카드 */}
+        <div className={`grid grid-cols-2 ${session.user.role === "CAREGIVER" ? "md:grid-cols-5" : "md:grid-cols-4"} gap-5 mb-10`}>
+          <Link
+            href="/community/new"
+            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-blue-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Camera className="w-8 h-8 text-white" />
               </div>
-              <p className="font-semibold text-neutral-900 mb-1 text-sm">사진 공유</p>
-              <p className="text-xs text-neutral-500">일상 기록</p>
-            </Link>
+              <p className="font-black text-gray-900 mb-1.5 text-lg">사진 공유</p>
+              <p className="text-xs text-gray-500 font-medium">일상 기록하기</p>
+            </div>
+          </Link>
 
-            <Link
-              href="/medical/new"
-              className="card-notion p-6 card-hover-linear group text-center"
-            >
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4 mx-auto group-hover:bg-red-200 transition-colors">
-                <Heart className="w-6 h-6 text-red-600 fill-red-600" />
+          <Link
+            href="/medical/new"
+            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-red-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Heart className="w-8 h-8 text-white fill-white" />
               </div>
-              <p className="font-semibold text-neutral-900 mb-1 text-sm">의료 기록</p>
-              <p className="text-xs text-neutral-500">건강 정보</p>
-            </Link>
+              <p className="font-black text-gray-900 mb-1.5 text-lg">의료 기록</p>
+              <p className="text-xs text-gray-500 font-medium">건강 정보 기록</p>
+            </div>
+          </Link>
 
-            <Link
-              href="/shop"
-              className="card-notion p-6 card-hover-linear group text-center"
-            >
-              <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 mx-auto group-hover:bg-emerald-200 transition-colors">
-                <ShoppingBag className="w-6 h-6 text-emerald-600" />
+          <Link
+            href="/shop"
+            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-green-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <ShoppingBag className="w-8 h-8 text-white" />
               </div>
-              <p className="font-semibold text-neutral-900 mb-1 text-sm">생필품 구매</p>
-              <p className="text-xs text-neutral-500">필요 물품</p>
-            </Link>
+              <p className="font-black text-gray-900 mb-1.5 text-lg">생필품 구매</p>
+              <p className="text-xs text-gray-500 font-medium">필요한 물품 주문</p>
+            </div>
+          </Link>
 
-            <Link
-              href="/notifications"
-              className="card-notion p-6 card-hover-linear group text-center"
-            >
-              <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-4 mx-auto group-hover:bg-amber-200 transition-colors">
-                <Bell className="w-6 h-6 text-amber-600" />
+          <Link
+            href="/notifications"
+            className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-amber-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Bell className="w-8 h-8 text-white" />
               </div>
-              <p className="font-semibold text-neutral-900 mb-1 text-sm">알림</p>
-              <p className="text-xs text-neutral-500">새 소식</p>
-            </Link>
-          </div>
-        )}
+              <p className="font-black text-gray-900 mb-1.5 text-lg">알림</p>
+              <p className="text-xs text-gray-500 font-medium">새 소식 확인</p>
+            </div>
+          </Link>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* 최근 커뮤니티 - Notion 스타일 */}
-          <div className="card-notion overflow-hidden">
-            <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
-                <Camera className="w-5 h-5 text-primary-600" />
+          {/* 요양원 직원만 보이는 요양원 정보 수정 링크 */}
+          {session.user.role === "CAREGIVER" && (
+            <Link
+              href="/care-center/edit"
+              className="group bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-soft-lg border border-gray-100/80 card-hover relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-purple-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                  <Building2 className="w-8 h-8 text-white" />
+                </div>
+                <p className="font-black text-gray-900 mb-1.5 text-lg">요양원 정보</p>
+                <p className="text-xs text-gray-500 font-medium">정보 수정하기</p>
+              </div>
+            </Link>
+          )}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* 최근 커뮤니티 - 프리미엄 디자인 */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft-lg border border-gray-100/80 overflow-hidden">
+            <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50/30 to-transparent">
+              <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <Camera className="w-5 h-5 text-white" />
+                </div>
                 최근 커뮤니티
               </h2>
               <Link
                 href="/community"
-                className="text-sm text-neutral-600 hover:text-neutral-900 font-medium flex items-center gap-1 transition-colors"
+                className="text-sm text-primary-600 hover:text-primary-700 font-bold flex items-center gap-1.5 group/link"
               >
                 더보기
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="p-6 space-y-3">
+            <div className="p-6 md:p-8 space-y-4">
               {recentPosts.length > 0 ? (
                 recentPosts.map((post) => (
                   <Link
                     key={post.id}
                     href={`/community/${post.id}`}
-                    className="block p-4 rounded-lg hover:bg-neutral-50 transition-colors border border-neutral-100"
+                    className="block p-5 bg-gradient-to-r from-gray-50 to-white rounded-2xl hover:from-blue-50 hover:to-blue-50/50 transition-all duration-300 group border border-gray-100 hover:border-blue-200 hover:shadow-md"
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <ImageIcon className="w-5 h-5 text-primary-600" />
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary-400 via-primary-500 to-accent-400 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                        <ImageIcon className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                        <div className="flex items-center gap-2 mb-2">
                           {post.resident && (
-                            <span className="text-xs bg-primary-50 text-primary-700 px-2 py-0.5 rounded font-medium">
+                            <span className="text-xs bg-primary-100 text-primary-700 px-3 py-1 rounded-full font-bold">
                               {post.resident.name}
                             </span>
                           )}
-                          <span className="text-xs text-neutral-500">
+                          <span className="text-xs text-gray-500 font-medium">
                             {post.author.name}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-neutral-900 truncate mb-1">
+                        <p className="text-sm font-bold text-gray-900 truncate group-hover:text-primary-600 transition-colors mb-1">
                           {post.title || "제목 없음"}
                         </p>
-                        <div className="flex items-center justify-between mt-2">
-                          <p className="text-xs text-neutral-500">
-                            {formatDate(post.createdAt)}
-                          </p>
-                          {/* 가족회원: 좋아요/댓글 강조 */}
-                          {isFamily && post._count && (
-                            <div className="flex items-center gap-3 text-xs text-neutral-500">
-                              <span className={`flex items-center gap-1 ${post.isLiked ? 'text-red-600' : ''}`}>
-                                <Heart className={`w-3.5 h-3.5 ${post.isLiked ? 'fill-red-600' : ''}`} />
-                                {post._count.likes || 0}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <MessageCircle className="w-3.5 h-3.5" />
-                                {post._count.comments || 0}
-                              </span>
-                            </div>
-                          )}
-                        </div>
+                        <p className="text-xs text-gray-500 font-medium">
+                          {formatDate(post.createdAt)}
+                        </p>
                       </div>
                     </div>
                   </Link>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-neutral-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Camera className="w-8 h-8 text-neutral-400" />
+                <div className="text-center py-16">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+                    <Camera className="w-10 h-10 text-blue-600" />
                   </div>
-                  <p className="text-sm text-neutral-600 mb-4">
-                    {isFamily ? "아직 게시글이 없습니다" : "아직 게시글이 없습니다"}
+                  <p className="text-sm text-gray-600 mb-5 font-medium">
+                    아직 게시글이 없습니다
                   </p>
-                  {isCaregiver && (
-                    <Link
-                      href="/community/new"
-                      className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-medium"
-                    >
-                      <Plus className="w-4 h-4" />
-                      첫 게시글 작성하기
-                    </Link>
-                  )}
+                  <Link
+                    href="/community/new"
+                    className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-bold"
+                  >
+                    <Plus className="w-4 h-4" />
+                    첫 게시글 작성하기
+                  </Link>
                 </div>
               )}
             </div>
           </div>
 
-          {/* 최근 의료 기록 - Notion 스타일 */}
-          <div className="card-notion overflow-hidden">
-            <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
-                <Heart className="w-5 h-5 text-red-600 fill-red-600" />
+          {/* 최근 의료 기록 - 프리미엄 디자인 */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft-lg border border-gray-100/80 overflow-hidden">
+            <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-red-50/30 to-transparent">
+              <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/20">
+                  <Heart className="w-5 h-5 text-white fill-white" />
+                </div>
                 최근 의료 기록
               </h2>
               <Link
                 href="/medical"
-                className="text-sm text-neutral-600 hover:text-neutral-900 font-medium flex items-center gap-1 transition-colors"
+                className="text-sm text-red-600 hover:text-red-700 font-bold flex items-center gap-1.5 group/link"
               >
                 더보기
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="p-6 space-y-3">
+            <div className="p-6 md:p-8 space-y-4">
               {recentMedicalRecords.length > 0 ? (
                 recentMedicalRecords.map((record) => (
                   <Link
                     key={record.id}
                     href={`/medical/${record.id}`}
-                    className="block p-4 rounded-lg hover:bg-neutral-50 transition-colors border border-neutral-100"
+                    className="block p-5 bg-gradient-to-r from-red-50/30 to-white rounded-2xl hover:from-red-50 hover:to-red-50/50 transition-all duration-300 group border border-red-100 hover:border-red-200 hover:shadow-md"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded font-medium">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold">
                             {record.category}
                           </span>
-                          <span className="text-xs text-neutral-500">
+                          <span className="text-xs text-gray-500 font-medium">
                             {record.resident.name}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-neutral-900 mb-1">
+                        <p className="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors mb-2">
                           {record.title}
                         </p>
-                        <div className="flex items-center gap-1.5 text-xs text-neutral-500">
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium">
                           <Calendar className="w-3.5 h-3.5" />
                           {formatDate(record.recordDate)}
                         </div>
@@ -346,22 +281,20 @@ export default async function DashboardPage() {
                   </Link>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-neutral-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Heart className="w-8 h-8 text-neutral-400" />
+                <div className="text-center py-16">
+                  <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-pink-200 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+                    <Heart className="w-10 h-10 text-red-600" />
                   </div>
-                  <p className="text-sm text-neutral-600 mb-4">
+                  <p className="text-sm text-gray-600 mb-5 font-medium">
                     아직 의료 기록이 없습니다
                   </p>
-                  {isCaregiver && (
-                    <Link
-                      href="/medical/new"
-                      className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium"
-                    >
-                      <Plus className="w-4 h-4" />
-                      첫 의료 기록 작성하기
-                    </Link>
-                  )}
+                  <Link
+                    href="/medical/new"
+                    className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-bold"
+                  >
+                    <Plus className="w-4 h-4" />
+                    첫 의료 기록 작성하기
+                  </Link>
                 </div>
               )}
             </div>

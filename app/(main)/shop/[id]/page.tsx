@@ -56,8 +56,8 @@ export default function ProductDetailPage() {
   if (isLoading) {
     return (
       <AppLayout>
-        <div className="section-container py-10">
-          <Skeleton variant="rectangular" className="h-96 w-full rounded-xl" />
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <Skeleton variant="rectangular" className="h-96 w-full" />
         </div>
       </AppLayout>
     )
@@ -66,12 +66,12 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <AppLayout>
-        <div className="section-container py-10">
-          <div className="card-notion p-12 text-center">
-            <h2 className="text-xl font-bold text-neutral-900 mb-2">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
               상품을 찾을 수 없습니다
             </h2>
-            <Link href="/shop" className="btn-linear-primary inline-flex items-center gap-2 mt-6">
+            <Link href="/shop" className="btn-primary inline-flex items-center gap-2 mt-4">
               <ArrowLeft className="w-4 h-4" />
               쇼핑몰로 돌아가기
             </Link>
@@ -83,64 +83,64 @@ export default function ProductDetailPage() {
 
   return (
     <AppLayout>
-      <div className="section-container py-10">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Back Button */}
         <Link
           href="/shop"
-          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
+          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>뒤로가기</span>
         </Link>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Product Image - Notion 스타일 */}
-          <div className="card-notion overflow-hidden">
+          {/* Product Image */}
+          <div className="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden">
             {product.imageUrl ? (
-              <div className="relative w-full aspect-square bg-neutral-50">
+              <div className="relative w-full aspect-square">
                 <Image
                   src={product.imageUrl}
                   alt={product.name}
                   fill
-                  className="object-contain p-6"
+                  className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             ) : (
-              <div className="w-full aspect-square flex items-center justify-center bg-neutral-50">
-                <Package className="w-32 h-32 text-neutral-300" />
+              <div className="w-full aspect-square flex items-center justify-center bg-gray-50">
+                <Package className="w-32 h-32 text-gray-300" />
               </div>
             )}
           </div>
 
-          {/* Product Info - Notion 스타일 */}
+          {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4 tracking-tight">{product.name}</h1>
-              <p className="text-3xl font-bold text-neutral-900 mb-6">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+              <p className="text-3xl font-bold text-gray-900 mb-6">
                 {formatCurrency(product.price)}
               </p>
               {product.description && (
-                <p className="text-neutral-700 leading-relaxed">{product.description}</p>
+                <p className="text-gray-700 leading-relaxed">{product.description}</p>
               )}
             </div>
 
-            <div className="card-notion p-6">
+            <div className="pt-6 border-t border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-semibold text-neutral-600">재고</span>
-                <span className={`font-bold text-lg ${product.stock > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                <span className="text-sm text-gray-600">재고</span>
+                <span className={`font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {product.stock > 0 ? `${product.stock}개` : '품절'}
                 </span>
               </div>
 
               {product.stock > 0 && (
                 <div className="flex items-center gap-4 mb-6">
-                  <span className="text-sm font-semibold text-neutral-800">수량</span>
+                  <span className="text-sm font-semibold text-gray-800">수량</span>
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 rounded-lg border border-neutral-300 flex items-center justify-center hover:bg-neutral-50 transition-colors"
+                      className="w-10 h-10 rounded-xl border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -148,7 +148,7 @@ export default function ProductDetailPage() {
                     <button
                       type="button"
                       onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                      className="w-10 h-10 rounded-lg border border-neutral-300 flex items-center justify-center hover:bg-neutral-50 transition-colors"
+                      className="w-10 h-10 rounded-xl border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -159,7 +159,7 @@ export default function ProductDetailPage() {
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0 || isAddingToCart}
-                className="w-full btn-linear-primary inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full btn-primary inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {product.stock === 0 ? "품절" : "장바구니에 담기"}
@@ -171,3 +171,4 @@ export default function ProductDetailPage() {
     </AppLayout>
   )
 }
+

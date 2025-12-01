@@ -3,68 +3,24 @@ import { NextResponse } from "next/server"
 
 export default withAuth(
   function middleware(req) {
-    const token = req.nextauth.token
-    const pathname = req.nextUrl.pathname
-
-    // 역할 기반 접근 제어
-    const userRole = token?.role as string | undefined
-
-    // CAREGIVER/ADMIN 전용 페이지
-    if (pathname.startsWith("/residents/new") || 
-        pathname.startsWith("/residents/") && pathname.includes("/edit")) {
-      if (userRole !== "CAREGIVER" && userRole !== "ADMIN") {
-        return NextResponse.redirect(new URL("/dashboard", req.url))
-      }
-    }
-
-    // CAREGIVER/ADMIN 전용 페이지
-    if (pathname.startsWith("/care-center/members")) {
-      if (userRole !== "CAREGIVER" && userRole !== "ADMIN") {
-        return NextResponse.redirect(new URL("/dashboard", req.url))
-      }
-    }
-
-    // CAREGIVER/ADMIN 전용 페이지 - 게시글 작성
-    if (pathname === "/community/new") {
-      if (userRole !== "CAREGIVER" && userRole !== "ADMIN") {
-        return NextResponse.redirect(new URL("/community", req.url))
-      }
-    }
-
-    // CAREGIVER/ADMIN 전용 페이지 - 의료 기록 작성
-    if (pathname === "/medical/new") {
-      if (userRole !== "CAREGIVER" && userRole !== "ADMIN") {
-        return NextResponse.redirect(new URL("/medical", req.url))
-      }
-    }
-
     return NextResponse.next()
   },
   {
     callbacks: {
       authorized: ({ token, req }) => {
-        const pathname = req.nextUrl.pathname
-
-        // 인증이 필요한 경로들
-        const protectedPaths = [
-          "/dashboard",
-          "/community",
-          "/medical",
-          "/shop",
-          "/profile",
-          "/residents",
-          "/care-center",
-          "/notifications",
-        ]
-
-        const requiresAuth = protectedPaths.some(path => 
-          pathname.startsWith(path)
-        )
-
-        if (requiresAuth) {
+        // /dashboard 및 하위 경로는 인증 필요
+        if (req.nextUrl.pathname.startsWith("/dashboard")) {
           return !!token
         }
-
+        if (req.nextUrl.pathname.startsWith("/community")) {
+          return !!token
+        }
+        if (req.nextUrl.pathname.startsWith("/medical")) {
+          return !!token
+        }
+        if (req.nextUrl.pathname.startsWith("/shop")) {
+          return !!token
+        }
         return true
       },
     },
@@ -77,10 +33,6 @@ export const config = {
     "/community/:path*",
     "/medical/:path*",
     "/shop/:path*",
-    "/profile/:path*",
-    "/residents/:path*",
-    "/care-center/:path*",
-    "/notifications/:path*",
   ],
 }
 
