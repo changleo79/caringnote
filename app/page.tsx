@@ -4,51 +4,57 @@ import Logo from "@/components/brand/Logo";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section - Notion/Linear 스타일 미니멀 */}
-      <section className="relative overflow-hidden border-b border-neutral-100">
-        {/* 미묘한 배경 패턴 */}
-        <div className="absolute inset-0 bg-pattern-grid opacity-30"></div>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/30">
+      {/* Hero Section - 프리미엄 느낌 */}
+      <section className="relative overflow-hidden border-b-4 border-primary-200/50">
+        {/* 배경 패턴 */}
+        <div className="absolute inset-0 bg-pattern-grid opacity-20"></div>
         
-        {/* 미묘한 그라데이션 오버레이 */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-50/50 via-transparent to-transparent"></div>
+        {/* 그라데이션 오버레이 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-100/60 via-white/80 to-accent-100/40"></div>
+        
+        {/* 배경 장식 */}
+        <div className="absolute top-20 right-20 w-72 h-72 bg-primary-300/30 rounded-full blur-3xl animate-float-subtle"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent-300/20 rounded-full blur-3xl animate-float-subtle" style={{ animationDelay: '3s' }}></div>
         
         <div className="section-container py-32 md:py-48 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Badge - Linear 스타일 */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-neutral-100 rounded-full mb-8 animate-in">
-              <Sparkles className="w-3.5 h-3.5 text-neutral-600" />
-              <span className="text-xs font-medium text-neutral-700">요양원 케어 플랫폼</span>
+            {/* Badge - 프리미엄 느낌 */}
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-xl rounded-full mb-12 animate-in shadow-xl border-2 border-primary-200/50">
+              <Sparkles className="w-5 h-5 text-primary-600" />
+              <span className="text-sm font-black text-primary-700">요양원 케어 플랫폼</span>
             </div>
             
             {/* Logo */}
-            <div className="mb-10 animate-in-up" style={{ animationDelay: '0.1s' }}>
-              <Logo variant="icon" size="lg" className="mx-auto" />
+            <div className="mb-12 animate-in-up" style={{ animationDelay: '0.1s' }}>
+              <div className="p-6 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl inline-block border-2 border-primary-200/50">
+                <Logo variant="icon" size="lg" className="mx-auto" />
+              </div>
             </div>
             
-            {/* Main Heading - Notion 스타일 타이포그래피 */}
-            <div className="mb-8 animate-in-up" style={{ animationDelay: '0.2s' }}>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-neutral-900 mb-6 tracking-tight leading-[1.1]">
+            {/* Main Heading - 프리미엄 타이포그래피 */}
+            <div className="mb-12 animate-in-up" style={{ animationDelay: '0.2s' }}>
+              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-neutral-900 mb-8 tracking-tight leading-[1.1]">
                 케어링노트
               </h1>
-              <p className="text-xl md:text-2xl text-neutral-600 max-w-2xl mx-auto leading-relaxed font-medium">
+              <p className="text-2xl md:text-3xl text-neutral-700 max-w-3xl mx-auto leading-relaxed font-black">
                 부모님의 일상을 가족과 함께 공유하고,<br className="hidden md:block" />
-                <span className="text-neutral-900 font-semibold">건강한 생활을 지원하는</span> 통합 소통 플랫폼
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">건강한 생활을 지원하는</span> 통합 소통 플랫폼
               </p>
             </div>
             
-            {/* CTA Buttons - Linear 스타일 */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in-up" style={{ animationDelay: '0.3s' }}>
+            {/* CTA Buttons - 프리미엄 느낌 */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-in-up" style={{ animationDelay: '0.3s' }}>
               <Link
                 href="/auth/signup"
-                className="btn-linear-primary px-8 py-3.5 text-base"
+                className="btn-primary inline-flex items-center gap-3 px-12 py-6 text-lg"
               >
                 무료로 시작하기
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-6 h-6" />
               </Link>
               <Link
                 href="/auth/login"
-                className="btn-linear-secondary px-8 py-3.5 text-base"
+                className="btn-secondary inline-flex items-center gap-3 px-12 py-6 text-lg"
               >
                 로그인
               </Link>
@@ -71,42 +77,42 @@ export default function HomePage() {
           </div>
 
           {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-10">
             {/* Feature 1 */}
-            <div className="card-notion p-8 card-hover-linear group">
-              <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-200 transition-colors">
-                <Camera className="w-6 h-6 text-primary-600" />
+            <div className="card-app p-10 card-hover-linear group">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-blue-500/40 group-hover:scale-110 transition-all duration-700">
+                <Camera className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-neutral-900 mb-3">
+              <h3 className="text-3xl font-black text-neutral-900 mb-4">
                 사진 공유
               </h3>
-              <p className="text-neutral-600 leading-relaxed">
+              <p className="text-base text-neutral-600 leading-relaxed font-medium">
                 요양원에서 부모님의 일상을 사진으로 공유하고, 가족들과 댓글로 소통하며 추억을 나누세요.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="card-notion p-8 card-hover-linear group">
-              <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-200 transition-colors">
-                <Heart className="w-6 h-6 text-red-600 fill-red-600" />
+            <div className="card-app p-10 card-hover-linear group">
+              <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-red-500/40 group-hover:scale-110 transition-all duration-700">
+                <Heart className="w-10 h-10 text-white fill-white" />
               </div>
-              <h3 className="text-2xl font-bold text-neutral-900 mb-3">
+              <h3 className="text-3xl font-black text-neutral-900 mb-4">
                 의료 정보
               </h3>
-              <p className="text-neutral-600 leading-relaxed">
+              <p className="text-base text-neutral-600 leading-relaxed font-medium">
                 건강 상태와 진료 기록을 투명하게 공유하여, 언제든지 부모님의 건강을 확인하고 안심하세요.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="card-notion p-8 card-hover-linear group">
-              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-emerald-200 transition-colors">
-                <ShoppingBag className="w-6 h-6 text-emerald-600" />
+            <div className="card-app p-10 card-hover-linear group">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-green-500/40 group-hover:scale-110 transition-all duration-700">
+                <ShoppingBag className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-neutral-900 mb-3">
+              <h3 className="text-3xl font-black text-neutral-900 mb-4">
                 생필품 구매
               </h3>
-              <p className="text-neutral-600 leading-relaxed">
+              <p className="text-base text-neutral-600 leading-relaxed font-medium">
                 필요한 생필품을 앱에서 쉽게 구매하고, 요양원으로 직접 배송받아 더욱 편리하게 관리하세요.
               </p>
             </div>
