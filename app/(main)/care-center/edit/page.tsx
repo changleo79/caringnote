@@ -140,28 +140,28 @@ export default function EditCareCenterPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-6 py-12 max-w-4xl">
         {/* Back Button */}
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-base text-neutral-600 hover:text-neutral-900 mb-8 transition-all duration-300 group font-bold px-4 py-2 rounded-xl hover:bg-white/80 backdrop-blur-sm"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span>뒤로가기</span>
         </Link>
 
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+        <div className="mb-12">
+          <h1 className="text-5xl md:text-6xl font-black text-neutral-900 mb-4 tracking-tight">
             요양원 정보 수정
           </h1>
-          <p className="text-gray-600">
+          <p className="text-xl text-neutral-600 font-bold">
             요양원 정보를 수정할 수 있습니다
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-br from-white via-purple-50/20 to-white rounded-3xl shadow-3d border-2 border-purple-200/50 p-10 md:p-14 space-y-8 backdrop-blur-sm">
           {/* 요양원 이름 */}
           <div>
             <label className="block text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
@@ -173,7 +173,7 @@ export default function EditCareCenterPage() {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              className="input-vercel w-full"
               placeholder="요양원 이름을 입력하세요"
             />
           </div>
@@ -189,7 +189,7 @@ export default function EditCareCenterPage() {
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               required
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              className="input-vercel w-full"
               placeholder="요양원 주소를 입력하세요"
             />
           </div>
@@ -204,7 +204,7 @@ export default function EditCareCenterPage() {
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              className="input-vercel w-full"
               placeholder="02-1234-5678"
             />
           </div>
@@ -219,7 +219,7 @@ export default function EditCareCenterPage() {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              className="input-vercel w-full"
               placeholder="info@example.com"
             />
           </div>
@@ -234,7 +234,7 @@ export default function EditCareCenterPage() {
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={6}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400 resize-none"
+              className="input-vercel w-full resize-none"
               placeholder="요양원에 대한 설명을 입력하세요"
             />
           </div>
@@ -249,7 +249,7 @@ export default function EditCareCenterPage() {
               type="url"
               value={formData.logoUrl}
               onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl input-focus outline-none transition-all bg-white text-gray-900 placeholder:text-gray-400"
+              className="input-vercel w-full"
               placeholder="https://example.com/logo.png"
             />
             {formData.logoUrl && (
