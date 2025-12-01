@@ -5,6 +5,10 @@ import { Toaster } from "react-hot-toast";
 export const metadata: Metadata = {
   title: "케어링노트 - 부모님의 따뜻한 하루를 함께합니다",
   description: "요양원에 계신 부모님의 일상을 가족과 함께 공유하고, 건강한 생활을 지원하는 통합 소통 플랫폼",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
