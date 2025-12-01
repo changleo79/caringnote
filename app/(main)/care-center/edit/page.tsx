@@ -27,14 +27,17 @@ export default function EditCareCenterPage() {
     const loadCareCenter = async () => {
       if (status === "loading") return
       
-      if (!session || session.user.role !== "CAREGIVER" || !session.user.careCenterId) {
+      if (!session || session.user.role !== "CAREGIVER") {
         toast.error("요양원 직원만 접근할 수 있습니다.")
         router.push("/dashboard")
         return
       }
 
+      // careCenterId가 없으면 임시 ID 생성 (나중에 API에서 실제 ID로 생성됨)
+      const careCenterId = session.user.careCenterId || session.user.id
+
       try {
-        const res = await fetch(`/api/care-centers/${session.user.careCenterId}`)
+        const res = await fetch(`/api/care-centers/${careCenterId}`)
         const data = await res.json()
 
         if (res.ok) {
@@ -66,14 +69,17 @@ export default function EditCareCenterPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    if (!session || !session.user.careCenterId) {
+    if (!session) {
       toast.error("인증이 필요합니다.")
       setIsLoading(false)
       return
     }
 
+    // careCenterId가 없으면 사용자 ID를 사용 (API에서 자동 생성됨)
+    const careCenterId = session.user.careCenterId || session.user.id
+
     try {
-      const response = await fetch(`/api/care-centers/${session.user.careCenterId}`, {
+      const response = await fetch(`/api/care-centers/${careCenterId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -82,15 +88,15 @@ export default function EditCareCenterPage() {
       const data = await response.json()
 
       if (response.ok) {
-        toast.success("요양원 정보가 수정되었습니다!")
+        toast.success("요양원 정보가 저장되었습니다!")
         router.push("/dashboard")
         router.refresh()
       } else {
-        toast.error(data.error || "요양원 정보 수정에 실패했습니다.")
+        toast.error(data.error || "요양원 정보 저장에 실패했습니다.")
       }
     } catch (error: any) {
       console.error("Error updating care center:", error)
-      toast.error("요양원 정보 수정 중 오류가 발생했습니다.")
+      toast.error("요양원 정보 저장 중 오류가 발생했습니다.")
     } finally {
       setIsLoading(false)
     }
