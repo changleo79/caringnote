@@ -26,8 +26,11 @@ export async function GET(
       )
     }
 
-    // 자신의 요양원만 조회 가능
-    if (session.user.careCenterId !== params.id) {
+    // careCenterId가 없거나 params.id와 다르면 새로 생성
+    let careCenterId = session.user.careCenterId || params.id
+
+    // 자신의 요양원만 조회 가능 (careCenterId가 없으면 새로 생성하므로 허용)
+    if (session.user.careCenterId && session.user.careCenterId !== params.id) {
       return NextResponse.json(
         { error: "권한이 없습니다." },
         { status: 403 }
@@ -35,7 +38,7 @@ export async function GET(
     }
 
     let careCenter = await prisma.careCenter.findUnique({
-      where: { id: params.id },
+      where: { id: careCenterId },
       select: {
         id: true,
         name: true,
@@ -58,7 +61,7 @@ export async function GET(
       // 기본 요양원 정보로 생성
       careCenter = await prisma.careCenter.create({
         data: {
-          id: params.id,
+          id: careCenterId,
           name: `${user?.name || "요양원"}의 요양원`,
           address: "주소를 입력해주세요",
           phone: null,
@@ -80,7 +83,7 @@ export async function GET(
       // 사용자의 careCenterId 업데이트
       await prisma.user.update({
         where: { id: session.user.id },
-        data: { careCenterId: params.id },
+        data: { careCenterId: careCenterId },
       })
     }
 
@@ -117,8 +120,11 @@ export async function PATCH(
       )
     }
 
-    // 자신의 요양원만 수정 가능
-    if (session.user.careCenterId !== params.id) {
+    // careCenterId가 없거나 params.id와 다르면 새로 생성
+    let careCenterId = session.user.careCenterId || params.id
+
+    // 자신의 요양원만 수정 가능 (careCenterId가 없으면 새로 생성하므로 허용)
+    if (session.user.careCenterId && session.user.careCenterId !== params.id) {
       return NextResponse.json(
         { error: "권한이 없습니다." },
         { status: 403 }
@@ -138,22 +144,16 @@ export async function PATCH(
 
     // 요양원이 존재하는지 확인
     let careCenter = await prisma.careCenter.findUnique({
-      where: { id: params.id },
+      where: { id: careCenterId },
     })
 
     let updatedCareCenter
 
     // 요양원이 없으면 생성
     if (!careCenter) {
-      // 사용자 정보 가져오기
-      const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { name: true },
-      })
-
       updatedCareCenter = await prisma.careCenter.create({
         data: {
-          id: params.id,
+          id: careCenterId,
           name,
           address,
           phone: phone || null,
@@ -175,12 +175,12 @@ export async function PATCH(
       // 사용자의 careCenterId 업데이트
       await prisma.user.update({
         where: { id: session.user.id },
-        data: { careCenterId: params.id },
+        data: { careCenterId: careCenterId },
       })
     } else {
       // 요양원이 있으면 업데이트
       updatedCareCenter = await prisma.careCenter.update({
-        where: { id: params.id },
+        where: { id: careCenterId },
         data: {
           name,
           address,
