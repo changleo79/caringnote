@@ -32,8 +32,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 상단 네비게이션 - 앱다운 느낌 */}
-      <header className="bg-white/80 backdrop-blur-xl border-b border-neutral-100 sticky top-0 z-50 shadow-app">
+      {/* 상단 네비게이션 - 프리미엄 느낌 */}
+      <header className="bg-white/90 backdrop-blur-2xl border-b border-white/40 sticky top-0 z-50 shadow-app-lg">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <Logo variant="default" size="md" href="/dashboard" />
@@ -143,10 +143,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </nav>
 
-      {/* 사이드바 (데스크톱) - 앱다운 느낌 */}
+      {/* 사이드바 (데스크톱) - 프리미엄 느낌 */}
       <div className="hidden md:flex">
-        <aside className="w-72 bg-white/50 backdrop-blur-xl border-r border-neutral-100 min-h-[calc(100vh-80px)] sticky top-20">
-          <nav className="p-6 space-y-2">
+        <aside className="w-72 bg-white/70 backdrop-blur-2xl border-r border-white/40 min-h-[calc(100vh-80px)] sticky top-20">
+          <nav className="p-6 space-y-3">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
@@ -155,17 +155,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group",
+                    "flex items-center gap-4 px-6 py-5 rounded-2xl transition-all duration-500 group relative overflow-hidden",
                     isActive
-                      ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white font-bold shadow-xl shadow-primary-500/30 scale-[1.02]"
-                      : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 hover:scale-[1.01]"
+                      ? "bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white font-black shadow-2xl shadow-primary-500/40 scale-[1.02]"
+                      : "text-neutral-600 hover:bg-white/80 hover:text-neutral-900 hover:scale-[1.01] hover:shadow-lg"
                   )}
                 >
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 animate-shimmer"></div>
+                  )}
                   <Icon className={cn(
-                    "w-6 h-6 transition-transform duration-300",
+                    "w-6 h-6 transition-transform duration-500 relative z-10",
                     isActive && "scale-110"
                   )} />
-                  <span className="text-base">{item.label}</span>
+                  <span className="text-base relative z-10">{item.label}</span>
                 </Link>
               )
             })}

@@ -65,24 +65,25 @@ export default async function DashboardPage() {
   return (
     <AppLayout>
       <div className="container mx-auto px-4 py-10 max-w-7xl">
-        {/* Welcome Section - 앱다운 느낌 */}
+        {/* Welcome Section - 프리미엄 느낌 */}
         <div className="mb-12">
-          <div className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl p-12 md:p-16 text-white shadow-app-xl overflow-hidden">
+          <div className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-3xl p-12 md:p-16 text-white shadow-3d overflow-hidden">
             {/* 배경 패턴 */}
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.15),transparent_60%)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.2),transparent_60%)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,255,255,0.1),transparent_50%)]"></div>
             
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-2xl">
-                  <Sparkles className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-lg">
+                  <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-sm font-bold text-white/90">오늘도 좋은 하루 되세요</span>
+                <span className="text-base font-black text-white/95 tracking-wide">오늘도 좋은 하루 되세요</span>
               </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tight">
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-none">
                 안녕하세요, {session.user.name}님
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 font-semibold">
+              <p className="text-2xl md:text-3xl text-white/95 font-black">
                 부모님의 건강한 하루를 함께합니다
               </p>
             </div>
@@ -93,15 +94,15 @@ export default async function DashboardPage() {
         <div className={`grid grid-cols-2 ${session.user.role === "CAREGIVER" ? "md:grid-cols-5" : "md:grid-cols-4"} gap-6 mb-12`}>
           <Link
             href="/community/new"
-            className="group bg-white rounded-3xl p-8 shadow-app-lg border border-neutral-100 card-hover relative overflow-hidden"
+            className="group bg-gradient-to-br from-white via-white to-blue-50/30 rounded-3xl p-10 shadow-3d border border-white/60 card-hover relative overflow-hidden backdrop-blur-sm"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-100/60 via-blue-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center mb-6 shadow-xl shadow-blue-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                <Camera className="w-10 h-10 text-white" />
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-blue-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
+                <Camera className="w-12 h-12 text-white" />
               </div>
-              <p className="font-black text-neutral-900 mb-2 text-xl">사진 공유</p>
-              <p className="text-sm text-neutral-500 font-semibold">일상 기록하기</p>
+              <p className="font-black text-neutral-900 mb-2 text-2xl">사진 공유</p>
+              <p className="text-base text-neutral-600 font-bold">일상 기록하기</p>
             </div>
           </Link>
 
@@ -166,9 +167,9 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* 최근 커뮤니티 - 앱다운 느낌 */}
-          <div className="bg-white rounded-3xl shadow-app-lg border border-neutral-100 overflow-hidden">
-            <div className="p-8 border-b border-neutral-100 flex items-center justify-between bg-gradient-to-r from-blue-50/50 to-transparent">
+          {/* 최근 커뮤니티 - 프리미엄 느낌 */}
+          <div className="bg-gradient-to-br from-white via-white to-blue-50/20 rounded-3xl shadow-3d border border-white/60 overflow-hidden backdrop-blur-sm">
+            <div className="p-8 border-b border-white/40 flex items-center justify-between bg-gradient-to-r from-blue-50/60 via-blue-50/40 to-transparent">
               <h2 className="text-2xl font-black text-neutral-900 flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                   <Camera className="w-6 h-6 text-white" />

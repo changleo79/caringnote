@@ -82,12 +82,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-primary-50/30 flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-primary-50/40 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* 배경 장식 */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary-200/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-200/20 rounded-full blur-3xl"></div>
+      
+      <div className="max-w-md w-full relative z-10">
         {/* Back to Home */}
         <Link 
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/80"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-8 transition-all duration-500 font-bold px-5 py-2.5 rounded-xl hover:bg-white/90 backdrop-blur-sm shadow-lg"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>홈으로</span>
@@ -111,21 +116,23 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Logo/Title - 앱다운 느낌 */}
+        {/* Logo/Title - 프리미엄 느낌 */}
         <div className="text-center mb-12">
-          <div className="mb-8 flex justify-center">
-            <Logo variant="default" size="md" />
+          <div className="mb-10 flex justify-center">
+            <div className="p-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl">
+              <Logo variant="default" size="md" />
+            </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-black text-neutral-900 mb-3 tracking-tight">
+          <h1 className="text-6xl md:text-7xl font-black text-neutral-900 mb-4 tracking-tight">
             로그인
           </h1>
-          <p className="text-lg text-neutral-600 font-semibold">
+          <p className="text-xl text-neutral-600 font-black">
             케어링노트에 오신 것을 환영합니다
           </p>
         </div>
 
-        {/* Login Form - 앱다운 느낌 */}
-        <div className="bg-white rounded-3xl shadow-app-xl border border-neutral-100 p-10 md:p-12">
+        {/* Login Form - 프리미엄 느낌 */}
+        <div className="bg-gradient-to-br from-white/90 via-white/80 to-neutral-50/40 rounded-3xl shadow-3d border border-white/60 p-12 md:p-14 backdrop-blur-2xl">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-neutral-900 mb-3">
