@@ -21,6 +21,7 @@ export default function NewPostPage() {
   const [residents, setResidents] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [loadingResidents, setLoadingResidents] = useState(true)
+  const [uploadingImages, setUploadingImages] = useState<Set<number>>(new Set())
 
   // 입소자 목록 불러오기
   useEffect(() => {
@@ -43,9 +44,69 @@ export default function NewPostPage() {
     }
   }, [session])
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    const fileArray = Array.from(files)
+    const maxFiles = 10
+    const remainingSlots = maxFiles - formData.images.length
+
+    if (fileArray.length > remainingSlots) {
+      toast.error(`최대 ${maxFiles}개까지 업로드 가능합니다. (현재 ${formData.images.length}개)`)
+      return
+    }
+
+    // 각 파일 업로드
+    for (let i = 0; i < Math.min(fileArray.length, remainingSlots); i++) {
+      const file = fileArray[i]
+      const imageIndex = formData.images.length + i
+      
+      setUploadingImages(prev => new Set(prev).add(imageIndex))
+
+      try {
+        const uploadFormData = new FormData()
+        uploadFormData.append("file", file)
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadFormData,
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          setFormData(prev => ({
+            ...prev,
+            images: [...prev.images, data.url],
+          }))
+          toast.success(`${file.name} 업로드 완료`)
+        } else {
+          toast.error(data.error || `${file.name} 업로드 실패`)
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error)
+        toast.error(`${file.name} 업로드 중 오류 발생`)
+      } finally {
+        setUploadingImages(prev => {
+          const newSet = new Set(prev)
+          newSet.delete(imageIndex)
+          return newSet
+        })
+      }
+    }
+
+    // input 초기화
+    e.target.value = ""
+  }
+
   const handleAddImageUrl = () => {
     const url = prompt("이미지 URL을 입력하세요:")
     if (url && url.trim()) {
+      if (formData.images.length >= 10) {
+        toast.error("최대 10개까지 업로드 가능합니다.")
+        return
+      }
       setFormData({
         ...formData,
         images: [...formData.images, url.trim()],
@@ -195,36 +256,65 @@ export default function NewPostPage() {
           {/* 이미지 */}
           <div>
             <label className="block text-sm font-semibold text-gray-800 mb-3">
-              이미지
+              이미지 {formData.images.length > 0 && `(${formData.images.length}/10)`}
             </label>
             <div className="space-y-3">
               {formData.images.map((imageUrl, index) => (
                 <div key={index} className="relative group">
-                  <img
-                    src={imageUrl}
-                    alt={`이미지 ${index + 1}`}
-                    className="w-full h-48 object-cover rounded-xl border border-gray-200"
-                    onError={(e) => {
-                      e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%23f3f4f6' width='400' height='200'/%3E%3Ctext fill='%239ca3af' font-family='sans-serif' font-size='18' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E이미지 로드 실패%3C/text%3E%3C/svg%3E"
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+                  {uploadingImages.has(index) ? (
+                    <div className="w-full h-48 bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mb-2"></div>
+                        <p className="text-sm text-gray-600">업로드 중...</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <img
+                        src={imageUrl}
+                        alt={`이미지 ${index + 1}`}
+                        className="w-full h-48 object-cover rounded-xl border border-gray-200"
+                        onError={(e) => {
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%23f3f4f6' width='400' height='200'/%3E%3Ctext fill='%239ca3af' font-family='sans-serif' font-size='18' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E이미지 로드 실패%3C/text%3E%3C/svg%3E"
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={handleAddImageUrl}
-                className="w-full py-12 border-2 border-dashed border-gray-300 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all flex flex-col items-center justify-center gap-2 text-gray-600"
-              >
-                <Camera className="w-8 h-8" />
-                <span>이미지 URL 추가</span>
-              </button>
+              
+              {formData.images.length < 10 && (
+                <>
+                  <label className="block w-full py-12 border-2 border-dashed border-gray-300 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all flex flex-col items-center justify-center gap-2 text-gray-600 cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileSelect}
+                      className="hidden"
+                      disabled={isLoading || uploadingImages.size > 0}
+                    />
+                    <Camera className="w-8 h-8" />
+                    <span>이미지 파일 선택 (최대 10개)</span>
+                    <span className="text-xs text-gray-500">또는</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleAddImageUrl}
+                    className="w-full py-3 border border-gray-300 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all text-gray-600 text-sm"
+                    disabled={isLoading || uploadingImages.size > 0}
+                  >
+                    이미지 URL로 추가
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
