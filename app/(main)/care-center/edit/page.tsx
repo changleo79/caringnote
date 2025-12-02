@@ -44,6 +44,7 @@ export default function EditCareCenterPage() {
         console.log("요양원 정보 응답:", { status: res.status, ok: res.ok, data })
 
         if (res.ok) {
+          // API가 성공했으면 데이터 설정 (빈 데이터여도 정상)
           setFormData({
             name: data.name || "",
             address: data.address || "",
@@ -52,12 +53,13 @@ export default function EditCareCenterPage() {
             description: data.description || "",
             logoUrl: data.logoUrl || "",
           })
+          setLoadingData(false)
         } else {
           console.error("요양원 정보 불러오기 실패:", data)
           // 요양원이 없으면 빈 폼으로 계속 진행 (저장 시 자동 생성됨)
+          // 에러 메시지 표시하지 않음 - 정상적인 경우일 수 있음
           if (res.status === 404 || data.error?.includes("찾을 수 없습니다")) {
-            console.log("요양원이 없음 - 빈 폼으로 진행")
-            // 빈 폼으로 계속 진행
+            console.log("요양원이 없음 - 빈 폼으로 진행 (정상)")
             setFormData({
               name: "",
               address: "",
@@ -69,14 +71,13 @@ export default function EditCareCenterPage() {
             setLoadingData(false)
             return
           }
+          // 다른 에러인 경우에만 토스트 표시
           toast.error(data.error || "요양원 정보를 불러오는데 실패했습니다.")
-          router.push("/dashboard")
+          setLoadingData(false)
         }
       } catch (error: any) {
         console.error("Error loading care center:", error)
         toast.error("요양원 정보를 불러오는 중 오류가 발생했습니다.")
-        router.push("/dashboard")
-      } finally {
         setLoadingData(false)
       }
     }
