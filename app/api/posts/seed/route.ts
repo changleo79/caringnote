@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
     }
 
     // 관리자만 실행 가능하도록 (또는 개발 환경에서만)
-    if (process.env.NODE_ENV === 'production' && session.user.role !== UserRole.ADMIN) {
+    // 프로덕션에서는 ADMIN만, 개발 환경에서는 모든 인증된 사용자 가능
+    if (process.env.NODE_ENV === 'production' && session.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "권한이 없습니다." },
         { status: 403 }
