@@ -153,6 +153,30 @@ export async function POST(req: NextRequest) {
     try {
       console.log("👤 사용자 생성 시도:", { email, name, role, careCenterId: role === "FAMILY" ? careCenterId : null })
       
+      let finalCareCenterId = role === "FAMILY" ? careCenterId : null
+      
+      // CAREGIVER인 경우 자동으로 요양원 생성
+      if (role === "CAREGIVER") {
+        try {
+          // 사용자 ID를 careCenterId로 사용하여 요양원 생성
+          const newCareCenterId = `carecenter_${Date.now()}_${Math.random().toString(36).substring(7)}`
+          
+          const newCareCenter = await prisma.careCenter.create({
+            data: {
+              id: newCareCenterId,
+              name: "", // 빈 이름으로 생성 (나중에 수정)
+              address: "", // 빈 주소로 생성 (나중에 수정)
+            },
+          })
+          
+          finalCareCenterId = newCareCenter.id
+          console.log("✅ 요양원 자동 생성 성공:", finalCareCenterId)
+        } catch (careCenterError: any) {
+          console.error("❌ 요양원 생성 오류:", careCenterError)
+          // 요양원 생성 실패해도 사용자는 생성 (나중에 수정 가능)
+        }
+      }
+      
       const user = await prisma.user.create({
         data: {
           email,
@@ -160,11 +184,11 @@ export async function POST(req: NextRequest) {
           name,
           phone: phone || null,
           role: role || "FAMILY",
-          careCenterId: role === "FAMILY" ? careCenterId : null,
+          careCenterId: finalCareCenterId,
         },
       })
 
-      console.log("✅ 사용자 생성 성공:", user.id)
+      console.log("✅ 사용자 생성 성공:", user.id, "careCenterId:", user.careCenterId)
 
       return NextResponse.json(
         { 
@@ -172,6 +196,7 @@ export async function POST(req: NextRequest) {
           userId: user.id,
           email: user.email,
           name: user.name,
+          careCenterId: user.careCenterId,
         },
         { status: 201 }
       )
