@@ -33,12 +33,6 @@ export default function NotificationsPage() {
     }
   }, [status])
 
-  useEffect(() => {
-    if (session) {
-      loadNotifications()
-    }
-  }, [session, filter])
-
   const loadNotifications = async () => {
     try {
       setIsLoading(true)
@@ -63,6 +57,13 @@ export default function NotificationsPage() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (session) {
+      loadNotifications()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, filter])
 
   const markAsRead = async (id: string) => {
     try {

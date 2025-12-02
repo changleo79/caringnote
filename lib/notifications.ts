@@ -156,7 +156,6 @@ export async function notifyPostLiked(postId: string, userId: string) {
     return await createNotification({
       type: NotificationType.PostLiked,
       title: `${user.name}님이 게시글에 좋아요를 눌렀습니다`,
-      content: null,
       userId: post.authorId,
       relatedId: postId,
       relatedType: "Post",

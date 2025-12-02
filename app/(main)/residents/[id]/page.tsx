@@ -38,6 +38,7 @@ export default function ResidentDetailPage() {
         loadExistingRequest()
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, params.id])
 
   const loadResident = async () => {
