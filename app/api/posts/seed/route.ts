@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { PostCategory, UserRole } from "@prisma/client"
 
 // 테스트용 게시글과 댓글 생성
 export async function POST(req: NextRequest) {
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 관리자만 실행 가능하도록 (또는 개발 환경에서만)
-    if (process.env.NODE_ENV === 'production' && session.user.role !== "ADMIN") {
+    if (process.env.NODE_ENV === 'production' && session.user.role !== UserRole.ADMIN) {
       return NextResponse.json(
         { error: "권한이 없습니다." },
         { status: 403 }
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
     const users = await prisma.user.findMany({
       where: {
         role: {
-          in: ["CAREGIVER", "FAMILY"]
+          in: [UserRole.CAREGIVER, UserRole.FAMILY]
         }
       },
       include: {
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
       const postCount = Math.floor(Math.random() * 3) + 3
       
       for (let i = 0; i < postCount; i++) {
-        const categories = ["Daily", "Medical", "Event", "Announcement"]
+        const categories = [PostCategory.Daily, PostCategory.Medical, PostCategory.Event, PostCategory.Announcement]
         const category = categories[Math.floor(Math.random() * categories.length)]
         
         const titles = [
@@ -108,13 +109,13 @@ export async function POST(req: NextRequest) {
         try {
           const post = await prisma.post.create({
             data: {
-              title: category === "Announcement" ? title : null,
+              title: category === PostCategory.Announcement ? title : null,
               content: `${content} (작성자: ${user.name})`,
               images: null,
               careCenterId: userCareCenterId,
               residentId: resident?.id || null,
               authorId: user.id,
-              category: category as any,
+              category: category,
             },
           })
 
