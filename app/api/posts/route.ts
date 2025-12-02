@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
         title: title || null,
         content: content || null,
         images: imagesJson,
-        careCenterId: careCenterId,
+        careCenterId: session.user.careCenterId!,
         residentId: residentId || null,
         authorId: session.user.id!,
         category: category || "Daily",
