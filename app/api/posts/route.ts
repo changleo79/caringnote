@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { notifyPostCreated } from "@/lib/notifications"
 
 // 게시글 목록 조회
 export async function GET(req: NextRequest) {
@@ -17,6 +18,9 @@ export async function GET(req: NextRequest) {
 
     const searchParams = req.nextUrl.searchParams
     const careCenterId = searchParams.get("careCenterId") || session.user.careCenterId
+    const category = searchParams.get("category")
+    const residentId = searchParams.get("residentId")
+    const search = searchParams.get("search")
 
     if (!careCenterId) {
       // CAREGIVER인 경우 안내 메시지
@@ -32,10 +36,32 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const where: any = {
+      careCenterId: careCenterId,
+    }
+
+    // 카테고리 필터
+    if (category && category !== "all") {
+      where.category = category
+    }
+
+    // 입소자 필터
+    if (residentId && residentId !== "all") {
+      where.residentId = residentId
+    }
+
+    // 검색 필터
+    if (search && search.trim()) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { content: { contains: search, mode: "insensitive" } },
+        { author: { name: { contains: search, mode: "insensitive" } } },
+        { resident: { name: { contains: search, mode: "insensitive" } } },
+      ]
+    }
+
     const posts = await prisma.post.findMany({
-      where: {
-        careCenterId: careCenterId,
-      },
+      where,
       include: {
         author: {
           select: {
@@ -151,6 +177,11 @@ export async function POST(req: NextRequest) {
         },
       },
     })
+
+    // 알림 생성 (비동기, 에러가 발생해도 게시글 작성은 성공)
+    notifyPostCreated(post.id, session.user.id!, session.user.careCenterId!).catch(
+      (error) => console.error("알림 생성 실패:", error)
+    )
 
     return NextResponse.json({
       ...post,

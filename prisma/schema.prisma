@@ -50,6 +50,8 @@ model User {
   comments     Comment[]
   orders       Order[]
   medicalRecords MedicalRecord[]
+  notifications Notification[]
+  residentFamilies ResidentFamily[]
   
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -119,11 +121,64 @@ model Resident {
   posts       Post[]
   medicalRecords MedicalRecord[]
   orders      Order[]
+  families    ResidentFamily[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   @@index([careCenterId])
+}
+
+// 입소자-가족 연결
+model ResidentFamily {
+  id          String   @id @default(cuid())
+  residentId  String
+  resident    Resident @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relationship String  // 관계 (자녀, 배우자 등)
+  isApproved  Boolean  @default(false)
+  approvedById String?
+  approvedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([residentId, userId])
+  @@index([residentId])
+  @@index([userId])
+}
+
+// 알림
+model Notification {
+  id          String   @id @default(cuid())
+  type        NotificationType
+  title       String
+  content     String?  @db.Text
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relatedId   String?  // 관련 엔티티 ID (게시글, 의료 기록 등)
+  relatedType  String?  // 관련 엔티티 타입 (Post, MedicalRecord 등)
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  PostCreated          // 새 게시글
+  CommentCreated       // 새 댓글
+  PostLiked           // 게시글 좋아요
+  MedicalRecordCreated // 새 의료 기록
+  MedicalRecordUpdated // 의료 기록 수정
+  OrderCreated        // 새 주문
+  OrderStatusChanged  // 주문 상태 변경
+  FamilyRequest       // 가족 연결 요청
+  FamilyApproved      // 가족 연결 승인
+  FamilyRejected     // 가족 연결 거부
+  Announcement        // 공지사항
+  Other               // 기타
 }
 
 // 게시글 (사진 공유 커뮤니티)

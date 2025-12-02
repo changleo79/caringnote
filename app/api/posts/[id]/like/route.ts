@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { notifyPostLiked } from "@/lib/notifications"
 
 // 좋아요 토글
 export async function POST(
@@ -57,6 +58,11 @@ export async function POST(
       const likeCount = await prisma.postLike.count({
         where: { postId },
       })
+
+      // 알림 생성 (비동기, 에러가 발생해도 좋아요는 성공)
+      notifyPostLiked(postId, userId).catch(
+        (error) => console.error("알림 생성 실패:", error)
+      )
 
       return NextResponse.json({ 
         liked: true,

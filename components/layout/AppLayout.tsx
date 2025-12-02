@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react"
 import { useState } from "react"
+import NotificationBell from "@/components/notifications/NotificationBell"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession()
@@ -47,10 +48,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             
             <div className="flex items-center gap-3">
               {/* 알림 */}
-              <button className="relative p-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-2xl transition-all duration-300 hover:scale-110">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full border-2 border-white"></span>
-              </button>
+              <NotificationBell />
 
               {/* 사용자 메뉴 */}
               <div className="flex items-center gap-3">

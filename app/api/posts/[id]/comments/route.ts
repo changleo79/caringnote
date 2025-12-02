@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { notifyCommentCreated } from "@/lib/notifications"
 
 // 댓글 목록 조회
 export async function GET(
@@ -87,6 +88,11 @@ export async function POST(
         },
       },
     })
+
+    // 알림 생성 (비동기, 에러가 발생해도 댓글 작성은 성공)
+    notifyCommentCreated(comment.id, params.id, session.user.id!).catch(
+      (error) => console.error("알림 생성 실패:", error)
+    )
 
     return NextResponse.json(comment, { status: 201 })
   } catch (error: any) {
