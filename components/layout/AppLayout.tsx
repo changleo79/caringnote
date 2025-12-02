@@ -31,9 +31,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-primary-50/20 to-neutral-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white via-amber-50/30 to-blue-50/40">
       {/* 상단 네비게이션 - 프리미엄 느낌 */}
-      <header className="bg-white/90 backdrop-blur-2xl border-b border-white/40 sticky top-0 z-50 shadow-app-lg">
+      <header className="bg-gradient-to-r from-white/95 via-primary-50/30 to-white/95 backdrop-blur-2xl border-b-4 border-primary-200/50 sticky top-0 z-50 shadow-app-xl">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <Logo variant="default" size="md" href="/dashboard" />

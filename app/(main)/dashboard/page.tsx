@@ -67,7 +67,7 @@ export default async function DashboardPage() {
       <div className="container mx-auto px-6 py-12 max-w-7xl">
         {/* Welcome Section - 프리미엄 느낌 */}
         <div className="mb-16">
-          <div className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 rounded-3xl p-14 md:p-20 text-white shadow-3d overflow-hidden border-4 border-primary-400/30">
+          <div className="relative bg-gradient-to-br from-blue-500 via-primary-600 to-cyan-600 rounded-3xl p-16 md:p-24 text-white shadow-3d overflow-hidden border-4 border-blue-400/50">
             {/* 배경 패턴 */}
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.2),transparent_60%)]"></div>
@@ -94,7 +94,7 @@ export default async function DashboardPage() {
         <div className={`grid grid-cols-2 ${session.user.role === "CAREGIVER" ? "md:grid-cols-5" : "md:grid-cols-4"} gap-8 mb-16`}>
           <Link
             href="/community/new"
-            className="group bg-gradient-to-br from-white via-blue-50/40 to-white rounded-3xl p-12 shadow-3d border-2 border-blue-200/50 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-gradient-to-br from-blue-50 via-white to-blue-100/50 rounded-3xl p-14 shadow-3d border-4 border-blue-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-100/60 via-blue-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
 
           <Link
             href="/medical/new"
-            className="group bg-gradient-to-br from-white via-red-50/40 to-white rounded-3xl p-12 shadow-3d border-2 border-red-200/50 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-gradient-to-br from-red-50 via-white to-pink-100/50 rounded-3xl p-14 shadow-3d border-4 border-red-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-red-100/60 via-red-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
 
           <Link
             href="/shop"
-            className="group bg-gradient-to-br from-white via-green-50/40 to-white rounded-3xl p-12 shadow-3d border-2 border-green-200/50 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-gradient-to-br from-green-50 via-white to-emerald-100/50 rounded-3xl p-14 shadow-3d border-4 border-green-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-green-100/60 via-green-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
@@ -136,7 +136,7 @@ export default async function DashboardPage() {
 
           <Link
             href="/notifications"
-            className="group bg-gradient-to-br from-white via-amber-50/40 to-white rounded-3xl p-12 shadow-3d border-2 border-amber-200/50 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-gradient-to-br from-amber-50 via-white to-orange-100/50 rounded-3xl p-14 shadow-3d border-4 border-amber-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-100/60 via-amber-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
@@ -152,7 +152,7 @@ export default async function DashboardPage() {
           {session.user.role === "CAREGIVER" && (
             <Link
               href="/care-center/edit"
-              className="group bg-gradient-to-br from-white via-purple-50/40 to-white rounded-3xl p-12 shadow-3d border-2 border-purple-200/50 card-hover relative overflow-hidden backdrop-blur-sm"
+              className="group bg-gradient-to-br from-purple-50 via-white to-indigo-100/50 rounded-3xl p-14 shadow-3d border-4 border-purple-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-100/60 via-purple-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               <div className="relative z-10">
@@ -168,7 +168,7 @@ export default async function DashboardPage() {
 
         <div className="grid md:grid-cols-2 gap-10">
           {/* 최근 커뮤니티 - 프리미엄 느낌 */}
-          <div className="bg-gradient-to-br from-white via-blue-50/30 to-white rounded-3xl shadow-3d border-2 border-blue-200/50 overflow-hidden backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-blue-50/60 via-white to-blue-100/40 rounded-3xl shadow-3d border-4 border-blue-300/60 overflow-hidden backdrop-blur-sm">
             <div className="p-8 border-b border-white/40 flex items-center justify-between bg-gradient-to-r from-blue-50/60 via-blue-50/40 to-transparent">
               <h2 className="text-2xl font-black text-neutral-900 flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
