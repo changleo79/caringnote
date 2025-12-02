@@ -109,15 +109,18 @@ export default function EditCareCenterPage() {
       if (response.ok) {
         toast.success("요양원 정보가 저장되었습니다!")
         
-        // 세션 갱신 - NextAuth의 update 함수 사용
-        if (updateSession) {
-          await updateSession()
+        // 세션 갱신 시도
+        try {
+          if (updateSession) {
+            await updateSession()
+          }
+        } catch (updateError) {
+          console.log("세션 갱신 실패, 페이지 새로고침으로 대체:", updateError)
         }
         
         // 페이지 새로고침으로 세션 반영
         setTimeout(() => {
-          router.push("/dashboard")
-          router.refresh()
+          window.location.href = "/dashboard"
         }, 500)
       } else {
         console.error("요양원 정보 저장 실패:", data)
