@@ -66,8 +66,9 @@ export async function GET(
 
     // 요양원이 없으면 빈 데이터 반환 (저장 시 생성됨)
     if (!careCenter) {
-      console.log("요양원이 없음 - 빈 데이터 반환, careCenterId:", careCenterId)
+      console.log("요양원이 없음 - 빈 데이터 반환 (정상), careCenterId:", careCenterId)
       // 빈 요양원 데이터 반환 (저장 시 자동 생성됨)
+      // 200 OK로 반환하여 에러가 아님을 명확히 함
       return NextResponse.json({
         id: careCenterId,
         name: "",
@@ -76,6 +77,7 @@ export async function GET(
         email: "",
         description: "",
         logoUrl: "",
+        isEmpty: true, // 빈 데이터임을 표시
       })
     } else {
       console.log("요양원 조회 성공:", careCenter.id)
