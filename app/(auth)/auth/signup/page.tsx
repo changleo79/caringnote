@@ -81,9 +81,15 @@ export default function SignupPage() {
       return
     }
 
-    if (formData.role === "FAMILY" && !formData.careCenterId) {
-      toast.error("요양원을 선택해주세요.")
-      return
+    if (formData.role === "FAMILY") {
+      if (!formData.careCenterId) {
+        toast.error("가족 회원은 요양원을 반드시 선택해야 합니다.")
+        return
+      }
+      if (careCenters.length === 0) {
+        toast.error("등록된 요양원이 없습니다. 요양원 직원이 먼저 회원가입하여 요양원을 등록해주세요.")
+        return
+      }
     }
 
     setIsLoading(true)
@@ -197,31 +203,47 @@ export default function SignupPage() {
             {formData.role === "FAMILY" && (
               <div>
                 <label className="block text-sm font-black text-gray-900 mb-4">
-                  요양원 선택
+                  요양원 선택 <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <Building2 className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
-                  <select
-                    value={formData.careCenterId}
-                    onChange={(e) => setFormData({ ...formData, careCenterId: e.target.value })}
-                    required
-                    disabled={loadingCareCenters}
-                    className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                  >
-                    <option value="">
-                      {loadingCareCenters 
-                        ? "요양원 목록을 불러오는 중..." 
-                        : careCenters.length === 0
-                        ? "요양원이 없습니다. 요양원 직원으로 가입하세요"
-                        : "요양원을 선택하세요"}
-                    </option>
-                    {careCenters.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {loadingCareCenters ? (
+                  <div className="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl bg-gray-50 text-gray-500 text-center">
+                    요양원 목록을 불러오는 중...
+                  </div>
+                ) : careCenters.length === 0 ? (
+                  <div className="w-full px-5 py-4 border-2 border-amber-300 rounded-2xl bg-amber-50">
+                    <p className="text-amber-800 font-bold mb-2">
+                      ⚠️ 요양원이 등록되어 있지 않습니다
+                    </p>
+                    <p className="text-sm text-amber-700 mb-3">
+                      가족 회원으로 가입하려면 먼저 요양원이 등록되어 있어야 합니다.
+                    </p>
+                    <p className="text-sm text-amber-700">
+                      요양원 직원이 먼저 회원가입하여 요양원을 등록한 후, 가족 회원으로 가입해주세요.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <Building2 className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                    <select
+                      value={formData.careCenterId}
+                      onChange={(e) => setFormData({ ...formData, careCenterId: e.target.value })}
+                      required
+                      className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl input-focus outline-none transition-all bg-white text-gray-900 appearance-none cursor-pointer hover:border-primary-400 font-medium"
+                    >
+                      <option value="">요양원을 선택하세요</option>
+                      {careCenters.map((center) => (
+                        <option key={center.id} value={center.id}>
+                          {center.name} {center.address ? `(${center.address})` : ""}
+                        </option>
+                      ))}
+                    </select>
+                    {!formData.careCenterId && (
+                      <p className="mt-2 text-sm text-red-600 font-semibold">
+                        * 가족 회원은 요양원을 반드시 선택해야 합니다
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
