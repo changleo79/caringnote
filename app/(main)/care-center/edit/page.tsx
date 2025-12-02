@@ -161,7 +161,7 @@ export default function EditCareCenterPage() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-gradient-to-br from-white via-purple-50/20 to-white rounded-3xl shadow-3d border-2 border-purple-200/50 p-10 md:p-14 space-y-8 backdrop-blur-sm">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-br from-purple-50/60 via-white to-indigo-100/40 rounded-3xl shadow-3d border-4 border-purple-300/60 p-12 md:p-16 space-y-10 backdrop-blur-sm">
           {/* 요양원 이름 */}
           <div>
             <label className="block text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">

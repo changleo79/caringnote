@@ -145,7 +145,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* 사이드바 (데스크톱) - 프리미엄 느낌 */}
       <div className="hidden md:flex">
-        <aside className="w-80 bg-gradient-to-b from-white/90 via-primary-50/20 to-white/90 backdrop-blur-2xl border-r-2 border-primary-200/30 min-h-[calc(100vh-80px)] sticky top-20 shadow-xl shadow-primary-100/30">
+        <aside className="w-80 bg-gradient-to-b from-white/95 via-blue-50/40 to-white/95 backdrop-blur-2xl border-r-4 border-blue-300/50 min-h-[calc(100vh-80px)] sticky top-20 shadow-2xl shadow-blue-200/40">
           <nav className="p-6 space-y-3">
             {navItems.map((item) => {
               const Icon = item.icon

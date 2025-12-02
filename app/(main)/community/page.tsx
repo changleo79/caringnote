@@ -75,7 +75,7 @@ export default async function CommunityPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-6 py-12 max-w-7xl">
+      <div className="container mx-auto px-6 py-16 max-w-7xl">
         {/* Header */}
         <div className="mb-12 flex items-center justify-between">
           <div>
@@ -103,7 +103,7 @@ export default async function CommunityPage() {
               <Link
                 key={post.id}
                 href={`/community/${post.id}`}
-                className="bg-gradient-to-br from-white via-blue-50/20 to-white rounded-3xl shadow-3d border-2 border-blue-200/50 overflow-hidden card-hover group backdrop-blur-sm"
+                className="bg-gradient-to-br from-blue-50/60 via-white to-blue-100/50 rounded-3xl shadow-3d border-4 border-blue-300/60 overflow-hidden card-hover group backdrop-blur-sm"
               >
                 {/* 이미지 */}
                 {post.images && post.images.length > 0 && (
