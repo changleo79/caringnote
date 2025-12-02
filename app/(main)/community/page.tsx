@@ -103,7 +103,7 @@ export default async function CommunityPage() {
               <Link
                 key={post.id}
                 href={`/community/${post.id}`}
-                className="bg-gradient-to-br from-blue-50/60 via-white to-blue-100/50 rounded-3xl shadow-3d border-4 border-blue-300/60 overflow-hidden card-hover group backdrop-blur-sm"
+                className="bg-white rounded-3xl shadow-2xl shadow-blue-200/40 border-4 border-blue-400/70 overflow-hidden card-hover group backdrop-blur-sm hover:border-blue-500/80 transition-all duration-500"
               >
                 {/* 이미지 */}
                 {post.images && post.images.length > 0 && (

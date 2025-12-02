@@ -67,7 +67,9 @@ export default async function DashboardPage() {
       <div className="container mx-auto px-6 py-12 max-w-7xl">
         {/* Welcome Section - 프리미엄 느낌 */}
         <div className="mb-16">
-          <div className="relative bg-gradient-to-br from-blue-500 via-primary-600 to-cyan-600 rounded-3xl p-16 md:p-24 text-white shadow-3d overflow-hidden border-4 border-blue-400/50">
+          <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 via-cyan-500 to-blue-700 rounded-3xl p-16 md:p-24 text-white shadow-2xl shadow-blue-500/50 overflow-hidden border-4 border-blue-400/60">
+            {/* 빛나는 효과 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-shimmer"></div>
             {/* 배경 패턴 */}
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.2),transparent_60%)]"></div>
@@ -80,10 +82,10 @@ export default async function DashboardPage() {
                 </div>
                 <span className="text-base font-black text-white/95 tracking-wide">오늘도 좋은 하루 되세요</span>
               </div>
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-none">
+              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black mb-8 tracking-tight leading-none drop-shadow-2xl">
                 안녕하세요, {session.user.name}님
               </h1>
-              <p className="text-2xl md:text-3xl text-white/95 font-black">
+              <p className="text-3xl md:text-4xl text-white font-black drop-shadow-lg">
                 부모님의 건강한 하루를 함께합니다
               </p>
             </div>
@@ -94,57 +96,57 @@ export default async function DashboardPage() {
         <div className={`grid grid-cols-2 ${session.user.role === "CAREGIVER" ? "md:grid-cols-5" : "md:grid-cols-4"} gap-8 mb-16`}>
           <Link
             href="/community/new"
-            className="group bg-gradient-to-br from-blue-50 via-white to-blue-100/50 rounded-3xl p-14 shadow-3d border-4 border-blue-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-white rounded-3xl p-16 shadow-2xl shadow-blue-200/40 border-4 border-blue-400/70 card-hover relative overflow-hidden backdrop-blur-sm hover:border-blue-500/80 transition-all duration-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-100/60 via-blue-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-blue-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-                <Camera className="w-12 h-12 text-white" />
+              <div className="w-28 h-28 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-blue-500/60 group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 group-hover:shadow-blue-500/80">
+                <Camera className="w-14 h-14 text-white" />
               </div>
-              <p className="font-black text-neutral-900 mb-2 text-2xl">사진 공유</p>
-              <p className="text-base text-neutral-600 font-bold">일상 기록하기</p>
+              <p className="font-black text-neutral-900 mb-3 text-3xl">사진 공유</p>
+              <p className="text-lg text-neutral-600 font-black">일상 기록하기</p>
             </div>
           </Link>
 
           <Link
             href="/medical/new"
-            className="group bg-gradient-to-br from-red-50 via-white to-pink-100/50 rounded-3xl p-14 shadow-3d border-4 border-red-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-white rounded-3xl p-16 shadow-2xl shadow-red-200/40 border-4 border-red-400/70 card-hover relative overflow-hidden backdrop-blur-sm hover:border-red-500/80 transition-all duration-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-red-100/60 via-red-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
-              <div className="w-24 h-24 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-red-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-                <Heart className="w-12 h-12 text-white fill-white" />
+              <div className="w-28 h-28 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-red-500/60 group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 group-hover:shadow-red-500/80">
+                <Heart className="w-14 h-14 text-white fill-white" />
               </div>
-              <p className="font-black text-neutral-900 mb-2 text-2xl">의료 기록</p>
-              <p className="text-base text-neutral-600 font-bold">건강 정보 기록</p>
+              <p className="font-black text-neutral-900 mb-3 text-3xl">의료 기록</p>
+              <p className="text-lg text-neutral-600 font-black">건강 정보 기록</p>
             </div>
           </Link>
 
           <Link
             href="/shop"
-            className="group bg-gradient-to-br from-green-50 via-white to-emerald-100/50 rounded-3xl p-14 shadow-3d border-4 border-green-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-white rounded-3xl p-16 shadow-2xl shadow-green-200/40 border-4 border-green-400/70 card-hover relative overflow-hidden backdrop-blur-sm hover:border-green-500/80 transition-all duration-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-green-100/60 via-green-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
-              <div className="w-24 h-24 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-green-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-                <ShoppingBag className="w-12 h-12 text-white" />
+              <div className="w-28 h-28 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-green-500/60 group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 group-hover:shadow-green-500/80">
+                <ShoppingBag className="w-14 h-14 text-white" />
               </div>
-              <p className="font-black text-neutral-900 mb-2 text-2xl">생필품 구매</p>
-              <p className="text-base text-neutral-600 font-bold">필요한 물품 주문</p>
+              <p className="font-black text-neutral-900 mb-3 text-3xl">생필품 구매</p>
+              <p className="text-lg text-neutral-600 font-black">필요한 물품 주문</p>
             </div>
           </Link>
 
           <Link
             href="/notifications"
-            className="group bg-gradient-to-br from-amber-50 via-white to-orange-100/50 rounded-3xl p-14 shadow-3d border-4 border-amber-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
+            className="group bg-white rounded-3xl p-16 shadow-2xl shadow-amber-200/40 border-4 border-amber-400/70 card-hover relative overflow-hidden backdrop-blur-sm hover:border-amber-500/80 transition-all duration-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-100/60 via-amber-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10">
-              <div className="w-24 h-24 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-amber-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-                <Bell className="w-12 h-12 text-white" />
+              <div className="w-28 h-28 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-amber-500/60 group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 group-hover:shadow-amber-500/80">
+                <Bell className="w-14 h-14 text-white" />
               </div>
-              <p className="font-black text-neutral-900 mb-2 text-2xl">알림</p>
-              <p className="text-base text-neutral-600 font-bold">새 소식 확인</p>
+              <p className="font-black text-neutral-900 mb-3 text-3xl">알림</p>
+              <p className="text-lg text-neutral-600 font-black">새 소식 확인</p>
             </div>
           </Link>
 
@@ -152,15 +154,15 @@ export default async function DashboardPage() {
           {session.user.role === "CAREGIVER" && (
             <Link
               href="/care-center/edit"
-              className="group bg-gradient-to-br from-purple-50 via-white to-indigo-100/50 rounded-3xl p-14 shadow-3d border-4 border-purple-300/60 card-hover relative overflow-hidden backdrop-blur-sm"
+              className="group bg-white rounded-3xl p-16 shadow-2xl shadow-purple-200/40 border-4 border-purple-400/70 card-hover relative overflow-hidden backdrop-blur-sm hover:border-purple-500/80 transition-all duration-500"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-100/60 via-purple-50/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               <div className="relative z-10">
-                <div className="w-24 h-24 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-purple-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-                  <Building2 className="w-12 h-12 text-white" />
+                <div className="w-28 h-28 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-purple-500/60 group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 group-hover:shadow-purple-500/80">
+                  <Building2 className="w-14 h-14 text-white" />
                 </div>
-                <p className="font-black text-neutral-900 mb-2 text-2xl">요양원 정보</p>
-                <p className="text-base text-neutral-600 font-bold">정보 수정하기</p>
+                <p className="font-black text-neutral-900 mb-3 text-3xl">요양원 정보</p>
+                <p className="text-lg text-neutral-600 font-black">정보 수정하기</p>
               </div>
             </Link>
           )}
@@ -168,7 +170,7 @@ export default async function DashboardPage() {
 
         <div className="grid md:grid-cols-2 gap-10">
           {/* 최근 커뮤니티 - 프리미엄 느낌 */}
-          <div className="bg-gradient-to-br from-blue-50/60 via-white to-blue-100/40 rounded-3xl shadow-3d border-4 border-blue-300/60 overflow-hidden backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl shadow-blue-200/40 border-4 border-blue-400/70 overflow-hidden backdrop-blur-sm">
             <div className="p-8 border-b border-white/40 flex items-center justify-between bg-gradient-to-r from-blue-50/60 via-blue-50/40 to-transparent">
               <h2 className="text-2xl font-black text-neutral-900 flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">

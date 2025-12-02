@@ -31,9 +31,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white via-amber-50/30 to-blue-50/40">
+    <div className="min-h-screen relative">
+      {/* 배경 장식 */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-50/50 via-white via-amber-50/40 to-pink-50/30"></div>
+        <div className="absolute top-20 right-20 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-float-subtle"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl animate-float-subtle" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-pink-200/10 rounded-full blur-3xl"></div>
+      </div>
       {/* 상단 네비게이션 - 프리미엄 느낌 */}
-      <header className="bg-gradient-to-r from-white/95 via-primary-50/30 to-white/95 backdrop-blur-2xl border-b-4 border-primary-200/50 sticky top-0 z-50 shadow-app-xl">
+      <header className="bg-white/80 backdrop-blur-3xl border-b-4 border-blue-300/60 sticky top-0 z-50 shadow-2xl shadow-blue-200/30">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <Logo variant="default" size="md" href="/dashboard" />
@@ -145,7 +152,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* 사이드바 (데스크톱) - 프리미엄 느낌 */}
       <div className="hidden md:flex">
-        <aside className="w-80 bg-gradient-to-b from-white/95 via-blue-50/40 to-white/95 backdrop-blur-2xl border-r-4 border-blue-300/50 min-h-[calc(100vh-80px)] sticky top-20 shadow-2xl shadow-blue-200/40">
+        <aside className="w-80 bg-white/90 backdrop-blur-3xl border-r-4 border-blue-400/60 min-h-[calc(100vh-80px)] sticky top-20 shadow-2xl shadow-blue-200/40">
           <nav className="p-6 space-y-3">
             {navItems.map((item) => {
               const Icon = item.icon
