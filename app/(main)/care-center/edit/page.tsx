@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useSession, update } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import AppLayout from "@/components/layout/AppLayout"
 import toast from "react-hot-toast"
@@ -10,7 +10,7 @@ import { ArrowLeft, Building2, Phone, Mail, MapPin, FileText, Image as ImageIcon
 
 export default function EditCareCenterPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { data: session, status, update: updateSession } = useSession()
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -110,7 +110,9 @@ export default function EditCareCenterPage() {
         toast.success("요양원 정보가 저장되었습니다!")
         
         // 세션 갱신 - NextAuth의 update 함수 사용
-        await update()
+        if (updateSession) {
+          await updateSession()
+        }
         
         // 페이지 새로고침으로 세션 반영
         setTimeout(() => {
