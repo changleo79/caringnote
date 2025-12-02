@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
+import { useSession, update } from "next-auth/react"
 import Link from "next/link"
 import AppLayout from "@/components/layout/AppLayout"
 import toast from "react-hot-toast"
@@ -110,7 +110,6 @@ export default function EditCareCenterPage() {
         toast.success("요양원 정보가 저장되었습니다!")
         
         // 세션 갱신 - NextAuth의 update 함수 사용
-        const { update } = await import("next-auth/react")
         await update()
         
         // 페이지 새로고침으로 세션 반영
