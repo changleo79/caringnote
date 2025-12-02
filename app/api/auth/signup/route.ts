@@ -160,11 +160,22 @@ export async function POST(req: NextRequest) {
           name,
           phone: phone || null,
           role: role || "FAMILY",
-          careCenterId: role === "FAMILY" ? careCenterId : null, // CAREGIVER는 나중에 요양원 정보 설정
+          careCenterId: role === "FAMILY" ? (careCenterId || null) : null, // 가족 회원은 요양원 필수, CAREGIVER는 나중에 요양원 정보 설정
         },
       })
 
-      console.log("✅ 사용자 생성 성공:", user.id)
+      // 가족 회원인데 careCenterId가 null이면 오류
+      if (role === "FAMILY" && !user.careCenterId) {
+        console.error("❌ 가족 회원인데 careCenterId가 null:", user.id)
+        // 생성된 사용자 삭제
+        await prisma.user.delete({ where: { id: user.id } })
+        return NextResponse.json(
+          { error: "요양원 정보가 저장되지 않았습니다. 다시 시도해주세요." },
+          { status: 500 }
+        )
+      }
+
+      console.log("✅ 사용자 생성 성공:", user.id, "careCenterId:", user.careCenterId)
 
       return NextResponse.json(
         { 
