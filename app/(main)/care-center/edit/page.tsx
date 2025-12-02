@@ -169,10 +169,12 @@ export default function EditCareCenterPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-5xl md:text-6xl font-black text-neutral-900 mb-4 tracking-tight">
-            요양원 정보 수정
+            {session.user.careCenterId ? "요양원 정보 수정" : "요양원 정보 등록"}
           </h1>
           <p className="text-xl text-neutral-600 font-bold">
-            요양원 정보를 수정할 수 있습니다
+            {session.user.careCenterId 
+              ? "요양원 정보를 수정할 수 있습니다" 
+              : "요양원 정보를 등록해주세요. 등록 후 게시글 작성 등 모든 기능을 사용할 수 있습니다."}
           </p>
         </div>
 
@@ -295,7 +297,9 @@ export default function EditCareCenterPage() {
               disabled={isLoading}
               className="btn-primary flex-1"
             >
-              {isLoading ? "수정 중..." : "정보 수정"}
+              {isLoading 
+                ? (session.user.careCenterId ? "수정 중..." : "등록 중...") 
+                : (session.user.careCenterId ? "정보 수정" : "요양원 등록")}
             </button>
           </div>
         </form>

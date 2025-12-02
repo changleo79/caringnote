@@ -16,38 +16,16 @@ export async function GET(req: NextRequest) {
     }
 
     const searchParams = req.nextUrl.searchParams
-    let careCenterId = searchParams.get("careCenterId") || session.user.careCenterId
-
-    // careCenterId가 없으면 CAREGIVER인 경우 자동 생성
-    if (!careCenterId && session.user.role === "CAREGIVER") {
-      try {
-        const newCareCenterId = `carecenter_${Date.now()}_${Math.random().toString(36).substring(7)}`
-        
-        const newCareCenter = await prisma.careCenter.create({
-          data: {
-            id: newCareCenterId,
-            name: "",
-            address: "",
-          },
-        })
-        
-        careCenterId = newCareCenter.id
-        
-        // 사용자의 careCenterId 업데이트
-        await prisma.user.update({
-          where: { id: session.user.id },
-          data: { careCenterId: careCenterId },
-        })
-        
-        console.log("✅ 게시글 조회 시 요양원 자동 생성:", careCenterId)
-      } catch (createError: any) {
-        console.error("❌ 요양원 자동 생성 오류:", createError)
-        // 생성 실패해도 빈 배열 반환
-        return NextResponse.json([])
-      }
-    }
+    const careCenterId = searchParams.get("careCenterId") || session.user.careCenterId
 
     if (!careCenterId) {
+      // CAREGIVER인 경우 안내 메시지
+      if (session.user.role === "CAREGIVER") {
+        return NextResponse.json(
+          { error: "요양원 정보를 먼저 설정해주세요. 대시보드에서 '요양원 정보' 메뉴를 이용하세요." },
+          { status: 400 }
+        )
+      }
       return NextResponse.json(
         { error: "요양원 정보가 필요합니다." },
         { status: 400 }
@@ -128,45 +106,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { title, content, images, residentId, category } = body
 
-    // careCenterId가 없으면 자동으로 생성
-    let careCenterId = session.user.careCenterId
-    
-    if (!careCenterId) {
-      // CAREGIVER인 경우에만 자동 생성
+    if (!session.user.careCenterId) {
+      // CAREGIVER인 경우 안내 메시지
       if (session.user.role === "CAREGIVER") {
-        try {
-          const newCareCenterId = `carecenter_${Date.now()}_${Math.random().toString(36).substring(7)}`
-          
-          const newCareCenter = await prisma.careCenter.create({
-            data: {
-              id: newCareCenterId,
-              name: "", // 빈 이름으로 생성
-              address: "", // 빈 주소로 생성
-            },
-          })
-          
-          careCenterId = newCareCenter.id
-          
-          // 사용자의 careCenterId 업데이트
-          await prisma.user.update({
-            where: { id: session.user.id },
-            data: { careCenterId: careCenterId },
-          })
-          
-          console.log("✅ 게시글 작성 시 요양원 자동 생성:", careCenterId)
-        } catch (createError: any) {
-          console.error("❌ 요양원 자동 생성 오류:", createError)
-          return NextResponse.json(
-            { error: "요양원 정보를 생성하는데 실패했습니다. 먼저 요양원 정보를 설정해주세요." },
-            { status: 500 }
-          )
-        }
-      } else {
         return NextResponse.json(
-          { error: "요양원 정보가 필요합니다." },
+          { error: "요양원 정보를 먼저 설정해주세요. 대시보드에서 '요양원 정보' 메뉴를 이용하세요." },
           { status: 400 }
         )
       }
+      return NextResponse.json(
+        { error: "요양원 정보가 필요합니다." },
+        { status: 400 }
+      )
     }
 
     // 이미지 배열을 JSON 문자열로 변환
