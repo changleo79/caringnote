@@ -95,12 +95,30 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // 로그인 시 또는 세션 업데이트 트리거 시
       if (user) {
         token.id = user.id
         token.role = user.role
         token.careCenterId = (user as any).careCenterId
       }
+      
+      // 세션 업데이트 트리거 시 데이터베이스에서 최신 정보 조회
+      if (trigger === "update" && token.id) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { careCenterId: true, role: true },
+          })
+          if (dbUser) {
+            token.careCenterId = dbUser.careCenterId
+            token.role = dbUser.role
+          }
+        } catch (error) {
+          console.error("JWT callback에서 사용자 정보 조회 실패:", error)
+        }
+      }
+      
       return token
     },
     async session({ session, token }) {
