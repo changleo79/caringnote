@@ -143,22 +143,22 @@ export default function CommunityPage() {
     <AppLayout>
       <div className="container mx-auto px-6 py-16 max-w-7xl">
         {/* Header */}
-        <div className="mb-12 flex items-center justify-between flex-wrap gap-4">
+        <div className="mb-8 md:mb-12 flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-5xl md:text-6xl font-black text-neutral-900 mb-4 tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-neutral-900 mb-3 md:mb-4 tracking-tight">
               커뮤니티
             </h1>
-            <p className="text-xl text-neutral-600 font-bold">
+            <p className="text-lg md:text-2xl text-neutral-600 font-black">
               부모님의 일상을 함께 공유해보세요
             </p>
           </div>
           <Link
             href="/community/new"
-            className="btn-primary inline-flex items-center gap-3 px-8 py-5"
+            className="btn-modern text-white inline-flex items-center gap-3 px-6 md:px-8 py-4 md:py-5 text-base md:text-lg"
           >
-            <Plus className="w-6 h-6" />
-            <span className="hidden sm:inline font-bold text-lg">게시글 작성</span>
-            <span className="sm:hidden font-bold">작성</span>
+            <Plus className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="hidden sm:inline font-black">게시글 작성</span>
+            <span className="sm:hidden font-black">작성</span>
           </Link>
         </div>
 
@@ -174,12 +174,12 @@ export default function CommunityPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border-2 border-neutral-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 text-lg"
+                className="input-modern pl-12 pr-4"
               />
             </div>
             <button
               onClick={handleSearch}
-              className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all hover:scale-105"
+              className="btn-modern text-white px-6 md:px-8 py-4 md:py-5 text-base md:text-lg"
             >
               검색
             </button>
@@ -294,7 +294,7 @@ export default function CommunityPage() {
               <Link
                 key={post.id}
                 href={`/community/${post.id}`}
-                className="bg-gradient-to-br from-white via-blue-50/40 to-white rounded-3xl p-10 shadow-3d border-2 border-blue-200/50 card-hover relative overflow-hidden backdrop-blur-sm group"
+                className="card-modern p-6 md:p-10 card-hover relative overflow-hidden group"
               >
                 {/* 이미지 */}
                 {post.images && post.images.length > 0 && (

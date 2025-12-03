@@ -40,10 +40,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl animate-float-subtle" style={{ animationDelay: '2s' }}></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-pink-200/10 rounded-full blur-3xl"></div>
       </div>
-      {/* 상단 네비게이션 - 프리미엄 느낌 */}
-      <header className="bg-white/80 backdrop-blur-3xl border-b-4 border-blue-300/60 sticky top-0 z-50 shadow-2xl shadow-blue-200/30">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-20">
+      {/* 상단 네비게이션 - 완전히 새로운 디자인 */}
+      <header className="bg-white/95 backdrop-blur-2xl border-b-2 border-white/60 sticky top-0 z-50 shadow-modern safe-area-inset-top">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between h-20 md:h-24">
             <Logo variant="default" size="md" href="/dashboard" />
             
             <div className="flex items-center gap-3">
@@ -111,9 +111,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      {/* 하단 네비게이션 (모바일) - 앱다운 느낌 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-neutral-100 md:hidden z-50 shadow-app-xl">
-        <div className="flex justify-around items-center h-20 safe-area-inset-bottom px-2">
+      {/* 하단 네비게이션 (모바일) - 완전히 새로운 앱 스타일 */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/98 backdrop-blur-2xl border-t-2 border-white/60 md:hidden z-50 shadow-modern-xl safe-area-inset-bottom">
+        <div className="flex justify-around items-center h-24 px-2 pb-2">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
@@ -122,22 +122,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center flex-1 h-full transition-all duration-300",
+                  "flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-95",
                   isActive
                     ? "text-primary-600"
-                    : "text-neutral-400 hover:text-neutral-600"
+                    : "text-neutral-400"
                 )}
               >
                 <div className={cn(
-                  "p-3 rounded-2xl transition-all duration-300 mb-1",
+                  "p-4 rounded-3xl transition-all duration-300 mb-1 relative",
                   isActive 
-                    ? "bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/30 scale-110" 
-                    : "hover:bg-neutral-100"
+                    ? "bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 shadow-lg shadow-primary-500/40 scale-110" 
+                    : "hover:bg-neutral-100/80 active:bg-neutral-200"
                 )}>
-                  <Icon className={cn("w-6 h-6", isActive && "text-white")} />
+                  <Icon className={cn("w-7 h-7", isActive && "text-white")} />
+                  {isActive && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary-400 rounded-full border-2 border-white shadow-lg"></div>
+                  )}
                 </div>
                 <span className={cn(
-                  "text-xs font-semibold",
+                  "text-sm font-black",
                   isActive && "text-primary-600"
                 )}>
                   {item.label}
@@ -148,10 +151,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </nav>
 
-      {/* 사이드바 (데스크톱) - 프리미엄 느낌 */}
+      {/* 사이드바 (데스크톱) - 완전히 새로운 디자인 */}
       <div className="hidden md:flex">
-        <aside className="w-80 bg-white/90 backdrop-blur-3xl border-r-4 border-blue-400/60 min-h-[calc(100vh-80px)] sticky top-20 shadow-2xl shadow-blue-200/40">
-          <nav className="p-6 space-y-3">
+        <aside className="w-80 bg-white/95 backdrop-blur-2xl border-r-2 border-white/60 min-h-[calc(100vh-96px)] sticky top-24 shadow-modern">
+          <nav className="p-6 space-y-4">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
@@ -160,20 +163,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-4 px-6 py-5 rounded-2xl transition-all duration-500 group relative overflow-hidden",
+                    "flex items-center gap-5 px-7 py-6 rounded-3xl transition-all duration-300 group relative overflow-hidden",
                     isActive
-                      ? "bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white font-black shadow-2xl shadow-primary-500/40 scale-[1.02]"
-                      : "text-neutral-600 hover:bg-white/80 hover:text-neutral-900 hover:scale-[1.01] hover:shadow-lg"
+                      ? "bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white font-black shadow-modern-lg scale-[1.02]"
+                      : "text-neutral-600 hover:bg-white/80 hover:text-neutral-900 hover:scale-[1.01] hover:shadow-modern"
                   )}
                 >
                   {isActive && (
                     <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 animate-shimmer"></div>
                   )}
                   <Icon className={cn(
-                    "w-6 h-6 transition-transform duration-500 relative z-10",
+                    "w-7 h-7 transition-transform duration-300 relative z-10",
                     isActive && "scale-110"
                   )} />
-                  <span className="text-base relative z-10">{item.label}</span>
+                  <span className="text-lg font-black relative z-10">{item.label}</span>
                 </Link>
               )
             })}
