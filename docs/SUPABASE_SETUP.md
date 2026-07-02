@@ -20,9 +20,11 @@ Supabase Dashboard → **Settings** → **Database** → **Connection string**
 `.env.local` 예시:
 
 ```env
-DATABASE_URL="postgresql://postgres.[ref]:[password]@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
-DIRECT_URL="postgresql://postgres.[ref]:[password]@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
+DATABASE_URL="postgresql://postgres.[ref]:[password]@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.[ref]:[password]@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres"
 ```
+
+> Cloud Agent VM은 IPv6 direct host(`db.*.supabase.co`)에 접근할 수 없으므로 **pooler(aws-1)** 를 사용합니다.
 
 ## 3. 스키마 적용
 

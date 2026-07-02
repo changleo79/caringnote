@@ -40,8 +40,11 @@ function getServiceRoleKey() {
 
 function buildConnectionStrings(password) {
   const encoded = encodeURIComponent(password)
-  const direct = `postgresql://postgres:${encoded}@db.${PROJECT_REF}.supabase.co:5432/postgres`
-  const pooled = `postgresql://postgres.${PROJECT_REF}:${encoded}@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true`
+  const ref = PROJECT_REF
+  // Cloud Agent VM은 IPv6 direct host(db.*.supabase.co) 접근 불가 → IPv4 pooler 사용
+  const host = `aws-1-ap-northeast-2.pooler.supabase.com`
+  const direct = `postgresql://postgres.${ref}:${encoded}@${host}:5432/postgres`
+  const pooled = `postgresql://postgres.${ref}:${encoded}@${host}:6543/postgres?pgbouncer=true`
   return { direct, pooled }
 }
 
