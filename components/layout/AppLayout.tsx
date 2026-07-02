@@ -12,97 +12,89 @@ import {
   ShoppingBag,
   LogOut,
   User,
-  Bell,
   Menu,
   X,
+  Building2,
 } from "lucide-react"
 import { useState } from "react"
 import NotificationBell from "@/components/notifications/NotificationBell"
+
+const navItems = [
+  { href: "/dashboard", label: "홈", icon: Home },
+  { href: "/community", label: "일상", icon: Camera },
+  { href: "/medical", label: "의료", icon: Heart },
+  { href: "/shop", label: "쇼핑", icon: ShoppingBag },
+]
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const navItems = [
-    { href: "/dashboard", label: "홈", icon: Home },
-    { href: "/community", label: "커뮤니티", icon: Camera },
-    { href: "/medical", label: "의료 정보", icon: Heart },
-    { href: "/shop", label: "쇼핑몰", icon: ShoppingBag },
-  ]
+  const isActive = (href: string) =>
+    pathname === href || pathname?.startsWith(href + "/")
+
+  const caregiverExtra = session?.user?.role === "CAREGIVER"
+    ? [{ href: "/care-center/edit", label: "요양원", icon: Building2 }]
+    : []
+
+  const allNavItems = [...navItems, ...caregiverExtra]
 
   return (
-    <div className="min-h-screen relative">
-      {/* 배경 장식 */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-50/50 via-white via-amber-50/40 to-pink-50/30"></div>
-        <div className="absolute top-20 right-20 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-float-subtle"></div>
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl animate-float-subtle" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-pink-200/10 rounded-full blur-3xl"></div>
-      </div>
-      {/* 상단 네비게이션 - 완전히 새로운 디자인 */}
-      <header className="bg-white/95 backdrop-blur-2xl border-b-2 border-white/60 sticky top-0 z-50 shadow-modern safe-area-inset-top">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-20 md:h-24">
-            <Logo variant="default" size="md" href="/dashboard" />
-            
-            <div className="flex items-center gap-3">
-              {/* 알림 */}
+    <div className="min-h-screen bg-warm-50">
+      {/* Top Header */}
+      <header className="bg-white border-b border-neutral-200/80 sticky top-0 z-50 safe-area-top">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16">
+            <Logo variant="default" size="sm" href="/dashboard" />
+
+            <div className="flex items-center gap-2">
               <NotificationBell />
 
-              {/* 사용자 메뉴 */}
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-3 text-sm text-neutral-700 px-4 py-2 bg-neutral-50 rounded-2xl">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary-500 via-primary-600 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="font-bold">{session?.user?.name}</span>
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-50">
+                <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
+                  <User className="w-4 h-4 text-brand-600" />
                 </div>
-                <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="p-3 text-neutral-600 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 hover:scale-110"
-                  title="로그아웃"
-                >
-                  <LogOut className="w-5 h-5" />
-                </button>
+                <span className="text-body font-medium text-neutral-700 max-w-[120px] truncate">
+                  {session?.user?.name}
+                </span>
               </div>
 
-              {/* 모바일 메뉴 버튼 */}
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="p-2.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                title="로그아웃"
+                aria-label="로그아웃"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-3 text-neutral-600 hover:bg-neutral-100 rounded-2xl transition-all duration-300"
+                className="md:hidden p-2.5 text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
+                aria-label="메뉴"
               >
-                {mobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* 모바일 메뉴 (드롭다운) - 앱다운 느낌 */}
+        {/* Mobile dropdown menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-neutral-100 bg-white/95 backdrop-blur-xl">
-            <nav className="container mx-auto px-4 py-3 space-y-2">
-              {navItems.map((item) => {
+          <div className="md:hidden border-t border-neutral-100 bg-white">
+            <nav className="max-w-7xl mx-auto px-4 py-3 space-y-1">
+              {allNavItems.map((item) => {
                 const Icon = item.icon
-                const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300",
-                      isActive
-                        ? "bg-gradient-to-r from-primary-50 to-primary-100 text-primary-700 font-bold shadow-md shadow-primary-100/50"
-                        : "text-neutral-600 hover:bg-neutral-50 hover:scale-[1.02]"
-                    )}
+                    className={isActive(item.href) ? "nav-item-active" : "nav-item-inactive"}
                   >
-                    <Icon className={cn("w-6 h-6", isActive && "scale-110")} />
-                    <span className="text-base">{item.label}</span>
+                    <Icon className="w-5 h-5" />
+                    {item.label}
                   </Link>
                 )
               })}
@@ -111,38 +103,54 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      {/* 하단 네비게이션 (모바일) - 완전히 새로운 앱 스타일 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/98 backdrop-blur-2xl border-t-2 border-white/60 md:hidden z-50 shadow-modern-xl safe-area-inset-bottom">
-        <div className="flex justify-around items-center h-24 px-2 pb-2">
+      <div className="flex max-w-7xl mx-auto">
+        {/* Desktop Sidebar */}
+        <aside className="hidden md:block w-56 flex-shrink-0 border-r border-neutral-200/80 min-h-[calc(100vh-4rem)] sticky top-16 bg-white">
+          <nav className="p-4 space-y-1">
+            {allNavItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={isActive(item.href) ? "nav-item-active" : "nav-item-inactive"}
+                >
+                  <Icon className="w-5 h-5" />
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 min-w-0 pb-24 md:pb-8">
+          {children}
+        </main>
+      </div>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200/80 md:hidden z-50 safe-area-bottom">
+        <div className="flex justify-around items-center h-16 px-2">
           {navItems.map((item) => {
             const Icon = item.icon
-            const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
+            const active = isActive(item.href)
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-95",
-                  isActive
-                    ? "text-primary-600"
-                    : "text-neutral-400"
+                  "flex flex-col items-center justify-center flex-1 h-full gap-0.5 transition-colors touch-manipulation",
+                  active ? "text-brand-600" : "text-neutral-400"
                 )}
               >
                 <div className={cn(
-                  "p-4 rounded-3xl transition-all duration-300 mb-1 relative",
-                  isActive 
-                    ? "bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 shadow-lg shadow-primary-500/40 scale-110" 
-                    : "hover:bg-neutral-100/80 active:bg-neutral-200"
+                  "p-2 rounded-xl transition-colors",
+                  active && "bg-brand-50"
                 )}>
-                  <Icon className={cn("w-7 h-7", isActive && "text-white")} />
-                  {isActive && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary-400 rounded-full border-2 border-white shadow-lg"></div>
-                  )}
+                  <Icon className="w-5 h-5" />
                 </div>
-                <span className={cn(
-                  "text-sm font-black",
-                  isActive && "text-primary-600"
-                )}>
+                <span className={cn("text-[11px] font-medium", active && "font-semibold")}>
                   {item.label}
                 </span>
               </Link>
@@ -150,49 +158,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           })}
         </div>
       </nav>
-
-      {/* 사이드바 (데스크톱) - 완전히 새로운 디자인 */}
-      <div className="hidden md:flex">
-        <aside className="w-80 bg-white/95 backdrop-blur-2xl border-r-2 border-white/60 min-h-[calc(100vh-96px)] sticky top-24 shadow-modern">
-          <nav className="p-6 space-y-4">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-5 px-7 py-6 rounded-3xl transition-all duration-300 group relative overflow-hidden",
-                    isActive
-                      ? "bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white font-black shadow-modern-lg scale-[1.02]"
-                      : "text-neutral-600 hover:bg-white/80 hover:text-neutral-900 hover:scale-[1.01] hover:shadow-modern"
-                  )}
-                >
-                  {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 animate-shimmer"></div>
-                  )}
-                  <Icon className={cn(
-                    "w-7 h-7 transition-transform duration-300 relative z-10",
-                    isActive && "scale-110"
-                  )} />
-                  <span className="text-lg font-black relative z-10">{item.label}</span>
-                </Link>
-              )
-            })}
-          </nav>
-        </aside>
-
-        {/* 메인 컨텐츠 */}
-        <main className="flex-1 pb-6">
-          {children}
-        </main>
-      </div>
-
-      {/* 모바일 메인 컨텐츠 */}
-      <main className="md:hidden pb-20">
-        {children}
-      </main>
     </div>
   )
 }

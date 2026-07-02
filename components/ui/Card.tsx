@@ -1,49 +1,43 @@
 import { cn } from "@/lib/utils"
-import { ReactNode } from "react"
+import { HTMLAttributes, forwardRef } from "react"
 
-interface CardProps {
-  children: ReactNode
-  className?: string
-  hover?: boolean
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  interactive?: boolean
 }
 
-export function Card({ children, className, hover = false }: CardProps) {
-  return (
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ interactive, className, children, ...props }, ref) => (
     <div
-      className={cn(
-        "bg-white rounded-2xl shadow-soft border border-gray-100",
-        hover && "card-hover",
-        className
-      )}
+      ref={ref}
+      className={cn(interactive ? "card-interactive" : "card", className)}
+      {...props}
     >
       {children}
     </div>
   )
-}
+)
+Card.displayName = "Card"
 
-interface CardHeaderProps {
-  children: ReactNode
-  className?: string
-}
-
-export function CardHeader({ children, className }: CardHeaderProps) {
+export function CardHeader({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("p-6 border-b border-gray-100", className)}>
+    <div className={cn("px-6 py-4 border-b border-neutral-100", className)} {...props}>
       {children}
     </div>
   )
 }
 
-interface CardContentProps {
-  children: ReactNode
-  className?: string
-}
-
-export function CardContent({ children, className }: CardContentProps) {
+export function CardContent({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("p-6", className)}>
+    <div className={cn("px-6 py-5", className)} {...props}>
       {children}
     </div>
   )
 }
 
+export function CardFooter({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("px-6 py-4 border-t border-neutral-100 bg-neutral-50/50 rounded-b-2xl", className)} {...props}>
+      {children}
+    </div>
+  )
+}

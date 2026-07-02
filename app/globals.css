@@ -6,269 +6,119 @@
   * {
     @apply border-neutral-200;
   }
-  
+
   html {
     font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* 모바일 터치 최적화 */
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
   }
-  
-  body {
-    @apply text-neutral-900 antialiased;
-    /* 완전히 새로운 배경 - 더 모던하고 미니멀 */
-    background: 
-      linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-    background-attachment: fixed;
-    font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    text-rendering: optimizeLegibility;
-    letter-spacing: -0.015em;
-    min-height: 100vh;
-    /* 모바일 최적화 */
-    font-size: 18px; /* 기본 폰트 크기 증가 */
-  }
-  
-  /* PC에서 기본 폰트 크기 더 증가 */
-  @media (min-width: 768px) {
-    body {
-      font-size: 20px;
-    }
-  }
-  
-  /* 스크롤바 스타일링 - 모던 앱 스타일 */
-  ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gradient-to-b from-primary-400 to-primary-600 rounded-full;
-    border: 3px solid transparent;
-    background-clip: padding-box;
-    transition: all 0.3s ease;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply from-primary-500 to-primary-700;
-  }
-  
-  /* Selection 스타일 */
-  ::selection {
-    @apply bg-primary-400/30 text-primary-900;
-  }
-  
-  /* Focus visible - 접근성 향상 */
-  :focus-visible {
-    @apply outline-none ring-4 ring-primary-400/50 ring-offset-4;
-  }
-}
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  body {
+    @apply text-neutral-800 antialiased bg-warm-50;
+    font-size: 1rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2;
+  }
 }
 
 @layer components {
-  /* 완전히 새로운 카드 디자인 - 네오모피즘 + 글래스모피즘 하이브리드 */
-  .card-modern {
-    @apply bg-white/95 backdrop-blur-2xl rounded-[2rem] border-2 border-white/50;
-    @apply transition-all duration-500 ease-out;
-    @apply shadow-[0_8px_32px_0_rgba(31,38,135,0.15)];
-    /* 네오모피즘 효과 */
-    box-shadow: 
-      0 8px 32px 0 rgba(31, 38, 135, 0.15),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+  .section-container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
-  .card-modern:hover {
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 
-      0 20px 60px -10px rgba(31, 38, 135, 0.25),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-12px) scale(1.02);
+
+  .card {
+    @apply bg-white rounded-2xl border border-neutral-200/80 shadow-card;
   }
-  
-  /* 모바일 터치 친화적 카드 */
-  .card-touch {
-    @apply card-modern;
-    @apply min-h-[120px] p-6;
-    /* 모바일에서 터치 영역 확보 */
-    @apply active:scale-[0.98] active:shadow-lg;
+
+  .card-interactive {
+    @apply card transition-all duration-200 hover:shadow-card-hover hover:border-neutral-300/80 active:scale-[0.99];
   }
-  
-  @media (min-width: 768px) {
-    .card-touch {
-      @apply min-h-[140px] p-8;
-    }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200;
+    @apply min-h-[48px] px-6 py-3 text-body touch-manipulation;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
   }
-  
-  /* 프리미엄 버튼 - 완전히 새로운 디자인 */
-  .btn-modern {
-    @apply inline-flex items-center justify-center;
-    @apply px-8 py-5 rounded-2xl;
-    @apply font-black text-lg;
-    @apply transition-all duration-300 ease-out;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed;
-    @apply relative overflow-hidden;
-    /* 모바일 터치 최적화 */
-    @apply min-h-[56px] touch-manipulation;
-    /* 그라데이션 배경 */
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 
-      0 10px 30px -5px rgba(102, 126, 234, 0.4),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-  }
-  
-  .btn-modern:active {
-    transform: scale(0.96);
-    box-shadow: 
-      0 5px 15px -3px rgba(102, 126, 234, 0.3),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-  }
-  
-  .btn-modern:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    box-shadow: 
-      0 15px 40px -5px rgba(102, 126, 234, 0.5),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-  
-  /* 프리미엄 입력 필드 */
-  .input-modern {
-    @apply w-full px-6 py-5 rounded-2xl;
-    @apply bg-white/90 backdrop-blur-xl border-2 border-white/60;
-    @apply text-lg font-medium text-neutral-900;
-    @apply transition-all duration-300;
-    @apply placeholder:text-neutral-400;
-    /* 모바일 최적화 */
-    @apply min-h-[56px];
-    box-shadow: 
-      0 4px 20px 0 rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
-  }
-  
-  .input-modern:focus {
-    @apply outline-none border-primary-400/60 bg-white;
-    box-shadow: 
-      0 8px 30px -5px rgba(102, 126, 234, 0.3),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
-      0 0 0 4px rgba(102, 126, 234, 0.1);
-  }
-  
-  /* 기존 호환성 유지 */
-  .card-notion {
-    @apply card-modern;
-  }
-  
-  .card-app {
-    @apply card-modern;
-  }
-  
-  .card-glass {
-    @apply card-modern;
-  }
-  
+
   .btn-primary {
-    @apply btn-modern text-white;
+    @apply btn bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 shadow-sm;
   }
-  
+
   .btn-secondary {
-    @apply inline-flex items-center justify-center;
-    @apply px-8 py-5 rounded-2xl;
-    @apply font-black text-lg text-primary-600;
-    @apply bg-white/90 backdrop-blur-xl border-2 border-primary-200/60;
-    @apply transition-all duration-300;
-    @apply min-h-[56px];
-    box-shadow: 
-      0 4px 20px 0 rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+    @apply btn bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400;
   }
-  
-  .btn-secondary:hover {
-    @apply bg-white border-primary-300/80;
-    box-shadow: 
-      0 8px 30px -5px rgba(102, 126, 234, 0.2),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-2px);
+
+  .btn-ghost {
+    @apply btn bg-transparent text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900;
   }
-  
-  .btn-secondary:active {
-    transform: scale(0.96);
+
+  .input {
+    @apply w-full min-h-[48px] px-4 py-3 rounded-xl border border-neutral-300 bg-white;
+    @apply text-body text-neutral-900 placeholder:text-neutral-400;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
   }
-  
-  /* 프리미엄 섀도우 */
-  .shadow-modern {
-    box-shadow: 
-      0 8px 32px 0 rgba(31, 38, 135, 0.15),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+
+  .input-with-icon {
+    @apply input pl-12;
   }
-  
-  .shadow-modern-lg {
-    box-shadow: 
-      0 20px 60px -10px rgba(31, 38, 135, 0.25),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+
+  .label {
+    @apply block text-body font-medium text-neutral-700 mb-2;
   }
-  
-  .shadow-modern-xl {
-    box-shadow: 
-      0 30px 80px -15px rgba(31, 38, 135, 0.35),
-      inset 0 1px 0 0 rgba(255, 255, 255, 1);
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-lg text-caption font-medium;
   }
-  
-  /* 3D 효과 */
-  .shadow-3d {
-    box-shadow: 
-      0 20px 60px -10px rgba(31, 38, 135, 0.25),
-      0 8px 20px -5px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+
+  .badge-brand {
+    @apply badge bg-brand-50 text-brand-700;
   }
-  
-  /* 호버 효과 */
-  .card-hover {
-    @apply transition-all duration-500 ease-out;
+
+  .badge-neutral {
+    @apply badge bg-neutral-100 text-neutral-600;
   }
-  
-  .card-hover:hover {
-    transform: translateY(-12px) scale(1.02);
+
+  .page-header {
+    @apply mb-8;
   }
-  
-  /* 애니메이션 */
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+
+  .page-title {
+    @apply text-heading text-neutral-900 font-semibold tracking-tight;
   }
-  
-  .animate-shimmer {
-    animation: shimmer 2s infinite;
+
+  .page-description {
+    @apply text-body-lg text-neutral-500 mt-2;
   }
-  
-  @keyframes float-subtle {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
+
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-body font-medium transition-colors duration-200;
+    @apply min-h-[48px] touch-manipulation;
   }
-  
-  .animate-float-subtle {
-    animation: float-subtle 8s ease-in-out infinite;
+
+  .nav-item-active {
+    @apply nav-item bg-brand-50 text-brand-700;
   }
-  
-  /* 모바일 safe area */
-  .safe-area-inset-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+
+  .nav-item-inactive {
+    @apply nav-item text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900;
   }
-  
-  .safe-area-inset-top {
-    padding-top: env(safe-area-inset-top);
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0px);
   }
 }

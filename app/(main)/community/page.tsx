@@ -132,7 +132,7 @@ export default function CommunityPage() {
       <AppLayout>
         <div className="container mx-auto px-6 py-16 max-w-7xl">
           <div className="flex items-center justify-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-brand-600 border-t-transparent"></div>
           </div>
         </div>
       </AppLayout>
@@ -141,20 +141,15 @@ export default function CommunityPage() {
 
   return (
     <AppLayout>
-      <div className="container mx-auto px-6 py-16 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 md:mb-12 flex items-center justify-between flex-wrap gap-4">
+      <div className="px-4 sm:px-6 py-8 max-w-5xl">
+        <div className="page-header flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-neutral-900 mb-3 md:mb-4 tracking-tight">
-              커뮤니티
-            </h1>
-            <p className="text-lg md:text-2xl text-neutral-600 font-black">
-              부모님의 일상을 함께 공유해보세요
-            </p>
+            <h1 className="page-title">일상 기록</h1>
+            <p className="page-description">부모님의 일상을 함께 공유해보세요</p>
           </div>
           <Link
             href="/community/new"
-            className="btn-modern text-white inline-flex items-center gap-3 px-6 md:px-8 py-4 md:py-5 text-base md:text-lg"
+            className="btn-primary inline-flex items-center gap-3 px-6 md:px-8 py-4 md:py-5 text-base md:text-lg"
           >
             <Plus className="w-5 h-5 md:w-6 md:h-6" />
             <span className="hidden sm:inline font-black">게시글 작성</span>
@@ -174,12 +169,12 @@ export default function CommunityPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                className="input-modern pl-12 pr-4"
+                className="input-with-icon pl-12 pr-4"
               />
             </div>
             <button
               onClick={handleSearch}
-              className="btn-modern text-white px-6 md:px-8 py-4 md:py-5 text-base md:text-lg"
+              className="btn-primary px-6 md:px-8 py-4 md:py-5 text-base md:text-lg"
             >
               검색
             </button>
