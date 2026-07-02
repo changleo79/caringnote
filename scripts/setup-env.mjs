@@ -189,14 +189,12 @@ SUPABASE_SERVICE_ROLE_KEY="${serviceKey}"
 
   if (!process.env.VERCEL_TOKEN) {
     console.log('\n📋 Vercel Dashboard → Settings → Environment Variables (Production/Preview/Development):')
-    for (const [key, value] of Object.entries(vercelVars)) {
-      const display = key.includes('KEY') || key.includes('SECRET') || key.includes('URL')
-        ? `${value.slice(0, 24)}...`
-        : value
-      console.log(`   ${key}=${display}`)
-    }
-    console.log('\n   ⚠️  pooler 연결 실패 시: Supabase → Settings → Database → Reset password')
-    console.log('      (영문+숫자만 권장) → 프로젝트 Restart → Connect 모달의 URI 복사')
+    console.log('   DATABASE_URL, DIRECT_URL  ← Supabase Connect 모달에서 URI 복사')
+    console.log(`   NEXTAUTH_URL=${VERCEL_APP_URL}`)
+    console.log(`   NEXTAUTH_SECRET=${nextAuthSecret}`)
+    console.log(`   NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}`)
+    console.log('   SUPABASE_SERVICE_ROLE_KEY  ← Supabase Settings → API → service_role')
+    console.log('\n   ⚠️  pooler 연결 실패 시: Reset database password (영문+숫자) → Restart project')
   }
 }
 
