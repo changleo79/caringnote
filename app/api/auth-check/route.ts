@@ -21,7 +21,7 @@ export async function GET() {
   }
 
   if (!process.env.NEXTAUTH_URL) {
-    status.recommendation.push("NEXTAUTH_URL 환경 변수를 설정하세요. https://caringnote.vercel.app")
+    status.recommendation.push("NEXTAUTH_URL 환경 변수를 설정하세요. https://silver-note.vercel.app")
   }
 
   if (!process.env.DATABASE_URL) {

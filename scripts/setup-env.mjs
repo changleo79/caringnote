@@ -18,7 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const PROJECT_REF = 'febqrvjexshypkjdvjgt'
 const SUPABASE_URL = `https://${PROJECT_REF}.supabase.co`
-const VERCEL_APP_URL = process.env.VERCEL_APP_URL || 'https://caringnote.vercel.app'
+const VERCEL_APP_URL = process.env.VERCEL_APP_URL || 'https://silver-note.vercel.app'
 
 function getPassword() {
   return (
