@@ -66,7 +66,7 @@ Vercel Dashboard → Settings → Environment Variables:
 ```
 DATABASE_URL
 DIRECT_URL
-NEXTAUTH_URL=https://your-app.vercel.app
+NEXTAUTH_URL=https://silver-note.vercel.app
 NEXTAUTH_SECRET
 NEXT_PUBLIC_SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY

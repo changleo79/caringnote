@@ -23,13 +23,15 @@ Production, Preview, Development 모두 설정:
 ```
 DATABASE_URL          # Supabase pooled (6543)
 DIRECT_URL            # Supabase direct (5432)
-NEXTAUTH_URL          # https://your-app.vercel.app
+NEXTAUTH_URL          # https://silver-note.vercel.app
 NEXTAUTH_SECRET       # openssl rand -base64 32
 NEXT_PUBLIC_SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY
 ```
 
 ## 4. 배포 후 확인
+
+Production: https://silver-note.vercel.app
 
 1. `/api/db-check` — DB 연결 확인
 2. `/auth/signup` — 회원가입 테스트
