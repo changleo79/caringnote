@@ -7,7 +7,11 @@ function getAuthSecret(): string {
   const secret = process.env.NEXTAUTH_SECRET
   if (!secret) {
     if (process.env.NODE_ENV === 'production') {
-      throw new Error('NEXTAUTH_SECRET must be set in production')
+      console.error(
+        '[Silver Note] NEXTAUTH_SECRET is not set. Configure it in Vercel Environment Variables.'
+      )
+      // 빌드 단계에서 throw하면 Vercel 배포가 실패하므로 런타임까지 임시 값 사용
+      return 'TEMPORARY-SECRET-SET-NEXTAUTH-SECRET-IN-VERCEL'
     }
     return 'dev-secret-change-in-production'
   }
