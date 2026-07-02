@@ -41,11 +41,21 @@ function getServiceRoleKey() {
 function buildConnectionStrings(password) {
   const encoded = encodeURIComponent(password)
   const ref = PROJECT_REF
-  // Cloud Agent VM은 IPv6 direct host(db.*.supabase.co) 접근 불가 → IPv4 pooler 사용
   const host = `aws-1-ap-northeast-2.pooler.supabase.com`
   const direct = `postgresql://postgres.${ref}:${encoded}@${host}:5432/postgres`
   const pooled = `postgresql://postgres.${ref}:${encoded}@${host}:6543/postgres?pgbouncer=true`
   return { direct, pooled }
+}
+
+async function schemaExists(serviceKey) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/CareCenter?select=id&limit=1`, {
+      headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
+    })
+    return res.ok
+  } catch {
+    return false
+  }
 }
 
 function generateSecret() {
@@ -130,39 +140,64 @@ SUPABASE_SERVICE_ROLE_KEY="${serviceKey}"
   fs.writeFileSync(envPath, envContent)
   console.log('✅ .env.local 생성 완료')
 
-  console.log('📦 DB 스키마 적용 중...')
-  execSync('npx prisma db push --accept-data-loss', {
-    stdio: 'inherit',
-    cwd: path.join(__dirname, '..'),
-    env: { ...process.env, DATABASE_URL: pooled, DIRECT_URL: direct },
-  })
-  console.log('✅ DB 스키마 적용 완료')
+  console.log('📦 DB 스키마 확인 중...')
+  const exists = await schemaExists(serviceKey)
+  if (exists) {
+    console.log('✅ DB 스키마 이미 존재 (SQL Editor 또는 이전 push)')
+  } else {
+    execSync('npx prisma db push --accept-data-loss', {
+      stdio: 'inherit',
+      cwd: path.join(__dirname, '..'),
+      env: { ...process.env, DATABASE_URL: pooled, DIRECT_URL: direct },
+    })
+    console.log('✅ DB 스키마 적용 완료')
+  }
 
+  // 시드 (Prisma → REST fallback)
   try {
     execSync('npx tsx prisma/seed.ts', {
       stdio: 'inherit',
       cwd: path.join(__dirname, '..'),
       env: { ...process.env, DATABASE_URL: direct, DIRECT_URL: direct },
     })
-    console.log('✅ 시드 데이터 적용 완료')
+    console.log('✅ 시드 데이터 적용 완료 (Prisma)')
   } catch {
-    console.log('ℹ️  시드 스킵')
+    console.log('ℹ️  Prisma 시드 실패 → REST API 시드 시도')
+    execSync('node scripts/seed-rest.mjs', {
+      stdio: 'inherit',
+      cwd: path.join(__dirname, '..'),
+      env: { ...process.env, NEXT_PUBLIC_SUPABASE_URL: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY: serviceKey },
+    })
   }
 
   await createStorageBucket(serviceKey)
 
-  await pushVercelEnv({
+  const vercelVars = {
     DATABASE_URL: pooled,
     DIRECT_URL: direct,
     NEXTAUTH_URL: VERCEL_APP_URL,
     NEXTAUTH_SECRET: nextAuthSecret,
     NEXT_PUBLIC_SUPABASE_URL: SUPABASE_URL,
     SUPABASE_SERVICE_ROLE_KEY: serviceKey,
-  })
+  }
+
+  await pushVercelEnv(vercelVars)
 
   console.log('\n🎉 설정 완료!')
   console.log(`   Supabase: ${SUPABASE_URL}`)
   console.log(`   Vercel:   ${VERCEL_APP_URL}`)
+
+  if (!process.env.VERCEL_TOKEN) {
+    console.log('\n📋 Vercel Dashboard → Settings → Environment Variables (Production/Preview/Development):')
+    for (const [key, value] of Object.entries(vercelVars)) {
+      const display = key.includes('KEY') || key.includes('SECRET') || key.includes('URL')
+        ? `${value.slice(0, 24)}...`
+        : value
+      console.log(`   ${key}=${display}`)
+    }
+    console.log('\n   ⚠️  pooler 연결 실패 시: Supabase → Settings → Database → Reset password')
+    console.log('      (영문+숫자만 권장) → 프로젝트 Restart → Connect 모달의 URI 복사')
+  }
 }
 
 main().catch((e) => {
