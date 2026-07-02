@@ -95,15 +95,19 @@ async function pushVercelEnv(vars) {
     return
   }
 
+  const environments = ['production', 'preview', 'development']
+
   for (const [key, value] of Object.entries(vars)) {
-    try {
-      execSync(
-        `printf '%s' "${value.replace(/"/g, '\\"')}" | npx vercel env add ${key} production preview development --force --token "${token}"`,
-        { stdio: 'pipe', cwd: path.join(__dirname, '..') }
-      )
-      console.log(`✅ Vercel env: ${key}`)
-    } catch {
-      console.warn(`⚠️  Vercel env ${key} 설정 실패`)
+    for (const env of environments) {
+      try {
+        execSync(
+          `npx vercel env add ${key} ${env} --value ${JSON.stringify(value)} --force --yes --token ${JSON.stringify(token)}`,
+          { stdio: 'pipe', cwd: path.join(__dirname, '..') }
+        )
+        console.log(`✅ Vercel env: ${key} (${env})`)
+      } catch {
+        console.warn(`⚠️  Vercel env ${key} (${env}) 설정 실패`)
+      }
     }
   }
 }
