@@ -2,23 +2,32 @@ import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
 
 export default withAuth(
-  function middleware(req) {
+  function middleware() {
     return NextResponse.next()
   },
   {
     callbacks: {
       authorized: ({ token, req }) => {
-        // /dashboard 및 하위 경로는 인증 필요
-        if (req.nextUrl.pathname.startsWith("/dashboard")) {
-          return !!token
-        }
-        if (req.nextUrl.pathname.startsWith("/community")) {
-          return !!token
-        }
-        if (req.nextUrl.pathname.startsWith("/medical")) {
-          return !!token
-        }
-        if (req.nextUrl.pathname.startsWith("/shop")) {
+        const path = req.nextUrl.pathname
+        const protectedPrefixes = [
+          "/dashboard",
+          "/community",
+          "/medical",
+          "/shop",
+          "/residents",
+          "/reports",
+          "/menu",
+          "/announcements",
+          "/visits",
+          "/requests",
+          "/handover",
+          "/timeline",
+          "/care-center",
+          "/profile",
+          "/care-ops",
+          "/notifications",
+        ]
+        if (protectedPrefixes.some((p) => path.startsWith(p))) {
           return !!token
         }
         return true
@@ -33,6 +42,17 @@ export const config = {
     "/community/:path*",
     "/medical/:path*",
     "/shop/:path*",
+    "/residents/:path*",
+    "/reports/:path*",
+    "/menu/:path*",
+    "/announcements/:path*",
+    "/visits/:path*",
+    "/requests/:path*",
+    "/handover/:path*",
+    "/timeline/:path*",
+    "/care-center/:path*",
+    "/profile/:path*",
+    "/care-ops/:path*",
+    "/notifications/:path*",
   ],
 }
-

@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import { ArrowLeft, Calendar, User, FileText } from "lucide-react"
 import { formatDate } from "@/lib/utils"
@@ -61,8 +60,7 @@ export default async function MedicalRecordDetailPage({
 
   if (!record) {
     return (
-      <AppLayout>
-        <div className="section-container py-10">
+    <><div className="section-container py-10">
           <div className="card-notion p-12 text-center">
             <h2 className="text-xl font-bold text-neutral-900 mb-2">
               의료 기록을 찾을 수 없습니다
@@ -73,13 +71,12 @@ export default async function MedicalRecordDetailPage({
             </Link>
           </div>
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   return (
-    <AppLayout>
-      <div className="section-container py-10">
+    <><div className="section-container py-10">
         {/* Back Button */}
         <Link
           href="/medical"
@@ -149,6 +146,6 @@ export default async function MedicalRecordDetailPage({
           </div>
         </div>
       </div>
-    </AppLayout>
+    </>
   )
 }

@@ -121,4 +121,39 @@
   .safe-area-top {
     padding-top: env(safe-area-inset-top, 0px);
   }
+
+  /* 접근성: 글자 크기 */
+  html.font-scale-2 body { font-size: 1.125rem; }
+  html.font-scale-3 body { font-size: 1.25rem; }
+
+  /* Staff Fast 모드 — 큰 타깃 */
+  .staff-mode .btn,
+  .staff-mode .nav-item {
+    @apply min-h-[56px] text-body-lg;
+  }
+  .staff-fab {
+    @apply fixed bottom-20 right-4 md:bottom-8 z-40;
+    @apply w-16 h-16 rounded-2xl bg-brand-600 text-white shadow-lg;
+    @apply flex items-center justify-center;
+    @apply hover:bg-brand-700 active:scale-95 transition-all;
+  }
+
+  /* 상태 칩 */
+  .chip-good { @apply badge bg-emerald-50 text-emerald-700; }
+  .chip-ok { @apply badge bg-amber-50 text-amber-700; }
+  .chip-caution { @apply badge bg-rose-50 text-rose-700; }
+
+  /* 레거시 클래스 호환 (디자인 통일) */
+  .card-modern, .card-notion { @apply card; }
+  .card-hover { @apply card-interactive; }
+  .btn-linear-primary { @apply btn-primary; }
+  .input-vercel { @apply input; }
+  .shadow-soft, .shadow-3d { @apply shadow-card; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

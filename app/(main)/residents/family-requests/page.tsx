@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { ArrowLeft, User, Calendar, Check, X, Mail, Phone, Clock } from "lucide-react"
@@ -127,7 +126,7 @@ export default function FamilyRequestsPage() {
     : requests
 
   return (
-    <AppLayout>
+    <>
       <div className="section-container py-10">
         {/* Back Button */}
         <Link
@@ -297,7 +296,7 @@ export default function FamilyRequestsPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </>
   )
 }
 

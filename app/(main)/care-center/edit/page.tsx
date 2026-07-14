@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-import AppLayout from "@/components/layout/AppLayout"
 import toast from "react-hot-toast"
 import { ArrowLeft, Building2, Phone, Mail, MapPin, FileText, Image as ImageIcon } from "lucide-react"
 
@@ -139,14 +138,14 @@ export default function EditCareCenterPage() {
 
   if (status === "loading" || loadingData) {
     return (
-      <AppLayout>
+      <>
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
             <p className="mt-4 text-gray-600">로딩 중...</p>
           </div>
         </div>
-      </AppLayout>
+      </>
     )
   }
 
@@ -155,7 +154,7 @@ export default function EditCareCenterPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className="container mx-auto px-6 py-12 max-w-4xl">
         {/* Back Button */}
         <Link
@@ -304,7 +303,7 @@ export default function EditCareCenterPage() {
           </div>
         </form>
       </div>
-    </AppLayout>
+    </>
   )
 }
 

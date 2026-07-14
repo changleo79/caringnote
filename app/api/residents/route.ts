@@ -1,49 +1,86 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { getApprovedResidentIds, isStaff, requireSession, requireStaff, writeAuditLog } from "@/lib/access"
 
-// 입소자 목록 조회
-export async function GET(req: NextRequest) {
+export const dynamic = "force-dynamic"
+
+export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session) {
-      return NextResponse.json(
-        { error: "인증이 필요합니다." },
-        { status: 401 }
-      )
+    const auth = await requireSession()
+    if (auth.error || !auth.user) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status })
     }
 
-    if (!session.user.careCenterId) {
-      return NextResponse.json(
-        { error: "요양원 정보가 필요합니다." },
-        { status: 400 }
-      )
+    if (isStaff(auth.user.role)) {
+      if (!auth.user.careCenterId) {
+        return NextResponse.json({ error: "요양원 정보가 필요합니다." }, { status: 400 })
+      }
+      const residents = await prisma.resident.findMany({
+        where: { careCenterId: auth.user.careCenterId },
+        include: {
+          families: {
+            where: { isApproved: false },
+            select: { id: true },
+          },
+          _count: { select: { dailyReports: true, families: true } },
+        },
+        orderBy: [{ roomNumber: "asc" }, { name: "asc" }],
+      })
+      return NextResponse.json(residents)
     }
 
+    const ids = await getApprovedResidentIds(auth.user.id)
     const residents = await prisma.resident.findMany({
-      where: {
-        careCenterId: session.user.careCenterId,
+      where: { id: { in: ids } },
+      include: {
+        careCenter: { select: { id: true, name: true } },
+        _count: { select: { dailyReports: true } },
       },
-      select: {
-        id: true,
-        name: true,
-        roomNumber: true,
-        photoUrl: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
+      orderBy: { name: "asc" },
     })
-
     return NextResponse.json(residents)
-  } catch (error: any) {
-    console.error("Error fetching residents:", error)
-    return NextResponse.json(
-      { error: "입소자 목록을 불러오는데 실패했습니다." },
-      { status: 500 }
-    )
+  } catch (error) {
+    console.error("GET /api/residents", error)
+    return NextResponse.json({ error: "입소자 목록을 불러오지 못했습니다." }, { status: 500 })
   }
 }
 
+export async function POST(req: NextRequest) {
+  try {
+    const auth = await requireStaff()
+    if (auth.error || !auth.user) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status })
+    }
+
+    const body = await req.json()
+    const { name, birthDate, gender, roomNumber, photoUrl, notes } = body
+    if (!name?.trim()) {
+      return NextResponse.json({ error: "이름은 필수입니다." }, { status: 400 })
+    }
+
+    const resident = await prisma.resident.create({
+      data: {
+        name: name.trim(),
+        birthDate: birthDate ? new Date(birthDate) : null,
+        gender: gender || null,
+        roomNumber: roomNumber || null,
+        photoUrl: photoUrl || null,
+        notes: notes || null,
+        careCenterId: auth.user.careCenterId!,
+      },
+    })
+
+    await writeAuditLog({
+      action: "resident.create",
+      userId: auth.user.id,
+      careCenterId: auth.user.careCenterId,
+      entityType: "Resident",
+      entityId: resident.id,
+    })
+
+    return NextResponse.json(resident, { status: 201 })
+  } catch (error) {
+    console.error("POST /api/residents", error)
+    return NextResponse.json({ error: "어르신 등록에 실패했습니다." }, { status: 500 })
+  }
+}

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-import AppLayout from "@/components/layout/AppLayout"
 import toast from "react-hot-toast"
 import { ArrowLeft, Camera, X, User } from "lucide-react"
 
@@ -160,7 +159,7 @@ export default function NewPostPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Back Button */}
         <Link
@@ -336,6 +335,6 @@ export default function NewPostPage() {
           </div>
         </form>
       </div>
-    </AppLayout>
+    </>
   )
 }

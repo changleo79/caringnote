@@ -1,14 +1,29 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import PwaRegister from "@/components/PwaRegister";
 
 export const metadata: Metadata = {
   title: "실버노트 — 부모님의 따뜻한 하루를 함께합니다",
   description: "요양원에 계신 부모님의 일상을 가족과 함께 기록하고, 건강한 생활을 지원하는 통합 소통 플랫폼",
-  icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+  applicationName: "실버노트",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "실버노트",
   },
+  icons: {
+    icon: [{ url: "/icon.svg" }, { url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
+    apple: "/icon-192.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0F6E6A",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -28,6 +43,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         {children}
+        <PwaRegister />
         <Toaster
           position="top-center"
           toastOptions={{
