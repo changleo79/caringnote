@@ -1,34 +1,35 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import toast from "react-hot-toast"
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { PageHeader } from "@/components/calm/PageHeader";
 
 export default function ProfilePage() {
-  const [fontScale, setFontScale] = useState(1)
-  const [staffMode, setStaffMode] = useState(false)
-  const [phone, setPhone] = useState("")
-  const [pin, setPin] = useState("")
-  const [name, setName] = useState("")
-  const [role, setRole] = useState("")
-  const [loading, setLoading] = useState(true)
+  const [fontScale, setFontScale] = useState(1);
+  const [staffMode, setStaffMode] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [pin, setPin] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/profile")
       .then((r) => r.json())
       .then((d) => {
         if (d?.id) {
-          setFontScale(d.fontScale || 1)
-          setStaffMode(Boolean(d.staffMode))
-          setPhone(d.phone || "")
-          setName(d.name || "")
-          setRole(d.role || "")
-          document.documentElement.classList.remove("font-scale-2", "font-scale-3")
-          if (d.fontScale === 2) document.documentElement.classList.add("font-scale-2")
-          if (d.fontScale === 3) document.documentElement.classList.add("font-scale-3")
+          setFontScale(d.fontScale || 1);
+          setStaffMode(Boolean(d.staffMode));
+          setPhone(d.phone || "");
+          setName(d.name || "");
+          setRole(d.role || "");
+          document.documentElement.classList.remove("font-scale-2", "font-scale-3");
+          if (d.fontScale === 2) document.documentElement.classList.add("font-scale-2");
+          if (d.fontScale === 3) document.documentElement.classList.add("font-scale-3");
         }
       })
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   const save = async () => {
     const res = await fetch("/api/profile", {
@@ -40,39 +41,41 @@ export default function ProfilePage() {
         phone,
         ...(pin.length >= 4 ? { pin } : {}),
       }),
-    })
+    });
     if (!res.ok) {
-      toast.error("저장에 실패했습니다.")
-      return
+      toast.error("저장에 실패했습니다.");
+      return;
     }
-    document.documentElement.classList.remove("font-scale-2", "font-scale-3")
-    if (fontScale === 2) document.documentElement.classList.add("font-scale-2")
-    if (fontScale === 3) document.documentElement.classList.add("font-scale-3")
-    toast.success("설정을 저장했습니다.")
-    setPin("")
-  }
+    document.documentElement.classList.remove("font-scale-2", "font-scale-3");
+    if (fontScale === 2) document.documentElement.classList.add("font-scale-2");
+    if (fontScale === 3) document.documentElement.classList.add("font-scale-3");
+    toast.success("설정을 저장했습니다.");
+    setPin("");
+  };
 
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--sn-accent)] border-t-transparent" />
       </div>
-    )
+    );
   }
 
-  const isStaff = role === "CAREGIVER" || role === "ADMIN"
+  const isStaff = role === "CAREGIVER" || role === "ADMIN";
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-8 sm:px-6">
-      <header className="page-header">
-        <h1 className="page-title">내 설정</h1>
-        <p className="page-description">{name}님의 읽기·작성 환경을 맞춥니다.</p>
-      </header>
+    <div className="mx-auto max-w-lg">
+      <PageHeader
+        title="내 설정"
+        description={`${name}님의 읽기·작성 환경`}
+      />
 
-      <div className="space-y-6">
-        <section className="card p-5">
-          <h2 className="font-semibold text-neutral-900 mb-3">큰글씨 모드</h2>
-          <p className="text-sm text-neutral-500 mb-4">보호자·시니어 열람용. 본문 크기를 키웁니다.</p>
+      <div className="space-y-10">
+        <section>
+          <h2 className="mb-2 text-lg font-semibold text-[var(--sn-ink)]">큰글씨 모드</h2>
+          <p className="mb-4 text-sm text-[var(--sn-ink-muted)]">
+            보호자·시니어 열람용. 본문 크기를 키웁니다.
+          </p>
           <div className="grid grid-cols-3 gap-2">
             {[
               { v: 1, label: "기본" },
@@ -83,11 +86,7 @@ export default function ProfilePage() {
                 key={opt.v}
                 type="button"
                 onClick={() => setFontScale(opt.v)}
-                className={
-                  fontScale === opt.v
-                    ? "btn-primary"
-                    : "btn-secondary"
-                }
+                className={fontScale === opt.v ? "btn-primary" : "btn-secondary"}
               >
                 {opt.label}
               </button>
@@ -95,9 +94,9 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        <section className="card p-5">
-          <h2 className="font-semibold text-neutral-900 mb-3">연락처</h2>
-          <label className="label">휴대폰 (알림톡·비상연락)</label>
+        <section className="border-t border-[var(--sn-line)] pt-8">
+          <h2 className="mb-3 text-lg font-semibold text-[var(--sn-ink)]">연락처</h2>
+          <label className="label">휴대폰</label>
           <input
             className="input"
             value={phone}
@@ -107,9 +106,9 @@ export default function ProfilePage() {
         </section>
 
         {isStaff && (
-          <section className="card p-5">
-            <h2 className="font-semibold text-neutral-900 mb-3">Staff 태블릿</h2>
-            <label className="flex items-center gap-3 min-h-[56px]">
+          <section className="border-t border-[var(--sn-line)] pt-8">
+            <h2 className="mb-3 text-lg font-semibold text-[var(--sn-ink)]">Staff 태블릿</h2>
+            <label className="flex min-h-[56px] items-center gap-3">
               <input
                 type="checkbox"
                 checked={staffMode}
@@ -136,5 +135,5 @@ export default function ProfilePage() {
         </button>
       </div>
     </div>
-  )
+  );
 }

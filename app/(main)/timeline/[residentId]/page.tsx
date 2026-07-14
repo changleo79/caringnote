@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import toast from "react-hot-toast"
+import { StatusChip } from "@/components/calm/StatusChip"
+import { EmptyState } from "@/components/calm/EmptyState"
 
 type TimelineItem = {
   type: string
@@ -35,64 +37,60 @@ export default function CareTimelinePage() {
       .finally(() => setLoading(false))
   }, [residentId])
 
-  if (loading) return <div className="p-6 text-neutral-500">불러오는 중…</div>
-  if (!resident) return <div className="p-6">어르신을 찾을 수 없습니다.</div>
-
-  const mood =
-    resident.statusChip === "GOOD" ? "좋음" : resident.statusChip === "CAUTION" ? "주의" : "보통"
+  if (loading) {
+    return <div className="p-8 text-[var(--sn-ink-muted)]">불러오는 중…</div>
+  }
+  if (!resident) {
+    return <div className="p-8">어르신을 찾을 수 없습니다.</div>
+  }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="relative bg-brand-800 text-white px-4 pt-8 pb-10">
-        <p className="text-brand-100 text-sm mb-1">Care Timeline</p>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {resident.name}
-          <span className="ml-3 text-lg font-medium text-brand-100">· {mood}</span>
-        </h1>
+    <div className="mx-auto max-w-xl">
+      <div className="border-b border-[var(--sn-line)] px-5 pb-8 pt-10">
+        <p className="text-sm font-semibold tracking-wide text-[var(--sn-accent)]">Care Timeline</p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <h1 className="font-display text-3xl font-semibold tracking-tight">{resident.name}</h1>
+          <StatusChip status={resident.statusChip} />
+        </div>
         {resident.roomNumber && (
-          <p className="text-brand-200 mt-1">{resident.roomNumber}호</p>
+          <p className="mt-1 text-[var(--sn-ink-muted)]">{resident.roomNumber}호</p>
         )}
       </div>
 
-      <div className="px-4 -mt-6 space-y-4 pb-10">
+      <div className="space-y-8 px-5 py-8">
         {todayMenu && (
-          <div className="card p-4">
-            <p className="font-semibold text-neutral-900 mb-2">오늘 식단</p>
-            <ul className="text-neutral-600 space-y-1 text-sm">
+          <div>
+            <p className="text-sm font-semibold text-[var(--sn-accent)]">오늘 식단</p>
+            <ul className="mt-3 space-y-1 text-[var(--sn-ink)]">
               {todayMenu.breakfast && <li>아침 · {todayMenu.breakfast}</li>}
               {todayMenu.lunch && <li>중식 · {todayMenu.lunch}</li>}
               {todayMenu.dinner && <li>저녁 · {todayMenu.dinner}</li>}
-              {todayMenu.snack && <li>간식 · {todayMenu.snack}</li>}
             </ul>
           </div>
         )}
 
         <div className="flex gap-2">
-          <Link href={`/visits?residentId=${residentId}`} className="btn-secondary flex-1 text-center">
+          <Link href={`/visits?residentId=${residentId}`} className="btn-secondary flex-1">
             면회 예약
           </Link>
-          <Link href={`/requests?residentId=${residentId}`} className="btn-secondary flex-1 text-center">
+          <Link href={`/requests?residentId=${residentId}`} className="btn-secondary flex-1">
             물품 요청
           </Link>
         </div>
 
         {items.length === 0 ? (
-          <div className="card p-8 text-center text-neutral-500">아직 기록이 없습니다.</div>
+          <EmptyState title="아직 기록이 없습니다" />
         ) : (
-          <ol className="space-y-3">
+          <ol className="relative space-y-0 border-l border-[var(--sn-line)] pl-6">
             {items.map((item) => (
-              <li key={`${item.type}-${item.id}`} className="card p-4">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-brand-700">
-                    {item.type}
-                  </span>
-                  <time className="text-xs text-neutral-400">
-                    {new Date(item.at).toLocaleString("ko-KR")}
-                  </time>
-                </div>
-                <p className="font-semibold text-neutral-900">{item.title}</p>
+              <li key={`${item.type}-${item.id}`} className="sn-fade-up relative pb-8">
+                <span className="absolute -left-[1.9rem] top-1.5 h-2.5 w-2.5 rounded-full bg-[var(--sn-accent)]" />
+                <time className="text-xs text-[var(--sn-ink-faint)]">
+                  {new Date(item.at).toLocaleString("ko-KR")}
+                </time>
+                <p className="mt-1 font-display text-lg font-semibold tracking-tight">{item.title}</p>
                 {item.content && (
-                  <p className="text-neutral-600 mt-1 whitespace-pre-wrap">{item.content}</p>
+                  <p className="mt-1 whitespace-pre-wrap text-[var(--sn-ink-muted)]">{item.content}</p>
                 )}
               </li>
             ))}

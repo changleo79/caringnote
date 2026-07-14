@@ -7,45 +7,68 @@ import { cn } from "@/lib/utils"
 import Logo from "@/components/brand/Logo"
 import {
   Home,
-  Camera,
   Heart,
-  ShoppingBag,
   LogOut,
-  User,
   Menu,
   X,
-  Building2,
   Users,
   NotebookPen,
+  Package,
+  MoreHorizontal,
+  Camera,
   ClipboardList,
   CalendarDays,
-  Package,
+  Building2,
+  ShoppingBag,
+  User,
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import NotificationBell from "@/components/notifications/NotificationBell"
 
-const familyNav = [
+const familyTabs = [
   { href: "/dashboard", label: "홈", icon: Home },
   { href: "/reports", label: "소식", icon: NotebookPen },
   { href: "/medical", label: "건강", icon: Heart },
-  { href: "/requests", label: "요청", icon: Package },
+  { href: "/more", label: "더보기", icon: MoreHorizontal },
 ]
 
-const staffNav = [
-  { href: "/dashboard", label: "홈", icon: Home },
+const staffTabs = [
   { href: "/reports/write", label: "작성", icon: NotebookPen },
   { href: "/residents", label: "어르신", icon: Users },
-  { href: "/community", label: "앨범", icon: Camera },
+  { href: "/dashboard", label: "홈", icon: Home },
 ]
 
-const quietHoursNote =
-  "밤 22시–아침 7시에는 알림을 모아 아침에 보여 드립니다 (Quiet hours)."
+const familyMore = [
+  { href: "/visits", label: "면회", icon: CalendarDays },
+  { href: "/requests", label: "물품 요청", icon: Package },
+  { href: "/residents/family-requests", label: "가족 연결", icon: Users },
+  { href: "/shop", label: "쇼핑", icon: ShoppingBag },
+  { href: "/profile", label: "설정", icon: User },
+]
+
+const staffMore = [
+  { href: "/community", label: "앨범", icon: Camera },
+  { href: "/menu", label: "식단", icon: ClipboardList },
+  { href: "/announcements", label: "공지", icon: CalendarDays },
+  { href: "/handover", label: "인수인계", icon: ClipboardList },
+  { href: "/care-ops", label: "케어Ops", icon: Heart },
+  { href: "/reports/stats", label: "리포트", icon: ClipboardList },
+  { href: "/residents/family-requests", label: "가족승인", icon: Users },
+  { href: "/care-center/edit", label: "요양원", icon: Building2 },
+  { href: "/profile", label: "설정", icon: User },
+  { href: "/shop", label: "쇼핑", icon: ShoppingBag },
+]
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession()
   const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const isStaff = session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
+  const tabs = isStaff ? staffTabs : familyTabs
+  const moreItems = isStaff ? staffMore : familyMore
+  const isMorePage =
+    moreItems.some((i) => pathname === i.href || pathname?.startsWith(i.href + "/")) &&
+    !tabs.some((t) => t.href !== "/more" && (pathname === t.href || pathname?.startsWith(t.href + "/")))
 
   useEffect(() => {
     document.documentElement.classList.toggle("staff-mode", Boolean(isStaff))
@@ -64,92 +87,60 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       .catch(() => {})
   }, [session?.user?.id])
 
-  const isActive = (href: string) =>
-    pathname === href || pathname?.startsWith(href + "/")
-
-  const navItems = isStaff ? staffNav : familyNav
-  const extra = isStaff
-    ? [
-        { href: "/menu", label: "식단", icon: ClipboardList },
-        { href: "/announcements", label: "공지", icon: CalendarDays },
-        { href: "/handover", label: "인수인계", icon: ClipboardList },
-        { href: "/care-ops", label: "케어Ops", icon: Heart },
-        { href: "/reports/stats", label: "리포트", icon: ClipboardList },
-        { href: "/residents/family-requests", label: "가족승인", icon: Users },
-        { href: "/care-center/edit", label: "요양원", icon: Building2 },
-        { href: "/profile", label: "설정", icon: User },
-        { href: "/shop", label: "쇼핑", icon: ShoppingBag },
-      ]
-    : [
-        { href: "/visits", label: "면회", icon: CalendarDays },
-        { href: "/shop", label: "쇼핑", icon: ShoppingBag },
-        { href: "/residents/family-requests", label: "연결", icon: Users },
-        { href: "/profile", label: "설정", icon: User },
-      ]
-
-  const allNavItems = [...navItems, ...extra]
+  const isActive = (href: string) => {
+    if (href === "/more") return isMorePage || pathname === "/more"
+    if (href === "/dashboard") return pathname === "/dashboard"
+    return pathname === href || pathname?.startsWith(href + "/")
+  }
 
   return (
-    <div className="min-h-screen bg-warm-50">
-      <header className="bg-white border-b border-neutral-200/80 sticky top-0 z-50 safe-area-top">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-            <Logo variant="default" size="sm" href="/dashboard" />
-
-            <div className="flex items-center gap-2">
-              <NotificationBell />
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-50">
-                <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
-                  <User className="w-4 h-4 text-brand-600" />
-                </div>
-                <span className="text-body font-medium text-neutral-700 max-w-[120px] truncate">
-                  {session?.user?.name}
-                </span>
-              </div>
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="p-2.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
-                aria-label="로그아웃"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2.5 text-neutral-600 hover:bg-neutral-100 rounded-xl"
-                aria-label="메뉴"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
+    <div className="min-h-screen bg-[var(--sn-bg)]">
+      <header className="safe-area-top sticky top-0 z-50 border-b border-[var(--sn-line)] bg-[var(--sn-bg)]/90 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
+          <Logo size="sm" href="/dashboard" />
+          <div className="flex items-center gap-1">
+            <NotificationBell />
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="rounded-xl p-2.5 text-[var(--sn-ink-muted)] hover:bg-[var(--sn-accent-soft)] hover:text-[var(--sn-accent-hover)]"
+              aria-label="로그아웃"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              className="rounded-xl p-2.5 text-[var(--sn-ink-muted)] hover:bg-[var(--sn-accent-soft)] md:hidden"
+              aria-label="메뉴"
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
 
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-neutral-100 bg-white">
-            <nav className="max-w-7xl mx-auto px-4 py-3 space-y-1">
-              {allNavItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={isActive(item.href) ? "nav-item-active" : "nav-item-inactive"}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {item.label}
-                  </Link>
-                )
-              })}
-            </nav>
-          </div>
+        {menuOpen && (
+          <nav className="border-t border-[var(--sn-line)] px-4 py-3 md:hidden">
+            {moreItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={isActive(item.href) ? "nav-item-active" : "nav-item-inactive"}
+                >
+                  <Icon className="h-5 w-5" />
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
         )}
       </header>
 
-      <div className="flex max-w-7xl mx-auto">
-        <aside className="hidden md:block w-56 flex-shrink-0 border-r border-neutral-200/80 min-h-[calc(100vh-4rem)] sticky top-16 bg-white">
-          <nav className="p-4 space-y-1">
-            {allNavItems.map((item) => {
+      <div className="mx-auto flex max-w-5xl">
+        <aside className="sticky top-14 hidden min-h-[calc(100vh-3.5rem)] w-52 shrink-0 border-r border-[var(--sn-line)] md:block">
+          <nav className="space-y-1 p-3">
+            {[...tabs.filter((t) => t.href !== "/more"), ...moreItems].map((item) => {
               const Icon = item.icon
               return (
                 <Link
@@ -157,7 +148,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   className={isActive(item.href) ? "nav-item-active" : "nav-item-inactive"}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="h-5 w-5" />
                   {item.label}
                 </Link>
               )
@@ -165,29 +156,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
         </aside>
 
-        <main className="flex-1 min-w-0 pb-24 md:pb-8">{children}</main>
+        <main className="min-w-0 flex-1 pb-24 md:pb-10">{children}</main>
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200/80 md:hidden z-50 safe-area-bottom">
-        <div className="flex justify-around items-center h-16 px-2">
-          {navItems.map((item) => {
+      <nav className="safe-area-bottom fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--sn-line)] bg-[var(--sn-bg)]/95 backdrop-blur-md md:hidden">
+        <div className="flex h-16 items-stretch justify-around px-1">
+          {tabs.map((item) => {
             const Icon = item.icon
             const active = isActive(item.href)
+            const href = item.href === "/more" ? (isStaff ? "/community" : "/visits") : item.href
             return (
               <Link
-                key={item.href}
-                href={item.href}
+                key={item.label}
+                href={href}
                 className={cn(
-                  "flex flex-col items-center justify-center flex-1 h-full gap-0.5 transition-colors touch-manipulation",
-                  active ? "text-brand-600" : "text-neutral-400"
+                  "flex flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium touch-manipulation",
+                  active ? "text-[var(--sn-accent)]" : "text-[var(--sn-ink-faint)]"
                 )}
               >
-                <div className={cn("p-2 rounded-xl", active && "bg-brand-50")}>
-                  <Icon className="w-5 h-5" />
-                </div>
-                <span className={cn("text-[11px] font-medium", active && "font-semibold")}>
-                  {item.label}
-                </span>
+                <Icon className="h-5 w-5" strokeWidth={active ? 2.25 : 1.75} />
+                {item.label}
               </Link>
             )
           })}
@@ -196,14 +184,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {isStaff && pathname !== "/reports/write" && (
         <Link href="/reports/write" className="staff-fab md:hidden" aria-label="알림장 쓰기">
-          <NotebookPen className="w-7 h-7" />
+          <NotebookPen className="h-7 w-7" />
         </Link>
-      )}
-
-      {!isStaff && (
-        <p className="sr-only" aria-live="polite">
-          {quietHoursNote}
-        </p>
       )}
     </div>
   )

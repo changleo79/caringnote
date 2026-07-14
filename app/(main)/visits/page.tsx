@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
+import { PageHeader } from "@/components/calm/PageHeader"
 
 function VisitsInner() {
   const { data: session } = useSession()
@@ -56,14 +57,11 @@ function VisitsInner() {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-xl mx-auto">
-      <div className="page-header">
-        <h1 className="page-title">면회</h1>
-        <p className="page-description">전화 대신, 차분히 예약하세요.</p>
-      </div>
+    <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+      <PageHeader title="면회" description="전화 대신, 차분히 예약하세요." />
 
       {!isStaff && (
-        <form onSubmit={submit} className="card p-5 space-y-3 mb-6">
+        <form onSubmit={submit} className="mb-10 space-y-4">
           <div>
             <label className="label">어르신</label>
             <select className="input" value={residentId} onChange={(e) => setResidentId(e.target.value)} required>
@@ -79,7 +77,7 @@ function VisitsInner() {
           </div>
           <div>
             <label className="label">방문자</label>
-            <input className="input" value={visitors} onChange={(e) => setVisitors(e.target.value)} placeholder="이름" />
+            <input className="input" value={visitors} onChange={(e) => setVisitors(e.target.value)} />
           </div>
           <div>
             <label className="label">메모</label>
@@ -89,15 +87,15 @@ function VisitsInner() {
         </form>
       )}
 
-      <ul className="space-y-3">
+      <ul className="divide-y divide-[var(--sn-line)]">
         {list.map((item) => (
-          <li key={item.id} className="card p-4">
-            <p className="font-semibold">{item.resident?.name}</p>
-            <p className="text-sm text-neutral-500 mt-1">
+          <li key={item.id} className="py-5">
+            <p className="font-display text-lg font-semibold">{item.resident?.name}</p>
+            <p className="mt-1 text-sm text-[var(--sn-ink-muted)]">
               {new Date(item.visitAt).toLocaleString("ko-KR")} · {item.status}
             </p>
             {isStaff && item.status === "Pending" && (
-              <div className="flex gap-2 mt-3">
+              <div className="mt-3 flex gap-2">
                 <button className="btn-primary flex-1" onClick={() => updateStatus(item.id, "Approved")}>승인</button>
                 <button className="btn-secondary flex-1" onClick={() => updateStatus(item.id, "Rejected")}>거절</button>
               </div>
@@ -111,7 +109,7 @@ function VisitsInner() {
 
 export default function VisitsPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-neutral-500">불러오는 중…</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-[var(--sn-ink-muted)]">불러오는 중…</div>}>
       <VisitsInner />
     </Suspense>
   )

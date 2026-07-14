@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
+import { StatusChip } from "@/components/calm/StatusChip"
+import { PHOTOS } from "@/lib/photos"
 
-/** 매직링크 — 앱 설치 없이 10초 안심 열람 */
 export default function MagicReportPage() {
   const params = useParams()
   const token = params.token as string
@@ -23,58 +24,71 @@ export default function MagicReportPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-warm-50 flex items-center justify-center p-6">
-        <div className="card p-8 max-w-md text-center">
-          <p className="text-neutral-700">{error}</p>
-          <Link href="/" className="btn-primary mt-6 inline-flex">실버노트 홈</Link>
+      <div className="flex min-h-screen items-center justify-center bg-[var(--sn-bg)] px-6">
+        <div className="max-w-md text-center">
+          <p className="font-display text-xl font-semibold">{error}</p>
+          <Link href="/" className="btn-primary mt-6 inline-flex">
+            실버노트 홈
+          </Link>
         </div>
       </div>
     )
   }
 
   if (!data) {
-    return <div className="min-h-screen bg-warm-50 flex items-center justify-center text-neutral-500">불러오는 중…</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--sn-bg)] text-[var(--sn-ink-muted)]">
+        불러오는 중…
+      </div>
+    )
   }
 
-  const mood =
-    data.moodChip === "GOOD" ? "좋음" : data.moodChip === "CAUTION" ? "주의" : "보통"
+  let image: string | null = null
+  try {
+    if (data.images) image = JSON.parse(data.images)[0]
+  } catch {
+    image = null
+  }
 
   return (
-    <div className="min-h-screen bg-warm-50">
-      <div className="max-w-lg mx-auto">
-        <header className="px-4 pt-8 pb-4">
-          <p className="text-brand-700 font-semibold text-sm tracking-wide">SILVER NOTE</p>
-          <h1 className="text-3xl font-semibold text-neutral-900 mt-2">
+    <div className="min-h-screen bg-[var(--sn-bg)]">
+      <div className="relative min-h-[55svh] overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={image || PHOTOS.familyStory}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover sn-hero-ken"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,32,30,0.88)] via-[rgba(12,32,30,0.25)] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 px-5 pb-8 pt-24 text-white">
+          <p className="text-sm font-medium text-white/70">실버노트</p>
+          <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">
             {data.resident.name}
-            <span className="text-xl text-neutral-500 font-medium"> · {mood}</span>
+            <span className="ml-2 text-xl font-medium text-white/80">
+              ·{" "}
+              {data.moodChip === "GOOD"
+                ? "좋음"
+                : data.moodChip === "CAUTION"
+                  ? "주의"
+                  : "보통"}
+            </span>
           </h1>
-          <p className="text-neutral-500 mt-1">{data.careCenterName}</p>
-        </header>
-
-        <main className="px-4 pb-12 space-y-4">
-          {data.images && (
-            <div className="rounded-2xl overflow-hidden bg-neutral-200 min-h-[200px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={JSON.parse(data.images)[0]}
-                alt=""
-                className="w-full object-cover max-h-[360px]"
-              />
-            </div>
-          )}
-          <div className="card p-5">
-            <p className="text-lg text-neutral-800 leading-relaxed whitespace-pre-wrap">
-              {data.content || "오늘의 소식이 도착했습니다."}
-            </p>
-            <p className="text-sm text-neutral-400 mt-4">
-              {data.authorName} · {new Date(data.publishedAt).toLocaleString("ko-KR")}
-            </p>
-          </div>
-          <Link href="/auth/login" className="btn-primary w-full">
-            앱에서 더 보기
-          </Link>
-        </main>
+          <p className="mt-1 text-white/65">{data.careCenterName}</p>
+        </div>
       </div>
+
+      <main className="mx-auto max-w-lg px-5 py-8 sn-fade-up">
+        <StatusChip status={data.moodChip} />
+        <p className="mt-4 text-lg leading-relaxed text-[var(--sn-ink)] whitespace-pre-wrap">
+          {data.content || "오늘의 소식이 도착했습니다."}
+        </p>
+        <p className="mt-6 text-sm text-[var(--sn-ink-faint)]">
+          {data.authorName} · {new Date(data.publishedAt).toLocaleString("ko-KR")}
+        </p>
+        <Link href="/auth/login" className="btn-primary mt-8 w-full">
+          앱에서 더 보기
+        </Link>
+      </main>
     </div>
   )
 }

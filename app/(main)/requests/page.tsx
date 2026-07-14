@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
+import { PageHeader } from "@/components/calm/PageHeader"
 
 function SupplyInner() {
   const { data: session } = useSession()
@@ -40,14 +41,11 @@ function SupplyInner() {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-xl mx-auto">
-      <div className="page-header">
-        <h1 className="page-title">물품 요청</h1>
-        <p className="page-description">기저귀·간식 등 필요한 것을 간단히 요청하세요.</p>
-      </div>
+    <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+      <PageHeader title="물품 요청" description="기저귀·간식 등 필요한 것을 간단히 요청하세요." />
 
       {!isStaff && (
-        <form onSubmit={submit} className="card p-5 space-y-3 mb-6">
+        <form onSubmit={submit} className="mb-10 space-y-4">
           <select className="input" value={residentId} onChange={(e) => setResidentId(e.target.value)} required>
             <option value="">어르신 선택</option>
             {residents.map((r) => (
@@ -60,12 +58,16 @@ function SupplyInner() {
         </form>
       )}
 
-      <ul className="space-y-3">
+      <ul className="divide-y divide-[var(--sn-line)]">
         {list.map((item) => (
-          <li key={item.id} className="card p-4 flex justify-between gap-3">
+          <li key={item.id} className="flex items-center justify-between gap-3 py-5">
             <div>
-              <p className="font-semibold">{item.itemName} × {item.quantity}</p>
-              <p className="text-sm text-neutral-500">{item.resident?.name} · {item.status}</p>
+              <p className="font-display text-lg font-semibold">
+                {item.itemName} × {item.quantity}
+              </p>
+              <p className="text-sm text-[var(--sn-ink-muted)]">
+                {item.resident?.name} · {item.status}
+              </p>
             </div>
             {isStaff && item.status === "Pending" && (
               <button
@@ -92,7 +94,7 @@ function SupplyInner() {
 
 export default function SupplyRequestsPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-neutral-500">불러오는 중…</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-[var(--sn-ink-muted)]">불러오는 중…</div>}>
       <SupplyInner />
     </Suspense>
   )

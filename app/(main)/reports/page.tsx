@@ -3,23 +3,26 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import toast from "react-hot-toast"
+import { PageHeader } from "@/components/calm/PageHeader"
+import { StatusChip } from "@/components/calm/StatusChip"
+import { EmptyState } from "@/components/calm/EmptyState"
+import { cn } from "@/lib/utils"
 
 type Report = {
   id: string
   content?: string | null
   moodChip: string
+  images?: string | null
   publishedAt?: string | null
   readAt?: string | null
   resident: { id: string; name: string; photoUrl?: string | null }
   reactions: { type: string }[]
 }
 
-const moodLabel: Record<string, string> = { GOOD: "좋음", OK: "보통", CAUTION: "주의" }
-const moodClass: Record<string, string> = { GOOD: "chip-good", OK: "chip-ok", CAUTION: "chip-caution" }
-
 export default function ReportsFeedPage() {
   const [reports, setReports] = useState<Report[]>([])
   const [loading, setLoading] = useState(true)
+  const [popId, setPopId] = useState<string | null>(null)
 
   useEffect(() => {
     fetch("/api/daily-reports")
@@ -36,60 +39,75 @@ export default function ReportsFeedPage() {
       body: JSON.stringify({ type }),
     })
     if (res.ok) {
+      if (type === "heart") {
+        setPopId(id)
+        setTimeout(() => setPopId(null), 500)
+      }
       toast.success(type === "thanks" ? "감사를 전했습니다." : "마음을 전했습니다.")
       setReports((prev) =>
-        prev.map((r) =>
-          r.id === id ? { ...r, reactions: [...r.reactions, { type }] } : r
-        )
+        prev.map((r) => (r.id === id ? { ...r, reactions: [...r.reactions, { type }] } : r))
       )
     }
   }
 
+  const imgOf = (r: Report) => {
+    try {
+      return r.images ? JSON.parse(r.images)[0] : null
+    } catch {
+      return null
+    }
+  }
+
   return (
-    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
-      <div className="page-header">
-        <h1 className="page-title">소식</h1>
-        <p className="page-description">부모님의 하루를 차분히 확인하세요.</p>
-      </div>
+    <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+      <PageHeader title="소식" description="부모님의 하루를 차분히 확인하세요." />
 
       {loading ? (
-        <p className="text-neutral-500">불러오는 중…</p>
+        <p className="text-[var(--sn-ink-muted)]">불러오는 중…</p>
       ) : reports.length === 0 ? (
-        <div className="card p-8 text-center text-neutral-500">아직 도착한 알림장이 없습니다.</div>
+        <EmptyState title="아직 도착한 알림장이 없습니다" />
       ) : (
-        <ul className="space-y-4">
-          {reports.map((r) => (
-            <li key={r.id} className="card overflow-hidden animate-[fadeUp_0.35s_ease]">
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <Link href={`/timeline/${r.resident.id}`} className="font-semibold text-neutral-900">
-                    {r.resident.name}
-                  </Link>
-                  <span className={moodClass[r.moodChip] || "chip-ok"}>
-                    {moodLabel[r.moodChip] || r.moodChip}
-                  </span>
+        <ul className="space-y-10">
+          {reports.map((r) => {
+            const img = imgOf(r)
+            return (
+              <li key={r.id} className="sn-fade-up">
+                {img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={img} alt="" className="aspect-[4/3] w-full object-cover" />
+                ) : null}
+                <div className={cn(img ? "pt-4" : "")}>
+                  <div className="flex items-center justify-between gap-3">
+                    <Link
+                      href={`/timeline/${r.resident.id}`}
+                      className="font-display text-xl font-semibold tracking-tight"
+                    >
+                      {r.resident.name}
+                    </Link>
+                    <StatusChip status={r.moodChip} />
+                  </div>
+                  <p className="mt-3 text-[17px] leading-relaxed text-[var(--sn-ink)] whitespace-pre-wrap">
+                    {r.content || "오늘의 소식이 도착했습니다."}
+                  </p>
+                  <p className="mt-3 text-xs text-[var(--sn-ink-faint)]">
+                    {r.publishedAt ? new Date(r.publishedAt).toLocaleString("ko-KR") : ""}
+                    {r.readAt ? " · 읽음" : ""}
+                  </p>
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      className={cn("btn-secondary flex-1", popId === r.id && "sn-heart-pop")}
+                      onClick={() => react(r.id, "heart")}
+                    >
+                      하트
+                    </button>
+                    <button className="btn-secondary flex-1" onClick={() => react(r.id, "thanks")}>
+                      감사
+                    </button>
+                  </div>
                 </div>
-                <p className="text-neutral-700 whitespace-pre-wrap">
-                  {r.content || "오늘의 소식이 도착했습니다."}
-                </p>
-                <p className="text-xs text-neutral-400 mt-2">
-                  {r.publishedAt ? new Date(r.publishedAt).toLocaleString("ko-KR") : ""}
-                  {r.readAt ? " · 읽음" : " · 미열람"}
-                </p>
-                <div className="flex gap-2 mt-4">
-                  <button className="btn-secondary flex-1" onClick={() => react(r.id, "heart")}>
-                    하트
-                  </button>
-                  <button className="btn-secondary flex-1" onClick={() => react(r.id, "thanks")}>
-                    감사
-                  </button>
-                  <Link href={`/timeline/${r.resident.id}`} className="btn-primary flex-1 text-center">
-                    타임라인
-                  </Link>
-                </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            )
+          })}
         </ul>
       )}
     </div>

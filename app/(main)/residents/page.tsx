@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
-import { Plus, User } from "lucide-react"
+import { Plus } from "lucide-react"
 import toast from "react-hot-toast"
+import { PageHeader } from "@/components/calm/PageHeader"
+import { StatusChip } from "@/components/calm/StatusChip"
+import { EmptyState } from "@/components/calm/EmptyState"
 
 type Resident = {
   id: string
@@ -13,12 +16,6 @@ type Resident = {
   photoUrl?: string | null
   statusChip?: string
   families?: { id: string }[]
-}
-
-const chipClass: Record<string, string> = {
-  GOOD: "chip-good",
-  OK: "chip-ok",
-  CAUTION: "chip-caution",
 }
 
 export default function ResidentsPage() {
@@ -66,72 +63,63 @@ export default function ResidentsPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
-      <div className="page-header flex items-start justify-between gap-4">
-        <div>
-          <h1 className="page-title">어르신</h1>
-          <p className="page-description">
-            {isStaff ? "시설 어르신 명부 · 오늘 소식 작성의 시작점" : "연결된 부모님"}
-          </p>
-        </div>
-        {isStaff && (
-          <button className="btn-primary" onClick={() => setShowForm((v) => !v)}>
-            <Plus className="w-5 h-5" /> 등록
-          </button>
-        )}
-      </div>
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+      <PageHeader
+        title="어르신"
+        description={isStaff ? "담당 어르신 그리드 · 소식 작성의 시작" : "연결된 부모님"}
+        action={
+          isStaff ? (
+            <button className="btn-primary shrink-0" onClick={() => setShowForm((v) => !v)}>
+              <Plus className="h-5 w-5" /> 등록
+            </button>
+          ) : null
+        }
+      />
 
       {showForm && (
-        <form onSubmit={create} className="card p-4 mb-6 space-y-3">
-          <div>
-            <label className="label">이름</label>
-            <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
-          </div>
-          <div>
-            <label className="label">호실</label>
-            <input className="input" value={roomNumber} onChange={(e) => setRoomNumber(e.target.value)} />
-          </div>
+        <form onSubmit={create} className="mb-8 space-y-3 border-b border-[var(--sn-line)] pb-8">
+          <input className="input" placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input className="input" placeholder="호실" value={roomNumber} onChange={(e) => setRoomNumber(e.target.value)} />
           <button type="submit" className="btn-primary w-full">저장</button>
         </form>
       )}
 
       {loading ? (
-        <p className="text-neutral-500">불러오는 중…</p>
+        <p className="text-[var(--sn-ink-muted)]">불러오는 중…</p>
       ) : residents.length === 0 ? (
-        <div className="card p-8 text-center text-neutral-500">
-          등록된 어르신이 없습니다.
-          {!isStaff && (
-            <div className="mt-4">
-              <Link href="/residents/family-requests" className="btn-secondary">가족 연결 요청</Link>
-            </div>
-          )}
-        </div>
+        <EmptyState
+          title="등록된 어르신이 없습니다"
+          action={
+            !isStaff ? (
+              <Link href="/residents/family-requests" className="btn-secondary">
+                가족 연결 요청
+              </Link>
+            ) : null
+          }
+        />
       ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           {residents.map((r) => (
             <li key={r.id}>
-              <Link href={`/timeline/${r.id}`} className="card-interactive p-4 flex items-center gap-3">
-                <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center overflow-hidden">
+              <Link href={`/timeline/${r.id}`} className="group block">
+                <div className="aspect-square overflow-hidden bg-[var(--sn-accent-soft)]">
                   {r.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={r.photoUrl} alt="" className="w-full h-full object-cover" />
+                    <img src={r.photoUrl} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
                   ) : (
-                    <User className="w-7 h-7 text-brand-600" />
+                    <div className="flex h-full items-center justify-center font-display text-3xl font-semibold text-[var(--sn-accent)]">
+                      {r.name.slice(0, 1)}
+                    </div>
                   )}
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-neutral-900 truncate">{r.name}</p>
-                    {r.statusChip && (
-                      <span className={chipClass[r.statusChip] || "chip-ok"}>
-                        {r.statusChip === "GOOD" ? "좋음" : r.statusChip === "CAUTION" ? "주의" : "보통"}
-                      </span>
-                    )}
+                <div className="mt-3 flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate font-display text-lg font-semibold">{r.name}</p>
+                    <p className="text-sm text-[var(--sn-ink-faint)]">
+                      {r.roomNumber ? `${r.roomNumber}호` : "호실 미정"}
+                    </p>
                   </div>
-                  <p className="text-neutral-500 text-sm">
-                    {r.roomNumber ? `${r.roomNumber}호` : "호실 미정"}
-                    {r.families && r.families.length > 0 ? ` · 승인대기 ${r.families.length}` : ""}
-                  </p>
+                  <StatusChip status={r.statusChip} />
                 </div>
               </Link>
             </li>
@@ -140,11 +128,9 @@ export default function ResidentsPage() {
       )}
 
       {isStaff && (
-        <div className="mt-6">
-          <Link href="/residents/family-requests" className="btn-secondary w-full">
-            가족 연결 요청 검토
-          </Link>
-        </div>
+        <Link href="/residents/family-requests" className="btn-secondary mt-8 w-full">
+          가족 연결 요청 검토
+        </Link>
       )}
     </div>
   )

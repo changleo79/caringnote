@@ -1,9 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { Camera, Send, Sparkles } from "lucide-react"
+import { PageHeader } from "@/components/calm/PageHeader"
+import { ChipPicker } from "@/components/calm/ChipPicker"
+import { Suspense } from "react"
 
 type Resident = { id: string; name: string; roomNumber?: string | null; photoUrl?: string | null }
 
@@ -23,11 +26,12 @@ const MOODS = [
 
 const DRAFT_KEY = "sn-quick-report-draft"
 
-export default function QuickReportWritePage() {
+function QuickWriteInner() {
   const router = useRouter()
+  const search = useSearchParams()
   const [residents, setResidents] = useState<Resident[]>([])
   const [missing, setMissing] = useState<Resident[]>([])
-  const [residentId, setResidentId] = useState("")
+  const [residentId, setResidentId] = useState(search.get("residentId") || "")
   const [moodChip, setMoodChip] = useState("OK")
   const [chips, setChips] = useState<string[]>([])
   const [content, setContent] = useState("")
@@ -43,12 +47,11 @@ export default function QuickReportWritePage() {
     fetch(`/api/daily-reports?missing=1&date=${today}`)
       .then((r) => r.json())
       .then((d) => setMissing(Array.isArray(d) ? d : []))
-
     try {
       const raw = localStorage.getItem(DRAFT_KEY)
       if (raw) {
         const d = JSON.parse(raw)
-        if (d.residentId) setResidentId(d.residentId)
+        if (!search.get("residentId") && d.residentId) setResidentId(d.residentId)
         if (d.moodChip) setMoodChip(d.moodChip)
         if (Array.isArray(d.chips)) setChips(d.chips)
         if (d.content) setContent(d.content)
@@ -57,20 +60,18 @@ export default function QuickReportWritePage() {
     } catch {
       /* ignore */
     }
-  }, [])
+  }, [search])
 
   useEffect(() => {
-    const payload = { residentId, moodChip, chips, content, image }
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(payload))
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({ residentId, moodChip, chips, content, image })
+      )
     } catch {
       /* quota */
     }
   }, [residentId, moodChip, chips, content, image])
-
-  const toggleChip = (id: string) => {
-    setChips((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]))
-  }
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -87,16 +88,12 @@ export default function QuickReportWritePage() {
       const res = await fetch("/api/ai/draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          residentName: resident?.name,
-          moodChip,
-          chips,
-        }),
+        body: JSON.stringify({ residentName: resident?.name, moodChip, chips }),
       })
       const data = await res.json()
       if (res.ok && data.draft) {
         setContent(data.draft)
-        toast.success("초안을 채웠습니다. 다듬어 보내세요.")
+        toast.success("초안을 채웠습니다.")
       } else toast.error("초안 생성 실패")
     } finally {
       setDrafting(false)
@@ -134,34 +131,31 @@ export default function QuickReportWritePage() {
           setImage(null)
           setMoodChip("OK")
           setMissing((m) => m.filter((x) => x.id !== residentId))
-        } else {
-          router.push("/dashboard")
-        }
+        } else router.push("/dashboard")
       }
     } catch {
-      toast.error("전송에 실패했습니다. 오프라인 초안은 기기에 보관됩니다.")
+      toast.error("전송에 실패했습니다. 초안은 기기에 보관됩니다.")
     } finally {
       setSending(false)
     }
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-xl mx-auto">
-      <div className="page-header">
-        <h1 className="page-title">알림장 퀵작성</h1>
-        <p className="page-description">사진 → 칩 → 전송. 2분이면 충분합니다.</p>
-      </div>
+    <div className="mx-auto max-w-xl px-4 py-6 sm:px-6">
+      <PageHeader title="알림장 퀵작성" description="사진 → 칩 → 전송. 2분이면 충분합니다." />
 
       {missing.length > 0 && (
-        <div className="card p-3 mb-4 border-rose-200 bg-rose-50/50">
-          <p className="text-sm font-medium text-rose-800 mb-2">오늘 미작성 {missing.length}명</p>
-          <div className="flex flex-wrap gap-2">
+        <div className="mb-6 border-b border-[var(--sn-line)] pb-4">
+          <p className="text-sm font-medium text-[var(--sn-ink-muted)]">
+            오늘 미작성 {missing.length}명
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
             {missing.map((m) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => setResidentId(m.id)}
-                className="badge bg-white text-rose-700 border border-rose-200"
+                className="badge-neutral border border-[var(--sn-line)]"
               >
                 {m.name}
               </button>
@@ -170,7 +164,7 @@ export default function QuickReportWritePage() {
         </div>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div>
           <label className="label">어르신</label>
           <div className="grid grid-cols-3 gap-2">
@@ -179,29 +173,31 @@ export default function QuickReportWritePage() {
                 key={r.id}
                 type="button"
                 onClick={() => setResidentId(r.id)}
-                className={`min-h-[56px] rounded-2xl border px-2 py-3 text-sm font-medium ${
+                className={`flex min-h-[72px] flex-col items-center justify-center border px-2 py-3 text-sm font-medium ${
                   residentId === r.id
-                    ? "border-brand-500 bg-brand-50 text-brand-800"
-                    : "border-neutral-200 bg-white"
+                    ? "border-[var(--sn-accent)] bg-[var(--sn-accent-soft)] text-[var(--sn-accent-hover)]"
+                    : "border-[var(--sn-line)] bg-[var(--sn-surface)]"
                 }`}
               >
-                {r.name}
-                {r.roomNumber ? <span className="block text-xs text-neutral-400">{r.roomNumber}</span> : null}
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sn-bg)] font-display text-sm">
+                  {r.name.slice(0, 1)}
+                </span>
+                <span className="mt-1">{r.name}</span>
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <label className="label">사진 (선택)</label>
-          <label className="card flex flex-col items-center justify-center min-h-[120px] cursor-pointer border-dashed">
+          <label className="label">사진</label>
+          <label className="flex min-h-[180px] cursor-pointer flex-col items-center justify-center border border-dashed border-[var(--sn-line-strong)] bg-[var(--sn-surface)]">
             {image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={image} alt="미리보기" className="max-h-48 rounded-xl" />
+              <img src={image} alt="미리보기" className="max-h-56 w-full object-cover" />
             ) : (
               <>
-                <Camera className="w-8 h-8 text-brand-600 mb-2" />
-                <span className="text-neutral-500">사진 찍기 / 선택</span>
+                <Camera className="mb-2 h-8 w-8 text-[var(--sn-accent)]" />
+                <span className="text-[var(--sn-ink-muted)]">사진 찍기 / 선택</span>
               </>
             )}
             <input type="file" accept="image/*" capture="environment" className="hidden" onChange={onFile} />
@@ -210,55 +206,34 @@ export default function QuickReportWritePage() {
 
         <div>
           <label className="label">상태</label>
-          <div className="flex gap-2">
-            {MOODS.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => setMoodChip(m.id)}
-                className={`btn flex-1 ${moodChip === m.id ? "btn-primary" : "btn-secondary"}`}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
+          <ChipPicker options={MOODS} value={moodChip} onChange={(v) => setMoodChip(String(v))} />
         </div>
 
         <div>
           <label className="label">오늘 한 일</label>
-          <div className="flex flex-wrap gap-2">
-            {CHIP_OPTIONS.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => toggleChip(c.id)}
-                className={`min-h-[48px] px-4 rounded-xl border font-medium ${
-                  chips.includes(c.id)
-                    ? "bg-brand-600 text-white border-brand-600"
-                    : "bg-white border-neutral-200"
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
+          <ChipPicker
+            options={CHIP_OPTIONS}
+            value={chips}
+            multi
+            onChange={(v) => setChips(Array.isArray(v) ? v : [v])}
+          />
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="label mb-0">한 줄 소식 (선택)</label>
+          <div className="mb-2 flex items-center justify-between">
+            <label className="label mb-0">한 줄 소식</label>
             <button
               type="button"
               onClick={aiDraft}
               disabled={drafting || !residentId}
-              className="text-sm font-medium text-brand-700 inline-flex items-center gap-1 min-h-[44px] px-2"
+              className="inline-flex min-h-[44px] items-center gap-1 text-sm font-medium text-[var(--sn-accent)]"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="h-4 w-4" />
               {drafting ? "작성 중…" : "AI 초안"}
             </button>
           </div>
           <textarea
-            className="input min-h-[96px]"
+            className="input min-h-[100px]"
             placeholder="예: 오늘 산책을 다녀오셨어요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -270,11 +245,19 @@ export default function QuickReportWritePage() {
             임시저장
           </button>
           <button type="button" className="btn-primary flex-[2]" disabled={sending} onClick={() => submit(false)}>
-            <Send className="w-5 h-5" />
+            <Send className="h-5 w-5" />
             {sending ? "전송 중…" : "전송"}
           </button>
         </div>
       </div>
     </div>
+  )
+}
+
+export default function QuickReportWritePage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-[var(--sn-ink-muted)]">불러오는 중…</div>}>
+      <QuickWriteInner />
+    </Suspense>
   )
 }

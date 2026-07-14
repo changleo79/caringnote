@@ -9,7 +9,7 @@ import { Mail, Lock, ArrowLeft, AlertCircle } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { Card, CardContent } from "@/components/ui/Card"
+import { PHOTOS } from "@/lib/photos"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -22,9 +22,7 @@ export default function LoginPage() {
     fetch("/api/auth-check")
       .then((res) => res.json())
       .then((data) => {
-        if (data.nextAuth?.status !== "✅ 정상") {
-          setServerConfigError(true)
-        }
+        if (data.nextAuth?.status !== "✅ 정상") setServerConfigError(true)
       })
       .catch(() => {})
   }, [])
@@ -33,14 +31,8 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
     setServerConfigError(false)
-
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })
-
+      const result = await signIn("credentials", { email, password, redirect: false })
       if (result?.error) {
         if (
           result.error.includes("configuration") ||
@@ -48,12 +40,12 @@ export default function LoginPage() {
           result.error.includes("NEXTAUTH")
         ) {
           setServerConfigError(true)
-          toast.error("서버 구성 오류: NEXTAUTH_SECRET 환경 변수를 확인하세요.")
+          toast.error("서버 구성 오류: NEXTAUTH_SECRET을 확인하세요.")
         } else {
           toast.error("이메일 또는 비밀번호가 올바르지 않습니다.")
         }
       } else if (result?.ok) {
-        toast.success("로그인 성공!")
+        toast.success("로그인되었습니다.")
         router.push("/dashboard")
         router.refresh()
       }
@@ -65,77 +57,71 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-warm-50 flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-body text-neutral-500 hover:text-neutral-800 mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          홈으로
-        </Link>
-
-        {serverConfigError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-red-900 text-body">서버 구성 오류</p>
-              <p className="text-caption text-red-700 mt-1">
-                NEXTAUTH_SECRET 환경 변수가 설정되지 않았습니다.
-              </p>
-            </div>
-          </div>
-        )}
-
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-6">
-            <Logo size="md" />
-          </div>
-          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight mb-2">로그인</h1>
-          <p className="text-body text-neutral-500">실버노트에 오신 것을 환영합니다</p>
+    <div className="min-h-screen lg:grid lg:grid-cols-2">
+      <div className="relative hidden min-h-screen lg:block">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={PHOTOS.auth} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,32,30,0.75)] to-transparent" />
+        <div className="absolute bottom-12 left-12 right-12 text-white">
+          <p className="font-display text-4xl font-semibold tracking-tight">실버노트</p>
+          <p className="mt-3 max-w-sm text-lg text-white/75">
+            부모님의 하루를, 가족과 함께 차분히.
+          </p>
         </div>
+      </div>
 
-        <Card>
-          <CardContent className="pt-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <Input
-                label="이메일"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="your@email.com"
-                icon={<Mail className="w-5 h-5" />}
-              />
+      <div className="flex min-h-screen flex-col justify-center px-6 py-12 sm:px-12">
+        <div className="mx-auto w-full max-w-md">
+          <Link
+            href="/"
+            className="mb-10 inline-flex items-center gap-2 text-[var(--sn-ink-muted)] hover:text-[var(--sn-ink)]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            홈으로
+          </Link>
 
-              <Input
-                label="비밀번호"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="비밀번호를 입력하세요"
-                icon={<Lock className="w-5 h-5" />}
-              />
+          <Logo size="md" href="/" />
+          <h1 className="mt-8 font-display text-3xl font-semibold tracking-tight">로그인</h1>
+          <p className="mt-2 text-[var(--sn-ink-muted)]">시설 직원과 보호자 모두 같은 화면에서 시작합니다.</p>
 
-              <Button
-                type="submit"
-                fullWidth
-                size="lg"
-                disabled={isLoading || serverConfigError}
-              >
-                {isLoading ? "로그인 중..." : "로그인"}
-              </Button>
-            </form>
+          {serverConfigError && (
+            <div className="mt-6 flex gap-3 border border-[var(--sn-caution)] bg-[var(--sn-caution-bg)] p-4 text-[var(--sn-caution)]">
+              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+              <p className="text-sm">서버 인증 설정이 필요합니다. 관리자에게 문의해 주세요.</p>
+            </div>
+          )}
 
-            <p className="text-center text-body text-neutral-500 mt-6 pt-6 border-t border-neutral-100">
-              계정이 없으신가요?{" "}
-              <Link href="/auth/signup" className="text-brand-600 font-semibold hover:text-brand-700">
-                회원가입
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            <Input
+              label="이메일"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon={<Mail className="h-5 w-5" />}
+              required
+              autoComplete="email"
+            />
+            <Input
+              label="비밀번호"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={<Lock className="h-5 w-5" />}
+              required
+              autoComplete="current-password"
+            />
+            <Button type="submit" fullWidth disabled={isLoading} className="min-h-[56px]">
+              {isLoading ? "확인 중…" : "로그인"}
+            </Button>
+          </form>
+
+          <p className="mt-8 text-center text-[var(--sn-ink-muted)]">
+            계정이 없으신가요?{" "}
+            <Link href="/auth/signup" className="font-semibold text-[var(--sn-accent)]">
+              회원가입
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
