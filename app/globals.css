@@ -157,3 +157,69 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Landing — Family Calm brand surface */
+.landing {
+  --ln-sand: #efe9df;
+  --ln-mist: #f7f3ec;
+  --ln-ink: #1c2423;
+  --ln-ink-muted: #5c6765;
+  --ln-line: rgba(28, 36, 35, 0.12);
+  --ln-teal: #0f6e6a;
+  --ln-teal-deep: #0a4542;
+  --ln-teal-soft: #7ec8c3;
+}
+
+.landing .font-display {
+  font-family: "SUIT Variable", "Pretendard Variable", sans-serif;
+}
+
+.landing-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+@keyframes landingFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes landingKen {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
+}
+
+@keyframes landingSoftRise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes landingChipIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.landing-fade-up {
+  animation: landingFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-hero-ken {
+  animation: landingKen 12s ease-out both;
+}
+
+.landing-soft-rise {
+  animation: landingSoftRise 0.9s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-chip {
+  animation: landingChipIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-fade-up,
+  .landing-hero-ken,
+  .landing-soft-rise,
+  .landing-chip {
+    animation: none !important;
+  }
+}

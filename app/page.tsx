@@ -1,205 +1,251 @@
 import Link from "next/link";
-import {
-  Camera,
-  ShoppingBag,
-  Shield,
-  Bell,
-  Users,
-  ArrowRight,
-  Heart,
-  FileText,
-  CheckCircle2,
-} from "lucide-react";
-import Logo from "@/components/brand/Logo";
+import { ArrowRight, NotebookPen, HeartHandshake, ShieldCheck } from "lucide-react";
 
-const features = [
-  {
-    icon: Camera,
-    title: "일상 기록",
-    description: "요양원에서 부모님의 일상을 사진으로 공유하고, 가족들과 댓글로 소통하세요.",
-    color: "bg-brand-50 text-brand-600",
-  },
-  {
-    icon: Heart,
-    title: "의료 정보",
-    description: "건강 상태와 진료 기록을 투명하게 공유하여, 언제든지 부모님의 건강을 확인하세요.",
-    color: "bg-red-50 text-red-600",
-  },
-  {
-    icon: ShoppingBag,
-    title: "생필품 구매",
-    description: "필요한 생필품을 앱에서 쉽게 구매하고, 요양원으로 직접 배송받으세요.",
-    color: "bg-emerald-50 text-emerald-600",
-  },
-];
-
-const benefits = [
-  { icon: Users, title: "요양원 선택 가입", desc: "요양원을 선택하면 바로 연결됩니다" },
-  { icon: Bell, title: "실시간 알림", desc: "중요한 소식을 놓치지 마세요" },
-  { icon: Shield, title: "안전한 정보 관리", desc: "개인정보와 의료 정보를 안전하게 보관합니다" },
-];
-
+/**
+ * 랜딩 — 첫 뷰포트: 브랜드 + 한 문장 + CTA + 풀블리드 케어 장면
+ * 아래 섹션은 역할별 한 가지 메시지씩 (보호사 / 보호자 / 시설장)
+ */
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-warm-50">
-      {/* Header */}
-      <header className="border-b border-neutral-200/80 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="section-container flex items-center justify-between h-16">
-          <Logo size="sm" />
-          <div className="flex items-center gap-3">
-            <Link href="/auth/login" className="btn-ghost text-body px-4 py-2 min-h-0">
-              로그인
-            </Link>
-            <Link href="/auth/signup" className="btn-primary text-body px-5 py-2 min-h-0">
-              시작하기
-            </Link>
-          </div>
+    <div className="landing min-h-screen bg-[var(--ln-sand)] text-[var(--ln-ink)]">
+      {/* 투명 내비 — 브랜드를 헤로에 맡김 */}
+      <header className="absolute inset-x-0 top-0 z-20">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-end gap-2 px-4 sm:px-6">
+          <Link
+            href="/auth/login"
+            className="rounded-xl px-4 py-2.5 text-[15px] font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
+          >
+            로그인
+          </Link>
+          <Link
+            href="/auth/signup"
+            className="rounded-xl bg-white px-5 py-2.5 text-[15px] font-semibold text-[var(--ln-teal-deep)] transition hover:bg-[var(--ln-mist)]"
+          >
+            시작하기
+          </Link>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="section-container py-20 md:py-28">
-        <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-50 text-brand-700 rounded-full text-caption font-medium mb-8">
-            <FileText className="w-4 h-4" />
-            요양원 케어 플랫폼
-          </div>
+      {/* HERO — 풀블리드 한 장면 */}
+      <section className="relative flex min-h-[100svh] items-end overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=2400&q=80"
+          alt="요양원에서 손잡고 대화하는 따뜻한 케어 장면"
+          className="absolute inset-0 h-full w-full object-cover object-[center_30%] landing-hero- ken"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(10,40,38,0.25) 0%, rgba(10,40,38,0.15) 35%, rgba(10,40,38,0.72) 78%, rgba(10,40,38,0.92) 100%)",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0 opacity-40 mix-blend-soft-light landing-grain" />
 
-          <div className="flex justify-center mb-8">
-            <Logo size="lg" href="/" />
-          </div>
-
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 tracking-tight leading-tight mb-6">
-            부모님의 일상을<br />
-            <span className="text-brand-600">가족과 함께</span> 기록하세요
-          </h1>
-
-          <p className="text-body-lg text-neutral-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-            실버노트는 요양원에 계신 부모님의 일상을 가족과 함께 공유하고,
-            건강한 생활을 지원하는 통합 소통 플랫폼입니다.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup" className="btn-primary text-body-lg px-8">
-              무료로 시작하기
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="/auth/login" className="btn-secondary text-body-lg px-8">
-              로그인
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="section-container py-16 md:py-24">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
-            모든 것이 한 곳에서
-          </h2>
-          <p className="text-body-lg text-neutral-500">
-            부모님의 안전하고 행복한 생활을 위한 모든 기능
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {features.map((feature) => {
-            const Icon = feature.icon;
-            return (
-              <div key={feature.title} className="card p-8 card-interactive">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${feature.color}`}>
-                  <Icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-subheading text-neutral-900 mb-3">{feature.title}</h3>
-                <p className="text-body text-neutral-600 leading-relaxed">{feature.description}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section className="bg-white border-y border-neutral-200/80">
-        <div className="section-container py-16 md:py-24">
-          <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
-                쉽고 간편하게 시작하세요
-              </h2>
-              <p className="text-body-lg text-neutral-500 mb-8 leading-relaxed">
-                복잡한 가입 절차 없이 요양원을 선택하고 바로 시작할 수 있습니다.
-                큰 글씨와 직관적인 화면으로 누구나 쉽게 사용할 수 있습니다.
-              </p>
-              <ul className="space-y-4">
-                {benefits.map((b) => {
-                  const Icon = b.icon;
-                  return (
-                    <li key={b.title} className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-5 h-5 text-brand-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-neutral-900">{b.title}</p>
-                        <p className="text-body text-neutral-500">{b.desc}</p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-
-            <div className="card p-6 shadow-elevated">
-              <div className="flex items-center gap-3 pb-5 border-b border-neutral-100 mb-5">
-                <div className="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center">
-                  <CheckCircle2 className="w-5 h-5 text-brand-600" />
-                </div>
-                <div>
-                  <p className="font-semibold text-neutral-900">김부모님</p>
-                  <p className="text-caption text-neutral-500">오늘도 건강하세요!</p>
-                </div>
-              </div>
-              <div className="space-y-3">
-                {[
-                  { text: "오늘의 식사 사진이 공유되었습니다", color: "bg-emerald-50 text-emerald-700" },
-                  { text: "건강 검진 일정이 등록되었습니다", color: "bg-brand-50 text-brand-700" },
-                  { text: "새로운 댓글이 달렸습니다", color: "bg-amber-50 text-amber-700" },
-                ].map((item) => (
-                  <div key={item.text} className={`flex items-center gap-3 p-3 rounded-xl text-body ${item.color}`}>
-                    <div className="w-2 h-2 rounded-full bg-current opacity-60 flex-shrink-0" />
-                    {item.text}
-                  </div>
-                ))}
-              </div>
+        <div className="relative z-10 w-full px-4 pb-14 pt-28 sm:px-8 sm:pb-20 md:px-12 lg:px-16">
+          <div className="mx-auto max-w-6xl landing-fade-up">
+            <p className="font-display text-[clamp(3.25rem,12vw,7.5rem)] font-semibold leading-[0.92] tracking-[-0.04em] text-white">
+              실버노트
+            </p>
+            <h1 className="mt-5 max-w-xl font-display text-[clamp(1.35rem,3.2vw,2rem)] font-medium leading-snug tracking-[-0.02em] text-white/95">
+              가족이 부모님의 하루를 믿고 느낄 수 있는 시니어 케어 OS
+            </h1>
+            <p className="mt-4 max-w-md text-[17px] leading-relaxed text-white/75 sm:text-lg">
+              앱 없이도 10초 안심. 보호사는 2분 퀵작성으로 돌봄에 집중합니다.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                href="/auth/signup"
+                className="inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-[var(--ln-teal)] px-8 text-lg font-semibold text-white transition hover:bg-[var(--ln-teal-deep)] active:scale-[0.99]"
+              >
+                무료로 시작하기
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link
+                href="/auth/login"
+                className="inline-flex min-h-[56px] items-center justify-center rounded-2xl border border-white/35 bg-white/10 px-8 text-lg font-semibold text-white backdrop-blur-sm transition hover:bg-white/18"
+              >
+                로그인
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section-container py-16 md:py-24">
-        <div className="max-w-2xl mx-auto text-center card p-12 bg-brand-600 border-brand-700 text-white">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
-            지금 바로 시작해보세요
-          </h2>
-          <p className="text-body-lg text-brand-100 mb-8 leading-relaxed">
-            가족들과 함께 부모님의 행복한 일상을 기록하고, 건강한 생활을 지원하세요.
+      {/* 보호자 — 10초 안심 */}
+      <section className="relative overflow-hidden px-4 py-20 sm:px-8 sm:py-28">
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 10% 0%, rgba(15,110,106,0.08), transparent 55%), linear-gradient(180deg, #F3EEE6 0%, #EDE6DB 100%)",
+          }}
+        />
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="landing-fade-up">
+            <p className="font-display text-sm font-semibold tracking-wide text-[var(--ln-teal-deep)]">
+              보호자
+            </p>
+            <h2 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-[-0.03em]">
+              오늘 괜찮으신지,
+              <br />
+              10초면 알 수 있어요
+            </h2>
+            <p className="mt-4 max-w-md text-lg leading-relaxed text-[var(--ln-ink-muted)]">
+              오늘의 사진·상태 칩·한 줄 소식·식단이 한 화면에. 카카오 알림톡과
+              매직링크로 앱 설치 없이도 바로 열람합니다.
+            </p>
+            <ul className="mt-8 space-y-3 text-[17px] text-[var(--ln-ink)]">
+              <li className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--ln-teal)]" />
+                좋음 · 보통 · 주의 상태 신호
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--ln-teal)]" />
+                하트·감사 한 탭 반응
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--ln-teal)]" />
+                큰글씨 모드 · Quiet hours
+              </li>
+            </ul>
+          </div>
+          <div className="relative landing-soft-rise">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1400&q=80"
+              alt="가족과 함께하는 평온한 일상"
+              className="h-[min(52vh,420px)] w-full object-cover object-center"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(10,40,38,0.85)] to-transparent px-6 pb-6 pt-16 text-white">
+              <p className="font-display text-2xl font-semibold tracking-tight">어머니 · 좋음</p>
+              <p className="mt-1 text-white/80">오늘 산책을 다녀오셨어요</p>
+              <p className="mt-3 text-sm text-white/65">중식 · 생선구이, 된장찌개</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 보호사 — 2분 퀵작성 */}
+      <section className="bg-[var(--ln-ink)] px-4 py-20 text-[var(--ln-sand)] sm:px-8 sm:py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="order-2 lg:order-1">
+            <div className="grid grid-cols-3 gap-3">
+              {["식사 잘함", "낮잠", "산책"].map((chip, i) => (
+                <div
+                  key={chip}
+                  className="flex min-h-[72px] items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-center text-sm font-medium landing-chip"
+                  style={{ animationDelay: `${i * 120}ms` }}
+                >
+                  {chip}
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-[var(--ln-teal)] text-base font-semibold text-white">
+              <NotebookPen className="h-5 w-5" />
+              전송 · 다음 미작성 어르신
+            </div>
+          </div>
+          <div className="order-1 lg:order-2 landing-fade-up">
+            <p className="font-display text-sm font-semibold tracking-wide text-[var(--ln-teal-soft)]">
+              요양보호사 · Staff Fast
+            </p>
+            <h2 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-[-0.03em] text-white">
+              돌봄을 끊지 않는
+              <br />
+              2분 퀵작성
+            </h2>
+            <p className="mt-4 max-w-md text-lg leading-relaxed text-white/65">
+              사진 → 상태 칩 → 전송. 장갑 모드 큰 타깃, 오늘 미작성 체크리스트,
+              태블릿 FAB으로 기록은 돌봄의 부산물이 됩니다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 시설장 — 신뢰 */}
+      <section className="px-4 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-2xl landing-fade-up">
+            <p className="font-display text-sm font-semibold tracking-wide text-[var(--ln-teal-deep)]">
+              시설장 · 복지사
+            </p>
+            <h2 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-[-0.03em]">
+              열람 · 증빙 · 비상연락이
+              <br />
+              한곳에
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-[var(--ln-ink-muted)]">
+              월간 소통 리포트로 공단평가 ‘수급자 가족과의 소통’을 준비하고,
+              교대 인수인계와 케어플랜·투약까지 요양원 Ops로 이어집니다.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-10 md:grid-cols-3">
+            {[
+              {
+                icon: HeartHandshake,
+                title: "Care Timeline",
+                desc: "알림장·식단·투약·사진을 어르신 한 분의 시계열로 모읍니다.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Trust Layer",
+                desc: "열람 확인과 소통 리포트로 신뢰를 남기고, 감시 느낌은 덜어냅니다.",
+              },
+              {
+                icon: NotebookPen,
+                title: "실버케어 Ops",
+                desc: "무거운 ERP 대신 입소 케어·면회·물품 요청에 먼저 맞춥니다.",
+              },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="border-t border-[var(--ln-line)] pt-6">
+                <Icon className="h-6 w-6 text-[var(--ln-teal)]" strokeWidth={1.75} />
+                <h3 className="mt-4 font-display text-xl font-semibold tracking-tight">{title}</h3>
+                <p className="mt-2 text-[16px] leading-relaxed text-[var(--ln-ink-muted)]">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 닫는 CTA */}
+      <section className="relative overflow-hidden px-4 py-24 sm:px-8">
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(135deg, #0F6E6A 0%, #0A3D3A 55%, #163A36 100%)",
+          }}
+        />
+        <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-white/5 blur-3xl" />
+        <div className="mx-auto max-w-3xl text-center text-white landing-fade-up">
+          <p className="font-display text-[clamp(2rem,6vw,3.5rem)] font-semibold tracking-[-0.03em]">
+            기록이 돌봄을 방해하지 않게
+          </p>
+          <p className="mx-auto mt-4 max-w-lg text-lg text-white/75">
+            시설은 부담을 줄이고, 보호자는 따뜻하게 연결됩니다. 지금 실버노트를
+            열어보세요.
           </p>
           <Link
             href="/auth/signup"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-brand-700 rounded-xl font-semibold text-body-lg hover:bg-brand-50 transition-colors"
+            className="mt-8 inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-white px-8 text-lg font-semibold text-[var(--ln-teal-deep)] transition hover:bg-[var(--ln-mist)]"
           >
-            무료로 시작하기
-            <ArrowRight className="w-5 h-5" />
+            시설 · 가족 시작하기
+            <ArrowRight className="h-5 w-5" />
           </Link>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-neutral-200/80 bg-white">
-        <div className="section-container py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Logo size="sm" href="/" />
-          <p className="text-caption text-neutral-400">
-            © {new Date().getFullYear()} Silver Note. All rights reserved.
+      <footer className="border-t border-[var(--ln-line)] bg-[var(--ln-sand)] px-4 py-10 sm:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <p className="font-display text-xl font-semibold tracking-tight">실버노트</p>
+            <p className="text-sm text-[var(--ln-ink-muted)]">Silver Note · Senior Care OS</p>
+          </div>
+          <p className="text-sm text-[var(--ln-ink-muted)]">
+            © {new Date().getFullYear()} Silver Note
           </p>
         </div>
       </footer>

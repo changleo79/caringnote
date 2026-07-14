@@ -59,6 +59,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['"Pretendard Variable"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['"SUIT Variable"', '"Pretendard Variable"', 'sans-serif'],
       },
       fontSize: {
         'display': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.03em', fontWeight: '700' }],
