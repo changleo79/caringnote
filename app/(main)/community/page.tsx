@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import { Camera, Plus, ImageIcon, Heart, MessageCircle, User, Search, Filter, X } from "lucide-react"
 import { formatDate } from "@/lib/utils"
@@ -129,19 +128,17 @@ export default function CommunityPage() {
 
   if (status === "loading" || isLoading) {
     return (
-      <AppLayout>
-        <div className="container mx-auto px-6 py-16 max-w-7xl">
+    <><div className="container mx-auto px-6 py-16 max-w-7xl">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="animate-spin rounded-full h-10 w-10 border-2 border-brand-600 border-t-transparent"></div>
           </div>
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   return (
-    <AppLayout>
-      <div className="px-4 sm:px-6 py-8 max-w-5xl">
+    <><div className="px-4 sm:px-6 py-8 max-w-5xl">
         <div className="page-header flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 className="page-title">일상 기록</h1>
@@ -401,6 +398,6 @@ export default function CommunityPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </>
   )
 }

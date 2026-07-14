@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import Image from "next/image"
 import toast from "react-hot-toast"
@@ -44,9 +43,37 @@ export default function ProductDetailPage() {
     }
   }, [session, params.id])
 
-  const handleAddToCart = () => {
-    // 장바구니 기능은 추후 구현
-    toast.success("장바구니 기능은 곧 제공될 예정입니다.")
+  const handleAddToCart = async () => {
+    if (!product) return
+    setIsAddingToCart(true)
+    try {
+      const residentsRes = await fetch("/api/residents")
+      const residents = await residentsRes.json()
+      const residentId = Array.isArray(residents) && residents[0]?.id
+      if (!residentId) {
+        toast.error("연결된 어르신이 필요합니다. 가족 연결을 먼저 완료하세요.")
+        return
+      }
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          residentId,
+          items: [{ productId: product.id, quantity }],
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.error || "주문에 실패했습니다.")
+        return
+      }
+      toast.success("주문이 접수되었습니다.")
+      router.push("/shop")
+    } catch {
+      toast.error("주문 중 오류가 발생했습니다.")
+    } finally {
+      setIsAddingToCart(false)
+    }
   }
 
   if (!session) {
@@ -55,18 +82,16 @@ export default function ProductDetailPage() {
 
   if (isLoading) {
     return (
-      <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <><div className="container mx-auto px-4 py-8 max-w-4xl">
           <Skeleton variant="rectangular" className="h-96 w-full" />
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   if (!product) {
     return (
-      <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <><div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-12 text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-3">
               상품을 찾을 수 없습니다
@@ -77,13 +102,12 @@ export default function ProductDetailPage() {
             </Link>
           </div>
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   return (
-    <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <><div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Back Button */}
         <Link
           href="/shop"
@@ -168,7 +192,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </>
   )
 }
 

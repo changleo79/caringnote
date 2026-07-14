@@ -1,19 +1,14 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { redirect } from "next/navigation"
-import { SessionProvider } from "@/components/providers/SessionProvider"
+import { SessionProvider } from "@/components/providers/SessionProvider";
+import AppLayout from "@/components/layout/AppLayout";
 
-export default async function MainLayout({
+export default function MainLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect("/auth/login")
-  }
-
-  return <SessionProvider session={session}>{children}</SessionProvider>
+  return (
+    <SessionProvider>
+      <AppLayout>{children}</AppLayout>
+    </SessionProvider>
+  );
 }
-

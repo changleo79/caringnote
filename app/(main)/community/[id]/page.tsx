@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import Image from "next/image"
 import toast from "react-hot-toast"
@@ -142,17 +141,17 @@ export default function PostDetailPage() {
 
   if (isLoading) {
     return (
-      <AppLayout>
+      <>
         <div className="section-container py-10">
           <Skeleton variant="rectangular" className="h-96 w-full rounded-xl" />
         </div>
-      </AppLayout>
+      </>
     )
   }
 
   if (!post) {
     return (
-      <AppLayout>
+      <>
         <div className="section-container py-10">
           <div className="card-notion p-12 text-center">
             <h2 className="text-xl font-bold text-neutral-900 mb-2">
@@ -164,12 +163,12 @@ export default function PostDetailPage() {
             </Link>
           </div>
         </div>
-      </AppLayout>
+      </>
     )
   }
 
   return (
-    <AppLayout>
+    <>
       <div className="section-container py-10">
         {/* Back Button */}
         <Link
@@ -305,6 +304,6 @@ export default function PostDetailPage() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </>
   )
 }

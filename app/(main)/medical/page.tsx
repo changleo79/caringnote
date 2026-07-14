@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import { Heart, Plus, Calendar, FileText } from "lucide-react"
 import { formatDate } from "@/lib/utils"
@@ -45,8 +44,7 @@ export default async function MedicalPage() {
   }
 
   return (
-    <AppLayout>
-      <div className="px-4 sm:px-6 py-8 max-w-5xl">
+    <><div className="px-4 sm:px-6 py-8 max-w-5xl">
         <div className="page-header flex items-center justify-between gap-4">
           <div>
             <h1 className="page-title">의료 정보</h1>
@@ -102,6 +100,6 @@ export default async function MedicalPage() {
           </Card>
         )}
       </div>
-    </AppLayout>
+    </>
   )
 }

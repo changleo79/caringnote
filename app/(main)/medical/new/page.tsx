@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { ArrowLeft, Heart, Calendar } from "lucide-react"
@@ -88,7 +87,7 @@ export default function NewMedicalRecordPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Back Button */}
         <Link
@@ -219,6 +218,6 @@ export default function NewMedicalRecordPage() {
           </div>
         </form>
       </div>
-    </AppLayout>
+    </>
   )
 }

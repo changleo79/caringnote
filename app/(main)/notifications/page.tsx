@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
-import AppLayout from "@/components/layout/AppLayout"
 import { Bell, Check, CheckCheck, Trash2, X } from "lucide-react"
 import toast from "react-hot-toast"
 import { NotificationType } from "@prisma/client"
@@ -154,19 +153,17 @@ export default function NotificationsPage() {
 
   if (status === "loading" || isLoading) {
     return (
-      <AppLayout>
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <><div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
           </div>
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   return (
-    <AppLayout>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <><div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -311,6 +308,6 @@ export default function NotificationsPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </>
   )
 }

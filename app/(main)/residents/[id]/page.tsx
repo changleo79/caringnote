@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import Image from "next/image"
 import toast from "react-hot-toast"
@@ -122,8 +121,7 @@ export default function ResidentDetailPage() {
 
   if (isLoading) {
     return (
-      <AppLayout>
-        <div className="section-container py-10">
+    <><div className="section-container py-10">
           <div className="card-notion p-12">
             <div className="text-center py-16">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
@@ -131,14 +129,13 @@ export default function ResidentDetailPage() {
             </div>
           </div>
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   if (!resident) {
     return (
-      <AppLayout>
-        <div className="section-container py-10">
+    <><div className="section-container py-10">
           <div className="card-notion p-12 text-center">
             <h2 className="text-xl font-bold text-neutral-900 mb-2">
               입소자를 찾을 수 없습니다
@@ -149,13 +146,12 @@ export default function ResidentDetailPage() {
             </Link>
           </div>
         </div>
-      </AppLayout>
-    )
+      </>
+  )
   }
 
   return (
-    <AppLayout>
-      <div className="section-container py-10">
+    <><div className="section-container py-10">
         {/* Back Button */}
         <Link
           href="/residents"
@@ -334,7 +330,7 @@ export default function ResidentDetailPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </>
   )
 }
 

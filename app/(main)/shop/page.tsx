@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import AppLayout from "@/components/layout/AppLayout"
 import Link from "next/link"
 import { ShoppingBag, Package } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
@@ -46,8 +45,7 @@ export default async function ShopPage() {
   }
 
   return (
-    <AppLayout>
-      <div className="px-4 sm:px-6 py-8 max-w-5xl">
+    <><div className="px-4 sm:px-6 py-8 max-w-5xl">
         <div className="page-header">
           <h1 className="page-title">쇼핑몰</h1>
           <p className="page-description">부모님께 필요한 생필품을 쉽게 구매하세요</p>
@@ -99,6 +97,6 @@ export default async function ShopPage() {
           </Card>
         )}
       </div>
-    </AppLayout>
+    </>
   )
 }
