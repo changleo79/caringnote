@@ -4,8 +4,9 @@ import { Toaster } from "react-hot-toast";
 import PwaRegister from "@/components/PwaRegister";
 
 export const metadata: Metadata = {
-  title: "실버노트 — 부모님의 따뜻한 하루를 함께합니다",
-  description: "요양원에 계신 부모님의 일상을 가족과 함께 기록하고, 건강한 생활을 지원하는 통합 소통 플랫폼",
+  title: "실버노트 — 가족이 부모님의 하루를 믿고 느낄 수 있는 시니어 케어 OS",
+  description:
+    "보호사는 2분 퀵작성, 보호자는 앱 없이 10초 안심. 알림장·식단·타임라인·소통 리포트까지 요양원과 가족을 잇는 실버노트.",
   applicationName: "실버노트",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [{ url: "/icon.svg" }, { url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
     apple: "/icon-192.png",
+  },
+  openGraph: {
+    title: "실버노트",
+    description: "가족이 부모님의 하루를 믿고 느낄 수 있는 시니어 케어 OS",
+    locale: "ko_KR",
+    type: "website",
   },
 };
 
@@ -39,6 +46,13 @@ export default function RootLayout({
           as="style"
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+        />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css"
         />
       </head>
       <body className="font-sans antialiased">
