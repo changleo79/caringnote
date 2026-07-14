@@ -8,36 +8,41 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ secrets.VERCEL_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Vercel secrets
+        id: check
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID 시크릿이 없어 CLI 배포를 건너뜁니다. Git Integration 배포만 사용합니다."
+          else
+            echo "missing=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node.js
+        if: steps.check.outputs.missing == 'false'
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
       - name: Install Vercel CLI
+        if: steps.check.outputs.missing == 'false'
         run: npm i -g vercel@latest
 
-      - name: Pull Vercel env
-        run: vercel pull --yes --environment=production --scope ${{ secrets.VERCEL_ORG_ID }}
+      - name: Pull · Build · Deploy production
+        if: steps.check.outputs.missing == 'false'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Build
-        run: vercel build --prod
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Deploy production
-        run: vercel deploy --prebuilt --prod --yes
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          vercel pull --yes --environment=production
+          vercel build --prod
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --yes)
+          echo "Deployed: $DEPLOY_URL"
+          # Force production alias for official domain
+          vercel alias set "$DEPLOY_URL" silver-note.vercel.app || true
+          vercel alias set "$DEPLOY_URL" caringnote.vercel.app || true
