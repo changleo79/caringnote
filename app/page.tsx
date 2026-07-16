@@ -1,25 +1,23 @@
-import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Check, Heart, ImagePlus, Send } from "lucide-react"
+import { ArrowRight, CalendarDays, Check, Heart, ImagePlus, Send } from "lucide-react"
 import Logo from "@/components/brand/Logo"
-import { PHOTO_ALT, PHOTOS } from "@/lib/photos"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[var(--sn-bg)] text-[var(--sn-ink)]">
-      <header className="absolute inset-x-0 top-0 z-20">
+      <header className="border-b border-[var(--sn-line)] bg-[var(--sn-bg)]">
         <div className="section-container flex h-20 items-center justify-between">
-          <Logo light size="sm" />
+          <Logo size="sm" />
           <nav className="flex items-center gap-2" aria-label="계정">
             <Link
               href="/auth/login"
-              className="inline-flex min-h-[44px] items-center px-4 text-sm font-semibold text-white"
+              className="inline-flex min-h-[44px] items-center px-4 text-sm font-semibold text-[var(--sn-ink-muted)]"
             >
               로그인
             </Link>
             <Link
               href="/auth/signup"
-              className="inline-flex min-h-[44px] items-center rounded-[var(--sn-radius)] bg-white px-5 text-sm font-semibold text-[var(--sn-ink)]"
+              className="inline-flex min-h-[44px] items-center rounded-[var(--sn-radius)] bg-[var(--sn-ink)] px-5 text-sm font-semibold text-white"
             >
               시작하기
             </Link>
@@ -28,43 +26,75 @@ export default function HomePage() {
       </header>
 
       <main>
-        <section className="relative min-h-[92svh] overflow-hidden">
-          <Image
-            src={PHOTOS.hero}
-            alt={PHOTO_ALT.hero}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,25,22,.78)_0%,rgba(12,25,22,.5)_48%,rgba(12,25,22,.08)_100%)]" />
-          <div className="section-container relative flex min-h-[92svh] items-end pb-16 pt-32 sm:items-center sm:pb-0">
-            <div className="max-w-2xl text-white">
-              <p className="mb-5 text-sm font-semibold tracking-[0.12em] text-white/72">
-                FAMILY CARE, CLEARLY CONNECTED
+        <section className="overflow-hidden">
+          <div className="section-container grid min-h-[calc(100svh-5rem)] items-center gap-14 py-16 lg:grid-cols-[.95fr_1.05fr] lg:py-24">
+            <div className="max-w-xl">
+              <p className="mb-5 text-sm font-semibold tracking-[0.1em] text-[var(--sn-accent)]">
+                돌봄의 하루를 가장 명확하게
               </p>
-              <h1 className="font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[1.03] tracking-[-0.045em]">
+              <h1 className="font-display text-[clamp(2.8rem,6vw,5.25rem)] font-semibold leading-[1.05] tracking-[-0.05em]">
                 부모님의 오늘이
                 <br />
-                안심으로 닿도록
+                안심으로 이어집니다
               </h1>
-              <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/82 sm:text-xl">
-                요양원의 돌봄 기록을 가족에게 가장 따뜻하고 명확한 방식으로 전합니다.
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-[var(--sn-ink-muted)] sm:text-xl">
+                시설의 돌봄 기록을 가족이 이해하기 쉬운 사진과 말로 전하는 시니어 케어 커뮤니케이션.
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <Link
-                  href="/auth/signup"
-                  className="inline-flex min-h-[52px] items-center gap-2 rounded-[var(--sn-radius)] bg-white px-6 font-semibold text-[var(--sn-ink)]"
-                >
+                <Link href="/auth/signup" className="btn-primary min-h-[54px] px-7">
                   무료로 시작하기
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                <a
-                  href="#how"
-                  className="inline-flex min-h-[52px] items-center rounded-[var(--sn-radius)] border border-white/36 px-6 font-semibold text-white"
-                >
-                  어떻게 작동하나요
+                <a href="#how" className="btn-secondary min-h-[54px] px-7">
+                  제품 둘러보기
                 </a>
+              </div>
+              <div className="mt-10 flex flex-wrap gap-x-7 gap-y-2 text-sm text-[var(--sn-ink-faint)]">
+                <span>앱 설치 없이 열람</span>
+                <span>2분 퀵작성</span>
+                <span>큰글씨 지원</span>
+              </div>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[38rem]">
+              <div className="absolute -inset-12 rounded-full bg-[var(--sn-accent-soft)] blur-3xl" />
+              <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--sn-line)] bg-[var(--sn-surface)] shadow-[0_30px_80px_rgba(23,32,30,.13)]">
+                <div className="flex items-center justify-between border-b border-[var(--sn-line)] px-6 py-5">
+                  <div>
+                    <p className="text-xs font-semibold text-[var(--sn-accent)]">오늘의 소식</p>
+                    <p className="mt-1 font-display text-xl font-semibold">김영자 어르신</p>
+                  </div>
+                  <span className="chip-good">편안함</span>
+                </div>
+                <div className="grid min-h-[17rem] place-items-center bg-[linear-gradient(145deg,#dfeee9,#f4f1e8)] p-8 text-center">
+                  <div>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/70 font-display text-3xl font-semibold text-[var(--sn-accent)]">
+                      김
+                    </div>
+                    <p className="mt-5 text-sm font-medium text-[var(--sn-ink-muted)]">
+                      실제 사진이 도착하면 이곳에 표시됩니다
+                    </p>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="font-display text-2xl font-semibold tracking-[-0.025em]">
+                    정원에서 산책을 다녀오셨어요
+                  </p>
+                  <p className="mt-3 leading-relaxed text-[var(--sn-ink-muted)]">
+                    점심을 잘 드시고 오후에는 햇볕을 쬐며 천천히 걸으셨습니다.
+                  </p>
+                  <div className="mt-6 flex items-center justify-between border-t border-[var(--sn-line)] pt-5">
+                    <span className="text-sm text-[var(--sn-ink-faint)]">오늘 오후 4:20</span>
+                    <span className="flex items-center gap-2 text-sm font-semibold text-[var(--sn-accent)]">
+                      <CalendarDays className="h-4 w-4" />
+                      타임라인
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -left-4 hidden rounded-[var(--sn-radius-lg)] border border-[var(--sn-line)] bg-white px-5 py-4 shadow-[var(--sn-shadow-2)] sm:block">
+                <p className="text-xs text-[var(--sn-ink-faint)]">보호자 확인</p>
+                <p className="mt-1 font-semibold">방금 읽었어요</p>
               </div>
             </div>
           </div>

@@ -4,13 +4,11 @@ import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
 import toast from "react-hot-toast"
-import { Mail, Lock, ArrowLeft, AlertCircle } from "lucide-react"
+import { Mail, Lock, ArrowLeft, AlertCircle, Check } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { PHOTO_ALT, PHOTOS } from "@/lib/photos"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -58,23 +56,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1.05fr_.95fr]">
-      <div className="relative h-56 overflow-hidden sm:h-72 lg:h-screen">
-        <Image
-          src={PHOTOS.auth}
-          alt={PHOTO_ALT.auth}
-          fill
-          priority
-          sizes="(max-width: 1024px) 100vw, 52vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,24,21,.08),rgba(10,24,21,.62))]" />
-        <div className="absolute inset-x-0 bottom-0 px-6 pb-6 text-white sm:px-10 sm:pb-8 lg:px-12 lg:pb-12">
-          <p className="font-display text-2xl font-semibold tracking-[-0.03em] lg:text-4xl">
-            부모님의 하루를,
-            <br className="hidden lg:block" /> 가장 가까이.
+    <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1fr_1fr]">
+      <div className="flex min-h-[15rem] flex-col justify-between bg-[var(--sn-ink)] px-6 py-7 text-white sm:px-10 lg:min-h-screen lg:px-14 lg:py-12">
+        <Logo light size="sm" />
+        <div className="py-10 lg:py-0">
+          <p className="max-w-lg font-display text-3xl font-semibold leading-tight tracking-[-0.035em] lg:text-5xl">
+            돌봄의 기록이
+            <br />가족의 안심이 됩니다
           </p>
+          <ul className="mt-8 hidden space-y-4 text-white/72 lg:block">
+            {["오늘의 사진과 쉬운 설명", "앱 설치 없는 매직링크", "보호자와 시설의 하나 된 기록"].map((item) => (
+              <li key={item} className="flex items-center gap-3">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10">
+                  <Check className="h-3.5 w-3.5" />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
+        <p className="hidden text-sm text-white/40 lg:block">Silver Note · Care communication</p>
       </div>
 
       <div className="flex flex-col justify-center px-6 py-10 sm:px-12 lg:min-h-screen">

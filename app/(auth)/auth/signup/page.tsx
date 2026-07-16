@@ -3,14 +3,12 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
 import toast from "react-hot-toast"
-import { Mail, Lock, User, Phone, Building2, ArrowLeft } from "lucide-react"
+import { Mail, Lock, User, Phone, Building2, ArrowLeft, Check } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 import { Button } from "@/components/ui/Button"
 import { Input, Select } from "@/components/ui/Input"
 import { cn } from "@/lib/utils"
-import { PHOTO_ALT, PHOTOS } from "@/lib/photos"
 
 interface CareCenter {
   id: string
@@ -88,23 +86,26 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1.05fr_.95fr]">
-      <div className="relative h-48 overflow-hidden sm:h-64 lg:sticky lg:top-0 lg:h-screen">
-        <Image
-          src={PHOTOS.auth}
-          alt={PHOTO_ALT.auth}
-          fill
-          priority
-          sizes="(max-width: 1024px) 100vw, 52vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,24,21,.06),rgba(10,24,21,.6))]" />
-        <div className="absolute inset-x-0 bottom-0 px-6 pb-6 text-white sm:px-10 sm:pb-8 lg:px-12 lg:pb-12">
-          <p className="font-display text-2xl font-semibold tracking-[-0.03em] lg:text-4xl">
+    <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1fr_1fr]">
+      <div className="flex min-h-[15rem] flex-col justify-between bg-[var(--sn-accent)] px-6 py-7 text-white sm:px-10 lg:sticky lg:top-0 lg:min-h-screen lg:px-14 lg:py-12">
+        <Logo light size="sm" />
+        <div className="py-10 lg:py-0">
+          <p className="max-w-lg font-display text-3xl font-semibold leading-tight tracking-[-0.035em] lg:text-5xl">
             더 가까운 돌봄을
-            <br className="hidden lg:block" /> 함께 시작해요
+            <br />함께 시작하세요
           </p>
+          <ul className="mt-8 hidden space-y-4 text-white/76 lg:block">
+            {["가족은 10초 안에 안심", "직원은 2분 안에 기록", "모든 소통은 한곳에서"].map((item) => (
+              <li key={item} className="flex items-center gap-3">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/12">
+                  <Check className="h-3.5 w-3.5" />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
+        <p className="hidden text-sm text-white/50 lg:block">가족과 시설 모두 무료로 시작할 수 있습니다.</p>
       </div>
 
       <div className="flex flex-col justify-center px-6 py-10 sm:px-12 lg:min-h-screen">
