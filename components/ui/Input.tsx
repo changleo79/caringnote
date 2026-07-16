@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none">
+            <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--sn-ink-faint)]">
               {icon}
             </div>
           )}
@@ -30,14 +30,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             className={cn(
               icon ? "input-with-icon" : "input",
-              error && "border-red-400 focus:border-red-500 focus:ring-red-500/20",
+              error && "border-[var(--sn-caution)]",
               className
             )}
             {...props}
           />
         </div>
-        {error && <p className="mt-1.5 text-caption text-red-600">{error}</p>}
-        {hint && !error && <p className="mt-1.5 text-caption text-neutral-500">{hint}</p>}
+        {error && <p className="mt-1.5 text-sm text-[var(--sn-caution)]">{error}</p>}
+        {hint && !error && <p className="mt-1.5 text-sm text-[var(--sn-ink-muted)]">{hint}</p>}
       </div>
     )
   }
@@ -65,15 +65,15 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           id={selectId}
           className={cn(
-            "input appearance-none cursor-pointer bg-white",
-            error && "border-red-400",
+            "input cursor-pointer appearance-none",
+            error && "border-[var(--sn-caution)]",
             className
           )}
           {...props}
         >
           {children}
         </select>
-        {error && <p className="mt-1.5 text-caption text-red-600">{error}</p>}
+        {error && <p className="mt-1.5 text-sm text-[var(--sn-caution)]">{error}</p>}
       </div>
     )
   }

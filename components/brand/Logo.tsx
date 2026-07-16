@@ -6,6 +6,7 @@ interface LogoProps {
   size?: "sm" | "md" | "lg"
   className?: string
   href?: string
+  light?: boolean
 }
 
 export default function Logo({
@@ -13,69 +14,57 @@ export default function Logo({
   size = "md",
   className,
   href = "/",
+  light = false,
 }: LogoProps) {
   const sizeClasses = {
-    sm: { icon: "w-8 h-8", text: "text-base", sub: "text-[10px]", gap: "gap-2" },
-    md: { icon: "w-10 h-10", text: "text-lg", sub: "text-xs", gap: "gap-2.5" },
-    lg: { icon: "w-12 h-12", text: "text-2xl", sub: "text-sm", gap: "gap-3" },
+    sm: { icon: "w-8 h-8", text: "text-base", gap: "gap-2" },
+    md: { icon: "w-10 h-10", text: "text-lg", gap: "gap-2.5" },
+    lg: { icon: "w-12 h-12", text: "text-2xl", gap: "gap-3" },
   }
-
   const s = sizeClasses[size]
 
   const IconMark = () => (
     <div
       className={cn(
-        "flex items-center justify-center rounded-xl bg-brand-600 shadow-sm",
+        "flex items-center justify-center",
+        light ? "text-white" : "text-[var(--sn-accent)]",
         s.icon
       )}
     >
       <svg
         viewBox="0 0 24 24"
-        className={cn(
-          "text-white",
-          size === "sm" ? "w-4 h-4" : size === "md" ? "w-5 h-5" : "w-6 h-6"
-        )}
+        className={cn(size === "sm" ? "w-4 h-4" : size === "md" ? "w-5 h-5" : "w-6 h-6")}
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="8" y1="13" x2="16" y2="13" />
-        <line x1="8" y1="17" x2="12" y2="17" />
+        <path d="M6.5 4.5h8.25a3 3 0 0 1 3 3v12H9.5a3 3 0 0 1-3-3v-12Z" />
+        <path d="M17.75 8.5h-7a2 2 0 0 0-2 2v8.75" />
+        <path d="M11.25 13.25h4" />
       </svg>
     </div>
   )
 
   const LogoContent = () => (
-    <div
-      className={cn(
-        "flex items-center",
-        variant !== "icon" && s.gap,
-        className
-      )}
-    >
+    <div className={cn("flex items-center", variant !== "icon" && s.gap, className)}>
       <IconMark />
       {variant !== "icon" && (
-        <div className="flex flex-col">
-          <span className={cn("font-semibold text-neutral-900 leading-tight tracking-tight", s.text)}>
-            실버노트
-          </span>
-          {(size === "lg" || variant === "default") && (
-            <span className={cn("text-neutral-500 font-medium leading-tight", s.sub)}>
-              Silver Note
-            </span>
+        <span
+          className={cn(
+            "font-display font-semibold leading-none tracking-[-0.025em]",
+            light ? "text-white" : "text-[var(--sn-ink)]",
+            s.text
           )}
-        </div>
+        >
+          실버노트
+        </span>
       )}
     </div>
   )
 
-  if (variant === "icon" && !href) {
-    return <LogoContent />
-  }
+  if (variant === "icon" && !href) return <LogoContent />
 
   return (
     <Link href={href} className="inline-block">

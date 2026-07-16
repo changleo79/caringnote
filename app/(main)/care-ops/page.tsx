@@ -1,76 +1,82 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
-import toast from "react-hot-toast"
-import Link from "next/link"
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import Link from "next/link";
+import { PageHeader } from "@/components/calm/PageHeader";
 
-/** Phase 4 — 요양원 Ops: 케어플랜·투약 확인 */
 export default function CareOpsPage() {
-  const { data: session } = useSession()
-  const isStaff = session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
-  const [residents, setResidents] = useState<any[]>([])
-  const [residentId, setResidentId] = useState("")
-  const [plans, setPlans] = useState<any[]>([])
-  const [meds, setMeds] = useState<any[]>([])
-  const [planTitle, setPlanTitle] = useState("")
-  const [planContent, setPlanContent] = useState("")
-  const [medName, setMedName] = useState("")
-  const [medDosage, setMedDosage] = useState("")
-  const [medSchedule, setMedSchedule] = useState("")
+  const { data: session } = useSession();
+  const isStaff =
+    session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN";
+  const [residents, setResidents] = useState<any[]>([]);
+  const [residentId, setResidentId] = useState("");
+  const [plans, setPlans] = useState<any[]>([]);
+  const [meds, setMeds] = useState<any[]>([]);
+  const [planTitle, setPlanTitle] = useState("");
+  const [planContent, setPlanContent] = useState("");
+  const [medName, setMedName] = useState("");
+  const [medDosage, setMedDosage] = useState("");
+  const [medSchedule, setMedSchedule] = useState("");
+  const [view, setView] = useState<"medications" | "plans">("medications");
+  const [showMedForm, setShowMedForm] = useState(false);
+  const [showPlanForm, setShowPlanForm] = useState(false);
 
   const loadResidents = () =>
     fetch("/api/residents")
       .then((r) => r.json())
       .then((d) => {
-        const list = Array.isArray(d) ? d : []
-        setResidents(list)
-        if (!residentId && list[0]) setResidentId(list[0].id)
-      })
+        const list = Array.isArray(d) ? d : [];
+        setResidents(list);
+        if (!residentId && list[0]) setResidentId(list[0].id);
+      });
 
   const loadOps = (id: string) => {
-    if (!id) return
+    if (!id) return;
     fetch(`/api/care-plans?residentId=${id}`)
       .then((r) => r.json())
-      .then((d) => setPlans(Array.isArray(d) ? d : []))
+      .then((d) => setPlans(Array.isArray(d) ? d : []));
     fetch(`/api/medications?residentId=${id}`)
       .then((r) => r.json())
-      .then((d) => setMeds(Array.isArray(d) ? d : []))
-  }
+      .then((d) => setMeds(Array.isArray(d) ? d : []));
+  };
 
   useEffect(() => {
-    loadResidents()
-  }, [])
+    loadResidents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (residentId) loadOps(residentId)
-  }, [residentId])
+    if (residentId) loadOps(residentId);
+  }, [residentId]);
 
   if (!isStaff) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center text-neutral-500">
+      <div className="mx-auto max-w-lg px-4 py-16 text-center text-[var(--sn-ink-muted)]">
         시설 직원 전용 화면입니다.
       </div>
-    )
+    );
   }
 
   const addPlan = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     const res = await fetch("/api/care-plans", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ residentId, title: planTitle, content: planContent }),
-    })
+    });
     if (res.ok) {
-      toast.success("케어플랜을 저장했습니다.")
-      setPlanTitle("")
-      setPlanContent("")
-      loadOps(residentId)
-    } else toast.error("저장 실패")
-  }
+      toast.success("케어플랜을 저장했습니다.");
+      setPlanTitle("");
+      setPlanContent("");
+      setShowPlanForm(false);
+      loadOps(residentId);
+    } else toast.error("저장 실패");
+  };
 
   const addMed = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     const res = await fetch("/api/medications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -80,35 +86,36 @@ export default function CareOpsPage() {
         dosage: medDosage,
         schedule: medSchedule,
       }),
-    })
+    });
     if (res.ok) {
-      toast.success("투약 일정을 추가했습니다.")
-      setMedName("")
-      setMedDosage("")
-      setMedSchedule("")
-      loadOps(residentId)
-    } else toast.error("저장 실패")
-  }
+      toast.success("투약 일정을 추가했습니다.");
+      setMedName("");
+      setMedDosage("");
+      setMedSchedule("");
+      setShowMedForm(false);
+      loadOps(residentId);
+    } else toast.error("저장 실패");
+  };
 
   const logMed = async (scheduleId: string) => {
     const res = await fetch("/api/medications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "log", scheduleId, administered: true }),
-    })
-    if (res.ok) toast.success("투약 확인 기록")
-    else toast.error("기록 실패")
-  }
+    });
+    if (res.ok) toast.success("투약 확인 기록");
+    else toast.error("기록 실패");
+  };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-      <header className="page-header">
-        <p className="text-sm font-medium text-brand-700">실버케어 Ops</p>
-        <h1 className="page-title">케어플랜 · 투약</h1>
-        <p className="page-description">입소 요양원 라이트 Ops. ERP 대신 돌봄 기록에 집중합니다.</p>
-      </header>
+    <div className="mx-auto max-w-2xl">
+      <PageHeader
+        eyebrow="오늘의 돌봄"
+        title="케어플랜 · 투약"
+        description="확인이 필요한 업무부터 처리합니다."
+      />
 
-      <div className="mb-6">
+      <div className="mb-10">
         <label className="label">어르신</label>
         <select
           className="input"
@@ -123,8 +130,32 @@ export default function CareOpsPage() {
         </select>
       </div>
 
-      <section className="card p-5 mb-6">
-        <h2 className="font-semibold mb-3">케어플랜 작성</h2>
+      <div className="mb-8 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setView("medications")}
+          className={view === "medications" ? "btn-primary" : "btn-secondary"}
+        >
+          투약 {meds.length}
+        </button>
+        <button
+          type="button"
+          onClick={() => setView("plans")}
+          className={view === "plans" ? "btn-primary" : "btn-secondary"}
+        >
+          케어플랜 {plans.length}
+        </button>
+      </div>
+
+      {view === "plans" && (
+      <section className="mb-10 border-b border-[var(--sn-line)] pb-10">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-[var(--sn-ink)]">케어플랜</h2>
+          <button type="button" onClick={() => setShowPlanForm((current) => !current)} className="btn-secondary">
+            {showPlanForm ? "닫기" : "새 플랜"}
+          </button>
+        </div>
+        {showPlanForm && (
         <form onSubmit={addPlan} className="space-y-3">
           <input
             className="input"
@@ -144,19 +175,30 @@ export default function CareOpsPage() {
             케어플랜 저장
           </button>
         </form>
-        <ul className="mt-4 space-y-2">
+        )}
+        <ul className="mt-6 divide-y divide-[var(--sn-line)]">
           {plans.map((p) => (
-            <li key={p.id} className="rounded-xl bg-neutral-50 p-3">
-              <p className="font-medium">{p.title}</p>
-              <p className="text-sm text-neutral-600 mt-1 whitespace-pre-wrap">{p.content}</p>
+            <li key={p.id} className="py-4 first:pt-0">
+              <p className="font-medium text-[var(--sn-ink)]">{p.title}</p>
+              <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--sn-ink-muted)]">
+                {p.content}
+              </p>
             </li>
           ))}
         </ul>
       </section>
+      )}
 
-      <section className="card p-5 mb-6">
-        <h2 className="font-semibold mb-3">투약 일정</h2>
-        <form onSubmit={addMed} className="space-y-3 mb-4">
+      {view === "medications" && (
+      <section className="mb-10">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-[var(--sn-ink)]">투약 일정</h2>
+          <button type="button" onClick={() => setShowMedForm((current) => !current)} className="btn-secondary">
+            {showMedForm ? "닫기" : "일정 추가"}
+          </button>
+        </div>
+        {showMedForm && (
+        <form onSubmit={addMed} className="mb-6 space-y-3">
           <input
             className="input"
             placeholder="약 이름"
@@ -182,26 +224,35 @@ export default function CareOpsPage() {
             일정 추가
           </button>
         </form>
-        <ul className="space-y-2">
+        )}
+        <ul className="divide-y divide-[var(--sn-line)]">
           {meds.map((m) => (
-            <li key={m.id} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 p-3">
+            <li
+              key={m.id}
+              className="flex items-center justify-between gap-3 py-4 first:pt-0"
+            >
               <div>
-                <p className="font-medium">{m.name}</p>
-                <p className="text-sm text-neutral-500">
+                <p className="font-medium text-[var(--sn-ink)]">{m.name}</p>
+                <p className="text-sm text-[var(--sn-ink-muted)]">
                   {[m.dosage, m.schedule].filter(Boolean).join(" · ")}
                 </p>
               </div>
-              <button type="button" className="btn-primary min-h-[48px] px-4" onClick={() => logMed(m.id)}>
+              <button
+                type="button"
+                className="btn-primary min-h-[56px] px-4"
+                onClick={() => logMed(m.id)}
+              >
                 투여 확인
               </button>
             </li>
           ))}
         </ul>
       </section>
+      )}
 
       <Link href={`/timeline/${residentId}`} className="btn-ghost w-full">
         타임라인에서 보기
       </Link>
     </div>
-  )
+  );
 }

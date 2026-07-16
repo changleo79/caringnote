@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useSession } from "next-auth/react"
-import { Plus, User } from "lucide-react"
+import { ArrowRight, NotebookPen, Plus, Search } from "lucide-react"
 import toast from "react-hot-toast"
+import { PageHeader } from "@/components/calm/PageHeader"
+import { StatusChip } from "@/components/calm/StatusChip"
+import { EmptyState } from "@/components/calm/EmptyState"
 
 type Resident = {
   id: string
@@ -15,12 +19,6 @@ type Resident = {
   families?: { id: string }[]
 }
 
-const chipClass: Record<string, string> = {
-  GOOD: "chip-good",
-  OK: "chip-ok",
-  CAUTION: "chip-caution",
-}
-
 export default function ResidentsPage() {
   const { data: session } = useSession()
   const isStaff = session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
@@ -29,6 +27,8 @@ export default function ResidentsPage() {
   const [showForm, setShowForm] = useState(false)
   const [name, setName] = useState("")
   const [roomNumber, setRoomNumber] = useState("")
+  const [query, setQuery] = useState("")
+  const [missingIds, setMissingIds] = useState<Set<string>>(new Set())
 
   const load = async () => {
     setLoading(true)
@@ -36,6 +36,16 @@ export default function ResidentsPage() {
       const res = await fetch("/api/residents")
       const data = await res.json()
       setResidents(Array.isArray(data) ? data : [])
+      if (isStaff) {
+        const today = new Date().toISOString().slice(0, 10)
+        const missingResponse = await fetch(`/api/daily-reports?missing=1&date=${today}`)
+        const missing = await missingResponse.json()
+        setMissingIds(
+          new Set<string>(
+            Array.isArray(missing) ? missing.map((resident: Resident) => resident.id) : []
+          )
+        )
+      }
     } catch {
       toast.error("목록을 불러오지 못했습니다.")
     } finally {
@@ -45,6 +55,7 @@ export default function ResidentsPage() {
 
   useEffect(() => {
     load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const create = async (e: React.FormEvent) => {
@@ -66,85 +77,115 @@ export default function ResidentsPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
-      <div className="page-header flex items-start justify-between gap-4">
-        <div>
-          <h1 className="page-title">어르신</h1>
-          <p className="page-description">
-            {isStaff ? "시설 어르신 명부 · 오늘 소식 작성의 시작점" : "연결된 부모님"}
-          </p>
-        </div>
-        {isStaff && (
-          <button className="btn-primary" onClick={() => setShowForm((v) => !v)}>
-            <Plus className="w-5 h-5" /> 등록
-          </button>
-        )}
-      </div>
+    <div className="mx-auto max-w-3xl">
+      <PageHeader
+        title="어르신"
+        description={isStaff ? "호실과 오늘 작성 상태를 한눈에 확인합니다." : "연결된 부모님"}
+        action={
+          isStaff ? (
+            <button className="btn-primary shrink-0" onClick={() => setShowForm((v) => !v)}>
+              <Plus className="h-5 w-5" /> 등록
+            </button>
+          ) : null
+        }
+      />
 
       {showForm && (
-        <form onSubmit={create} className="card p-4 mb-6 space-y-3">
-          <div>
-            <label className="label">이름</label>
-            <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
-          </div>
-          <div>
-            <label className="label">호실</label>
-            <input className="input" value={roomNumber} onChange={(e) => setRoomNumber(e.target.value)} />
-          </div>
+        <form onSubmit={create} className="mb-8 space-y-3 border-b border-[var(--sn-line)] pb-8">
+          <input className="input" placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input className="input" placeholder="호실" value={roomNumber} onChange={(e) => setRoomNumber(e.target.value)} />
           <button type="submit" className="btn-primary w-full">저장</button>
         </form>
       )}
 
-      {loading ? (
-        <p className="text-neutral-500">불러오는 중…</p>
-      ) : residents.length === 0 ? (
-        <div className="card p-8 text-center text-neutral-500">
-          등록된 어르신이 없습니다.
-          {!isStaff && (
-            <div className="mt-4">
-              <Link href="/residents/family-requests" className="btn-secondary">가족 연결 요청</Link>
-            </div>
-          )}
+      {!loading && residents.length > 6 && (
+        <div className="relative mb-6">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--sn-ink-faint)]" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="input pl-12"
+            placeholder="이름 또는 호실 검색"
+            aria-label="어르신 검색"
+          />
         </div>
+      )}
+
+      {loading ? (
+        <p className="text-[var(--sn-ink-muted)]">불러오는 중…</p>
+      ) : residents.length === 0 ? (
+        <EmptyState
+          title="등록된 어르신이 없습니다"
+          action={
+            !isStaff ? (
+              <Link href="/residents/family-requests" className="btn-secondary">
+                가족 연결 요청
+              </Link>
+            ) : null
+          }
+        />
       ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {residents.map((r) => (
-            <li key={r.id}>
-              <Link href={`/timeline/${r.id}`} className="card-interactive p-4 flex items-center gap-3">
-                <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center overflow-hidden">
+        <ul className="divide-y divide-[var(--sn-line)] border-y border-[var(--sn-line)]">
+          {residents
+            .filter(
+              (resident) =>
+                !query ||
+                resident.name.includes(query) ||
+                resident.roomNumber?.includes(query)
+            )
+            .map((r) => {
+            const isMissing = missingIds.has(r.id)
+            return (
+            <li key={r.id} className="flex min-h-[80px] items-center gap-4 py-3">
+                <Link href={`/residents/${r.id}`} className="flex min-w-0 flex-1 items-center gap-4">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[var(--sn-accent-soft)]">
                   {r.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={r.photoUrl} alt="" className="w-full h-full object-cover" />
+                    <Image
+                      src={r.photoUrl}
+                      alt={`${r.name} 어르신`}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
                   ) : (
-                    <User className="w-7 h-7 text-brand-600" />
+                    <div className="flex h-full items-center justify-center font-display font-semibold text-[var(--sn-accent)]">
+                      {r.name.slice(0, 1)}
+                    </div>
                   )}
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-neutral-900 truncate">{r.name}</p>
-                    {r.statusChip && (
-                      <span className={chipClass[r.statusChip] || "chip-ok"}>
-                        {r.statusChip === "GOOD" ? "좋음" : r.statusChip === "CAUTION" ? "주의" : "보통"}
-                      </span>
-                    )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-display text-lg font-semibold">{r.name}</p>
+                    <p className="text-sm text-[var(--sn-ink-faint)]">
+                      {r.roomNumber ? `${r.roomNumber}호` : "호실 미정"}
+                    </p>
                   </div>
-                  <p className="text-neutral-500 text-sm">
-                    {r.roomNumber ? `${r.roomNumber}호` : "호실 미정"}
-                    {r.families && r.families.length > 0 ? ` · 승인대기 ${r.families.length}` : ""}
-                  </p>
-                </div>
+                  {isStaff ? (
+                    <span className={isMissing ? "chip-ok" : "chip-good"}>
+                      {isMissing ? "미작성" : "완료"}
+                    </span>
+                  ) : (
+                    <StatusChip status={r.statusChip} />
+                  )}
+                  <ArrowRight className="h-4 w-4 text-[var(--sn-ink-faint)]" />
               </Link>
+              {isStaff && (
+                <Link
+                  href={`/reports/write?residentId=${r.id}`}
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--sn-radius)] bg-[var(--sn-accent-soft)] text-[var(--sn-accent)]"
+                  aria-label={`${r.name} 어르신 알림장 쓰기`}
+                >
+                  <NotebookPen className="h-5 w-5" />
+                </Link>
+              )}
             </li>
-          ))}
+          )})}
         </ul>
       )}
 
       {isStaff && (
-        <div className="mt-6">
-          <Link href="/residents/family-requests" className="btn-secondary w-full">
-            가족 연결 요청 검토
-          </Link>
-        </div>
+        <Link href="/residents/family-requests" className="btn-secondary mt-8 w-full">
+          가족 연결 요청 검토
+        </Link>
       )}
     </div>
   )
