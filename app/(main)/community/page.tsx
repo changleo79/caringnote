@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/calm/PageHeader";
 import { EmptyState } from "@/components/calm/EmptyState";
-import { PHOTOS } from "@/lib/photos";
 
 interface Post {
   id: string;
@@ -23,6 +23,7 @@ export default function CommunityPage() {
   const isStaff = ["ADMIN", "MANAGER", "CAREGIVER"].includes(session?.user?.role || "");
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const photoPosts = posts.filter((post) => post.images?.[0]);
 
   useEffect(() => {
     if (status === "unauthenticated") redirect("/auth/login");
@@ -60,7 +61,7 @@ export default function CommunityPage() {
             />
           ))}
         </div>
-      ) : posts.length === 0 ? (
+      ) : photoPosts.length === 0 ? (
         <EmptyState
           title="아직 사진이 없습니다"
           description="보호사가 올린 시설 앨범이 여기에 모입니다."
@@ -73,25 +74,25 @@ export default function CommunityPage() {
           }
         />
       ) : (
-        <div className="columns-2 gap-2 md:columns-3 md:gap-3">
-          {posts.map((post, i) => {
-            const photo =
-              post.images?.[0] || PHOTOS.moments[i % PHOTOS.moments.length];
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+          {photoPosts.map((post) => {
+            const photo = post.images[0];
             return (
               <Link
                 key={post.id}
                 href={`/community/${post.id}`}
-                className="mb-2 block break-inside-avoid md:mb-3"
+                className="group block"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <div className="relative aspect-square overflow-hidden bg-[var(--sn-surface-muted)]">
+                <Image
                   src={photo}
-                  alt=""
-                  className="w-full object-cover"
-                  style={{
-                    aspectRatio: i % 3 === 0 ? "4/5" : i % 3 === 1 ? "1/1" : "3/4",
-                  }}
+                  alt={post.content || post.title || "시설의 일상 사진"}
+                  fill
+                  unoptimized={photo.startsWith("data:")}
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                 />
+                </div>
                 <div className="mt-2 px-0.5">
                   <p className="line-clamp-2 text-sm text-[var(--sn-ink)]">
                     {post.content || post.title || "일상"}

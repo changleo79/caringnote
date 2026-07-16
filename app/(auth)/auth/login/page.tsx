@@ -4,12 +4,13 @@ import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import toast from "react-hot-toast"
 import { Mail, Lock, ArrowLeft, AlertCircle } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { PHOTOS } from "@/lib/photos"
+import { PHOTO_ALT, PHOTOS } from "@/lib/photos"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -57,20 +58,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-2">
-      <div className="relative hidden min-h-screen lg:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PHOTOS.auth} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,32,30,0.75)] to-transparent" />
-        <div className="absolute bottom-12 left-12 right-12 text-white">
-          <p className="font-display text-4xl font-semibold tracking-tight">실버노트</p>
-          <p className="mt-3 max-w-sm text-lg text-white/75">
-            부모님의 하루를, 가족과 함께 차분히.
+    <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1.05fr_.95fr]">
+      <div className="relative h-56 overflow-hidden sm:h-72 lg:h-screen">
+        <Image
+          src={PHOTOS.auth}
+          alt={PHOTO_ALT.auth}
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 52vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,24,21,.08),rgba(10,24,21,.62))]" />
+        <div className="absolute inset-x-0 bottom-0 px-6 pb-6 text-white sm:px-10 sm:pb-8 lg:px-12 lg:pb-12">
+          <p className="font-display text-2xl font-semibold tracking-[-0.03em] lg:text-4xl">
+            부모님의 하루를,
+            <br className="hidden lg:block" /> 가장 가까이.
           </p>
         </div>
       </div>
 
-      <div className="flex min-h-screen flex-col justify-center px-6 py-12 sm:px-12">
+      <div className="flex flex-col justify-center px-6 py-10 sm:px-12 lg:min-h-screen">
         <div className="mx-auto w-full max-w-md">
           <Link
             href="/"
@@ -81,7 +88,7 @@ export default function LoginPage() {
           </Link>
 
           <Logo size="md" href="/" />
-          <h1 className="mt-8 font-display text-3xl font-semibold tracking-tight">로그인</h1>
+          <h1 className="mt-8 font-display text-3xl font-semibold tracking-[-0.03em]">로그인</h1>
           <p className="mt-2 text-[var(--sn-ink-muted)]">시설 직원과 보호자 모두 같은 화면에서 시작합니다.</p>
 
           {serverConfigError && (

@@ -67,28 +67,34 @@ export default function CommunicationReportPage() {
             )}
           </div>
 
-          <dl className="divide-y divide-[var(--sn-line)] border-y border-[var(--sn-line)]">
-            <div className="flex items-baseline justify-between py-4">
+          <dl className="grid gap-3 sm:grid-cols-2">
+            <div className="card p-5">
               <dt className="text-[var(--sn-ink-muted)]">알림장 발송</dt>
-              <dd className="font-display text-2xl font-semibold text-[var(--sn-ink)]">
+              <dd className="mt-3 font-display text-3xl font-semibold text-[var(--sn-ink)]">
                 {s.dailyReportsSent}
               </dd>
             </div>
-            <div className="flex items-baseline justify-between py-4">
+            <div className="card p-5">
               <dt className="text-[var(--sn-ink-muted)]">열람률</dt>
-              <dd className="font-display text-2xl font-semibold text-[var(--sn-accent)]">
+              <dd className="mt-3 font-display text-3xl font-semibold text-[var(--sn-accent)]">
                 {s.readRate}%
               </dd>
+              <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--sn-surface-muted)]">
+                <div className="h-full rounded-full bg-[var(--sn-accent)]" style={{ width: `${Math.min(100, s.readRate)}%` }} />
+              </div>
             </div>
-            <div className="flex items-baseline justify-between py-4">
+            <div className="card p-5">
               <dt className="text-[var(--sn-ink-muted)]">어르신 커버리지</dt>
-              <dd className="font-display text-2xl font-semibold text-[var(--sn-ink)]">
+              <dd className="mt-3 font-display text-3xl font-semibold text-[var(--sn-ink)]">
                 {s.coverageRate}%
               </dd>
+              <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--sn-surface-muted)]">
+                <div className="h-full rounded-full bg-[var(--sn-good)]" style={{ width: `${Math.min(100, s.coverageRate)}%` }} />
+              </div>
             </div>
-            <div className="flex items-baseline justify-between py-4">
+            <div className="card p-5">
               <dt className="text-[var(--sn-ink-muted)]">공지 / 식단 / 앨범</dt>
-              <dd className="text-lg font-semibold text-[var(--sn-ink)]">
+              <dd className="mt-3 text-2xl font-semibold text-[var(--sn-ink)]">
                 {s.announcements} / {s.menuDays} / {s.albumPosts}
               </dd>
             </div>

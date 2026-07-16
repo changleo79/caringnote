@@ -46,10 +46,10 @@ export default function CareTimelinePage() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <div className="border-b border-[var(--sn-line)] px-5 pb-8 pt-10">
-        <p className="text-sm font-semibold tracking-wide text-[var(--sn-accent)]">Care Timeline</p>
+      <div className="border-b border-[var(--sn-line)] pb-8">
+        <p className="text-sm font-semibold text-[var(--sn-accent)]">돌봄 타임라인</p>
         <div className="mt-3 flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-3xl font-semibold tracking-tight">{resident.name}</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-[-0.03em]">{resident.name}</h1>
           <StatusChip status={resident.statusChip} />
         </div>
         {resident.roomNumber && (
@@ -57,7 +57,7 @@ export default function CareTimelinePage() {
         )}
       </div>
 
-      <div className="space-y-8 px-5 py-8">
+      <div className="space-y-8 py-8">
         {todayMenu && (
           <div>
             <p className="text-sm font-semibold text-[var(--sn-accent)]">오늘 식단</p>
@@ -83,12 +83,12 @@ export default function CareTimelinePage() {
         ) : (
           <ol className="relative space-y-0 border-l border-[var(--sn-line)] pl-6">
             {items.map((item) => (
-              <li key={`${item.type}-${item.id}`} className="sn-fade-up relative pb-8">
+              <li key={`${item.type}-${item.id}`} className="relative pb-8">
                 <span className="absolute -left-[1.9rem] top-1.5 h-2.5 w-2.5 rounded-full bg-[var(--sn-accent)]" />
                 <time className="text-xs text-[var(--sn-ink-faint)]">
                   {new Date(item.at).toLocaleString("ko-KR")}
                 </time>
-                <p className="mt-1 font-display text-lg font-semibold tracking-tight">{item.title}</p>
+                <p className="mt-1 font-display text-lg font-semibold tracking-[-0.02em]">{item.title}</p>
                 {item.content && (
                   <p className="mt-1 whitespace-pre-wrap text-[var(--sn-ink-muted)]">{item.content}</p>
                 )}

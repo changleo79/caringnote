@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import toast from "react-hot-toast"
 import { Mail, Lock, User, Phone, Building2, ArrowLeft } from "lucide-react"
 import Logo from "@/components/brand/Logo"
 import { Button } from "@/components/ui/Button"
 import { Input, Select } from "@/components/ui/Input"
 import { cn } from "@/lib/utils"
-import { PHOTOS } from "@/lib/photos"
+import { PHOTO_ALT, PHOTOS } from "@/lib/photos"
 
 interface CareCenter {
   id: string
@@ -87,23 +88,32 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-2">
-      <div className="relative hidden min-h-screen lg:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PHOTOS.walk} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,32,30,0.75)] to-transparent" />
-        <div className="absolute bottom-12 left-12 text-white">
-          <p className="font-display text-4xl font-semibold">함께 시작해요</p>
+    <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1.05fr_.95fr]">
+      <div className="relative h-48 overflow-hidden sm:h-64 lg:sticky lg:top-0 lg:h-screen">
+        <Image
+          src={PHOTOS.walk}
+          alt={PHOTO_ALT.walk}
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 52vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,24,21,.06),rgba(10,24,21,.6))]" />
+        <div className="absolute inset-x-0 bottom-0 px-6 pb-6 text-white sm:px-10 sm:pb-8 lg:px-12 lg:pb-12">
+          <p className="font-display text-2xl font-semibold tracking-[-0.03em] lg:text-4xl">
+            더 가까운 돌봄을
+            <br className="hidden lg:block" /> 함께 시작해요
+          </p>
         </div>
       </div>
 
-      <div className="flex min-h-screen flex-col justify-center px-6 py-12 sm:px-12">
+      <div className="flex flex-col justify-center px-6 py-10 sm:px-12 lg:min-h-screen">
         <div className="mx-auto w-full max-w-md">
           <Link href="/" className="mb-8 inline-flex items-center gap-2 text-[var(--sn-ink-muted)]">
             <ArrowLeft className="h-4 w-4" /> 홈으로
           </Link>
           <Logo size="md" />
-          <h1 className="mt-8 font-display text-3xl font-semibold tracking-tight">회원가입</h1>
+          <h1 className="mt-8 font-display text-3xl font-semibold tracking-[-0.03em]">회원가입</h1>
           <p className="mt-2 text-[var(--sn-ink-muted)]">시설과 가족을 연결하는 첫 단계입니다.</p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -116,7 +126,7 @@ export default function SignupPage() {
                     type="button"
                     onClick={() => setFormData({ ...formData, role, careCenterId: "" })}
                     className={cn(
-                      "min-h-[72px] border-2 p-4 text-center transition",
+                      "min-h-[72px] rounded-[var(--sn-radius)] border p-4 text-center transition",
                       formData.role === role
                         ? "border-[var(--sn-accent)] bg-[var(--sn-accent-soft)] text-[var(--sn-accent-hover)]"
                         : "border-[var(--sn-line)] text-[var(--sn-ink-muted)]"

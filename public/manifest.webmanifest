@@ -4,21 +4,15 @@
   "description": "가족이 부모님의 하루를 믿고 느낄 수 있는 시니어 케어 OS",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#F7F4EF",
-  "theme_color": "#0F6E6A",
+  "background_color": "#F7F8F6",
+  "theme_color": "#176C62",
   "lang": "ko",
   "orientation": "any",
   "icons": [
     {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]

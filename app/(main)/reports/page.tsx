@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import toast from "react-hot-toast"
 import { PageHeader } from "@/components/calm/PageHeader"
 import { StatusChip } from "@/components/calm/StatusChip"
@@ -59,11 +60,19 @@ export default function ReportsFeedPage() {
   }
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
-      <PageHeader title="소식" description="부모님의 하루를 차분히 확인하세요." />
+    <div className="mx-auto max-w-2xl">
+      <PageHeader title="소식" description="오늘의 장면과 돌봄 기록을 시간순으로 전합니다." />
 
       {loading ? (
-        <p className="text-[var(--sn-ink-muted)]">불러오는 중…</p>
+        <div className="space-y-10" aria-label="소식 불러오는 중">
+          {[1, 2].map((item) => (
+            <div key={item}>
+              <div className="aspect-[4/3] animate-pulse bg-[var(--sn-surface-muted)]" />
+              <div className="mt-4 h-6 w-1/3 animate-pulse rounded bg-[var(--sn-surface-muted)]" />
+              <div className="mt-3 h-16 animate-pulse rounded bg-[var(--sn-surface-muted)]" />
+            </div>
+          ))}
+        </div>
       ) : reports.length === 0 ? (
         <EmptyState title="아직 도착한 알림장이 없습니다" />
       ) : (
@@ -71,22 +80,30 @@ export default function ReportsFeedPage() {
           {reports.map((r) => {
             const img = imgOf(r)
             return (
-              <li key={r.id} className="sn-fade-up">
+              <li key={r.id}>
                 {img ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={img} alt="" className="aspect-[4/3] w-full object-cover" />
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[var(--sn-surface-muted)]">
+                    <Image
+                      src={img}
+                      alt={`${r.resident.name} 어르신의 일상 사진`}
+                      fill
+                      unoptimized={img.startsWith("data:")}
+                      sizes="(max-width: 768px) 100vw, 672px"
+                      className="object-cover"
+                    />
+                  </div>
                 ) : null}
                 <div className={cn(img ? "pt-4" : "")}>
                   <div className="flex items-center justify-between gap-3">
                     <Link
                       href={`/timeline/${r.resident.id}`}
-                      className="font-display text-xl font-semibold tracking-tight"
+                      className="font-display text-xl font-semibold tracking-[-0.02em]"
                     >
                       {r.resident.name}
                     </Link>
                     <StatusChip status={r.moodChip} />
                   </div>
-                  <p className="mt-3 text-[17px] leading-relaxed text-[var(--sn-ink)] whitespace-pre-wrap">
+                  <p className="mt-3 whitespace-pre-wrap text-lg leading-relaxed text-[var(--sn-ink)]">
                     {r.content || "오늘의 소식이 도착했습니다."}
                   </p>
                   <p className="mt-3 text-xs text-[var(--sn-ink-faint)]">
@@ -98,7 +115,7 @@ export default function ReportsFeedPage() {
                       className={cn("btn-secondary flex-1", popId === r.id && "sn-heart-pop")}
                       onClick={() => react(r.id, "heart")}
                     >
-                      하트
+                      마음
                     </button>
                     <button className="btn-secondary flex-1" onClick={() => react(r.id, "thanks")}>
                       감사

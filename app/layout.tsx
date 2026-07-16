@@ -1,7 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import PwaRegister from "@/components/PwaRegister";
+
+const pretendard = localFont({
+  src: "../public/fonts/PretendardVariable.woff2",
+  variable: "--font-pretendard",
+  display: "swap",
+  weight: "45 920",
+});
+
+const suit = localFont({
+  src: "../public/fonts/SUIT-Variable.woff2",
+  variable: "--font-suit",
+  display: "swap",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   title: "실버노트 — 가족이 부모님의 하루를 믿고 느낄 수 있는 시니어 케어 OS",
@@ -15,8 +30,7 @@ export const metadata: Metadata = {
     title: "실버노트",
   },
   icons: {
-    icon: [{ url: "/icon.svg" }, { url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
-    apple: "/icon-192.png",
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "실버노트",
@@ -27,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0F6E6A",
+  themeColor: "#176C62",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -39,23 +53,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <head>
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
-        />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css"
-        />
-      </head>
-      <body className="font-sans antialiased">
+    <html lang="ko" className={`${pretendard.variable} ${suit.variable}`}>
+      <body>
         {children}
         <PwaRegister />
         <Toaster
@@ -63,17 +62,17 @@ export default function RootLayout({
           toastOptions={{
             duration: 3500,
             style: {
-              background: "#fff",
-              color: "#262626",
-              borderRadius: "12px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              background: "var(--sn-surface)",
+              color: "var(--sn-ink)",
+              borderRadius: "var(--sn-radius)",
+              boxShadow: "var(--sn-shadow-2)",
               padding: "14px 18px",
-              fontSize: "15px",
+              fontSize: "var(--sn-type-sm)",
               fontWeight: "500",
-              border: "1px solid #e5e5e5",
+              border: "1px solid var(--sn-line)",
             },
             success: {
-              iconTheme: { primary: "#0d9488", secondary: "#fff" },
+              iconTheme: { primary: "#176c62", secondary: "#fff" },
             },
             error: {
               iconTheme: { primary: "#dc2626", secondary: "#fff" },

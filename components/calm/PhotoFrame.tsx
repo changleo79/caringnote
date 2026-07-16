@@ -1,28 +1,30 @@
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 export function PhotoFrame({
   src,
   alt,
   className,
-  ken = false,
+  priority = false,
+  sizes = "100vw",
   children,
 }: {
   src: string
   alt: string
   className?: string
-  ken?: boolean
+  priority?: boolean
+  sizes?: string
   children?: React.ReactNode
 }) {
   return (
-    <div className={cn("relative overflow-hidden bg-[var(--sn-ink)]", className)}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+    <div className={cn("relative overflow-hidden bg-[var(--sn-surface-muted)]", className)}>
+      <Image
         src={src}
         alt={alt}
-        className={cn(
-          "h-full w-full object-cover",
-          ken && "sn-hero-ken"
-        )}
+        fill
+        sizes={sizes}
+        priority={priority}
+        className="object-cover"
       />
       {children}
     </div>

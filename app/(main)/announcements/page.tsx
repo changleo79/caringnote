@@ -82,12 +82,12 @@ export default function AnnouncementsPage() {
               required
             />
           </div>
-          <label className="flex min-h-[48px] items-center gap-3 text-[15px] text-[var(--sn-ink-muted)]">
+          <label className="flex min-h-[56px] items-center gap-3 text-sm text-[var(--sn-ink-muted)]">
             <input
               type="checkbox"
               checked={isUrgent}
               onChange={(e) => setIsUrgent(e.target.checked)}
-              className="h-5 w-5"
+              className="h-6 w-6"
             />
             긴급으로 표시
           </label>
@@ -119,7 +119,7 @@ export default function AnnouncementsPage() {
               <p className="mt-1 text-xs text-[var(--sn-ink-faint)]">
                 {new Date(a.createdAt).toLocaleDateString("ko-KR")}
               </p>
-              <p className="mt-3 whitespace-pre-wrap text-[15px] leading-relaxed text-[var(--sn-ink-muted)]">
+              <p className="mt-3 whitespace-pre-wrap leading-relaxed text-[var(--sn-ink-muted)]">
                 {a.content}
               </p>
             </article>

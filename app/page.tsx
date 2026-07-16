@@ -1,178 +1,214 @@
+import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import { PHOTOS } from "@/lib/photos"
+import { ArrowRight, Check, Heart, ImagePlus, Send } from "lucide-react"
+import Logo from "@/components/brand/Logo"
+import { PHOTO_ALT, PHOTOS } from "@/lib/photos"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[var(--sn-bg)] text-[var(--sn-ink)]">
       <header className="absolute inset-x-0 top-0 z-20">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-end gap-2 px-4 sm:px-6">
-          <Link
-            href="/auth/login"
-            className="rounded-xl px-4 py-2.5 text-[15px] font-medium text-white/90 hover:bg-white/10"
-          >
-            로그인
-          </Link>
-          <Link
-            href="/auth/signup"
-            className="rounded-xl bg-white px-5 py-2.5 text-[15px] font-semibold text-[var(--sn-accent-hover)]"
-          >
-            시작하기
-          </Link>
+        <div className="section-container flex h-20 items-center justify-between">
+          <Logo light size="sm" />
+          <nav className="flex items-center gap-2" aria-label="계정">
+            <Link
+              href="/auth/login"
+              className="inline-flex min-h-[44px] items-center px-4 text-sm font-semibold text-white"
+            >
+              로그인
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="inline-flex min-h-[44px] items-center rounded-[var(--sn-radius)] bg-white px-5 text-sm font-semibold text-[var(--sn-ink)]"
+            >
+              시작하기
+            </Link>
+          </nav>
         </div>
       </header>
 
-      {/* Hero — brand first, one composition */}
-      <section className="relative flex min-h-[100svh] items-end overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={PHOTOS.hero}
-          alt="요양원에서의 따뜻한 돌봄 순간"
-          className="absolute inset-0 h-full w-full object-cover object-[center_25%] sn-hero-ken"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(12,32,30,0.15) 0%, rgba(12,32,30,0.2) 40%, rgba(12,32,30,0.78) 100%)",
-          }}
-        />
-        <div className="pointer-events-none absolute inset-0 opacity-30 mix-blend-soft-light landing-grain" />
-
-        <div className="relative z-10 w-full px-5 pb-16 pt-28 sm:px-10 lg:px-16">
-          <div className="mx-auto max-w-6xl sn-fade-up">
-            <p className="font-display text-[clamp(3.5rem,13vw,8rem)] font-semibold leading-[0.9] tracking-[-0.045em] text-white">
-              실버노트
-            </p>
-            <h1 className="mt-6 max-w-lg font-display text-[clamp(1.25rem,2.8vw,1.85rem)] font-medium leading-snug tracking-[-0.02em] text-white/95">
-              가족이 부모님의 하루를 믿고 느낄 수 있는 시니어 케어 OS
-            </h1>
-            <p className="mt-4 max-w-md text-[17px] leading-relaxed text-white/72">
-              앱 없이도 10초 안심. 보호사는 2분 퀵작성으로 돌봄에 집중합니다.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/auth/signup" className="btn-primary min-h-[56px] px-8 text-lg">
-                무료로 시작하기
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-              <Link
-                href="/auth/login"
-                className="inline-flex min-h-[56px] items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-8 text-lg font-semibold text-white backdrop-blur-sm"
-              >
-                로그인
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Family story — one job */}
-      <section className="px-5 py-24 sm:px-10">
-        <div className="mx-auto grid max-w-6xl items-end gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5 sn-fade-up">
-            <p className="text-sm font-semibold tracking-wide text-[var(--sn-accent)]">보호자</p>
-            <h2 className="mt-3 font-display text-[clamp(1.85rem,4vw,2.75rem)] font-semibold leading-[1.15] tracking-[-0.03em]">
-              오늘 괜찮으신지,
-              <br />
-              사진 한 장으로
-            </h2>
-            <p className="mt-4 max-w-sm text-lg leading-relaxed text-[var(--sn-ink-muted)]">
-              상태 · 한 줄 소식 · 식단이 한 화면에. 매직링크로 앱 없이 열람합니다.
-            </p>
-          </div>
-          <div className="relative lg:col-span-7 landing-soft-rise">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={PHOTOS.familyStory}
-              alt="평온한 돌봄의 하루"
-              className="aspect-[4/3] w-full object-cover"
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(12,32,30,0.88)] via-[rgba(12,32,30,0.4)] to-transparent px-6 pb-6 pt-20 text-white">
-              <p className="font-display text-2xl font-semibold tracking-tight">어머니 · 좋음</p>
-              <p className="mt-1 text-white/80">오늘 산책을 다녀오셨어요</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Staff — gesture */}
-      <section className="bg-[var(--sn-ink)] px-5 py-24 text-[var(--sn-bg)] sm:px-10">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-sm font-semibold tracking-wide text-[var(--sn-accent-mist)]">요양보호사</p>
-          <h2 className="mt-3 max-w-xl font-display text-[clamp(1.85rem,4vw,2.75rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-white">
-            돌봄을 끊지 않는 2분 퀵작성
-          </h2>
-          <p className="mt-4 max-w-md text-lg text-white/60">
-            사진 → 칩 → 전송. 장갑 모드 큰 타깃으로 기록은 부산물이 됩니다.
-          </p>
-          <div className="mt-12 grid grid-cols-3 gap-3 sm:max-w-lg">
-            {["식사 잘함", "낮잠", "산책"].map((c, i) => (
-              <div
-                key={c}
-                className="flex min-h-[80px] items-center justify-center border border-white/15 bg-white/5 text-center text-sm font-medium landing-chip"
-                style={{ animationDelay: `${i * 100}ms` }}
-              >
-                {c}
-              </div>
-            ))}
-          </div>
-          <div className="mt-3 flex min-h-[56px] max-w-lg items-center justify-center bg-[var(--sn-accent)] text-base font-semibold text-white">
-            전송
-          </div>
-        </div>
-      </section>
-
-      {/* Trust */}
-      <section className="px-5 py-24 sm:px-10">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-sm font-semibold tracking-wide text-[var(--sn-accent)]">시설</p>
-          <h2 className="mt-3 max-w-xl font-display text-[clamp(1.85rem,4vw,2.75rem)] font-semibold leading-[1.15] tracking-[-0.03em]">
-            열람과 증빙이 자연스럽게
-          </h2>
-          <p className="mt-4 max-w-lg text-lg text-[var(--sn-ink-muted)]">
-            Care Timeline · 소통 리포트 · 인수인계. 감시가 아니라 신뢰를 남깁니다.
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={PHOTOS.hands}
-            alt="돌봄의 손길"
-            className="mt-14 aspect-[21/9] w-full object-cover"
+      <main>
+        <section className="relative min-h-[92svh] overflow-hidden">
+          <Image
+            src={PHOTOS.hero}
+            alt={PHOTO_ALT.hero}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
           />
-        </div>
-      </section>
-
-      {/* Closing CTA — photo band */}
-      <section className="relative overflow-hidden px-5 py-28 sm:px-10">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PHOTOS.garden} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-[rgba(12,32,30,0.72)]" />
-        <div className="relative mx-auto max-w-2xl text-center text-white sn-fade-up">
-          <p className="font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold tracking-[-0.03em]">
-            기록이 돌봄을 방해하지 않게
-          </p>
-          <p className="mx-auto mt-4 max-w-md text-lg text-white/75">
-            시설은 부담을 줄이고, 보호자는 따뜻하게 연결됩니다.
-          </p>
-          <Link
-            href="/auth/signup"
-            className="mt-8 inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-white px-8 text-lg font-semibold text-[var(--sn-accent-hover)]"
-          >
-            시설 · 가족 시작하기
-            <ArrowRight className="h-5 w-5" />
-          </Link>
-        </div>
-      </section>
-
-      <footer className="border-t border-[var(--sn-line)] px-5 py-10 sm:px-10">
-        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-3 sm:flex-row sm:items-center">
-          <div>
-            <p className="font-display text-xl font-semibold">실버노트</p>
-            <p className="text-sm text-[var(--sn-ink-muted)]">Silver Note</p>
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,25,22,.78)_0%,rgba(12,25,22,.5)_48%,rgba(12,25,22,.08)_100%)]" />
+          <div className="section-container relative flex min-h-[92svh] items-end pb-16 pt-32 sm:items-center sm:pb-0">
+            <div className="max-w-2xl text-white">
+              <p className="mb-5 text-sm font-semibold tracking-[0.12em] text-white/72">
+                FAMILY CARE, CLEARLY CONNECTED
+              </p>
+              <h1 className="font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[1.03] tracking-[-0.045em]">
+                부모님의 오늘이
+                <br />
+                안심으로 닿도록
+              </h1>
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/82 sm:text-xl">
+                요양원의 돌봄 기록을 가족에게 가장 따뜻하고 명확한 방식으로 전합니다.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link
+                  href="/auth/signup"
+                  className="inline-flex min-h-[52px] items-center gap-2 rounded-[var(--sn-radius)] bg-white px-6 font-semibold text-[var(--sn-ink)]"
+                >
+                  무료로 시작하기
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href="#how"
+                  className="inline-flex min-h-[52px] items-center rounded-[var(--sn-radius)] border border-white/36 px-6 font-semibold text-white"
+                >
+                  어떻게 작동하나요
+                </a>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-[var(--sn-ink-faint)]">
-            © {new Date().getFullYear()} Silver Note
-          </p>
-        </div>
+        </section>
+
+        <section id="how" className="section-container py-24 sm:py-32">
+          <div className="grid gap-14 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="text-sm font-semibold text-[var(--sn-accent)]">보호자에게</p>
+              <h2 className="mt-4 max-w-md font-display text-4xl font-semibold leading-tight tracking-[-0.035em] sm:text-5xl">
+                숫자보다 먼저,
+                <br />
+                오늘의 한 장면
+              </h2>
+              <p className="mt-6 max-w-md text-lg leading-relaxed text-[var(--sn-ink-muted)]">
+                사진, 쉬운 상태, 짧은 설명. 보호자가 가장 궁금한 것부터 보여줍니다.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-[1.2fr_.8fr]">
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src={PHOTOS.familyStory}
+                  alt={PHOTO_ALT.familyStory}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 45vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-col justify-between rounded-[var(--sn-radius-lg)] bg-[var(--sn-surface)] p-6 shadow-[var(--sn-shadow-1)]">
+                <div>
+                  <span className="chip-good">편안함</span>
+                  <p className="mt-5 font-display text-2xl font-semibold tracking-[-0.025em]">
+                    오늘 산책을
+                    <br />
+                    다녀오셨어요
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--sn-ink-muted)]">
+                    점심도 잘 드시고 오후에는 정원에서 천천히 걸으셨습니다.
+                  </p>
+                </div>
+                <p className="mt-10 text-xs text-[var(--sn-ink-faint)]">오늘 오후 4:20 · 이은지 요양보호사</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[var(--sn-ink)] text-white">
+          <div className="section-container grid gap-16 py-24 sm:py-32 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="text-sm font-semibold text-[var(--sn-accent-mist)]">요양보호사에게</p>
+              <h2 className="mt-4 max-w-lg font-display text-4xl font-semibold leading-tight tracking-[-0.035em] sm:text-5xl">
+                돌봄을 멈추지 않는
+                <br />
+                2분 기록
+              </h2>
+              <p className="mt-6 max-w-md text-lg leading-relaxed text-white/64">
+                어르신 선택, 사진과 상태, 확인. 현장에서 필요한 세 단계만 남겼습니다.
+              </p>
+            </div>
+
+            <div className="rounded-[var(--sn-radius-lg)] bg-white p-4 text-[var(--sn-ink)] shadow-2xl sm:p-6">
+              <div className="flex items-center justify-between border-b border-[var(--sn-line)] pb-4">
+                <div>
+                  <p className="text-xs font-semibold text-[var(--sn-accent)]">2 / 3</p>
+                  <p className="mt-1 font-display text-xl font-semibold">김영자 어르신</p>
+                </div>
+                <span className="chip-ok">작성 중</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 py-5">
+                {[
+                  { icon: ImagePlus, label: "사진" },
+                  { icon: Heart, label: "편안함" },
+                  { icon: Check, label: "식사 잘함" },
+                ].map(({ icon: Icon, label }, index) => (
+                  <div
+                    key={label}
+                    className={`flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-[var(--sn-radius)] ${
+                      index === 0 ? "bg-[var(--sn-surface-muted)]" : "bg-[var(--sn-accent-soft)]"
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 text-[var(--sn-accent)]" />
+                    <span className="text-sm font-semibold">{label}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex min-h-[52px] items-center justify-center gap-2 rounded-[var(--sn-radius)] bg-[var(--sn-accent)] font-semibold text-white">
+                <Send className="h-4 w-4" />
+                가족에게 전송
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-container py-24 sm:py-32">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src={PHOTOS.hands}
+                alt={PHOTO_ALT.hands}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="lg:pl-12">
+              <p className="text-sm font-semibold text-[var(--sn-accent)]">시설에게</p>
+              <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-[-0.035em] sm:text-5xl">
+                기록은 가볍게,
+                <br />
+                신뢰는 오래
+              </h2>
+              <p className="mt-6 max-w-md text-lg leading-relaxed text-[var(--sn-ink-muted)]">
+                열람 현황, 보호자 소통, 인수인계 기록이 하나의 흐름으로 남습니다.
+              </p>
+              <Link href="/auth/signup" className="btn-primary mt-8">
+                시설 시작하기
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-[var(--sn-line)] bg-[var(--sn-surface)]">
+          <div className="section-container flex flex-col items-start justify-between gap-8 py-16 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="font-display text-3xl font-semibold tracking-[-0.03em]">
+                오늘부터 더 가까운 돌봄
+              </h2>
+              <p className="mt-2 text-[var(--sn-ink-muted)]">시설과 가족 모두 무료로 시작할 수 있습니다.</p>
+            </div>
+            <Link href="/auth/signup" className="btn-primary shrink-0">
+              실버노트 시작하기
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <footer className="section-container flex flex-col justify-between gap-5 py-10 sm:flex-row sm:items-center">
+        <Logo size="sm" />
+        <p className="text-sm text-[var(--sn-ink-faint)]">
+          © {new Date().getFullYear()} Silver Note
+        </p>
       </footer>
     </div>
   )

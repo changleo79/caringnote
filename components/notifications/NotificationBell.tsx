@@ -39,13 +39,13 @@ export default function NotificationBell() {
   return (
     <button
       onClick={() => router.push("/notifications")}
-      className="relative p-2.5 text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100 rounded-xl transition-colors"
+      className="relative flex h-11 w-11 items-center justify-center rounded-full text-[var(--sn-ink-muted)] transition-colors hover:bg-[var(--sn-surface-muted)] hover:text-[var(--sn-ink)]"
       title="알림"
-      aria-label="알림"
+      aria-label={unreadCount > 0 ? `읽지 않은 알림 ${unreadCount}개` : "알림"}
     >
       <Bell className="w-5 h-5" />
       {unreadCount > 0 && (
-        <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-red-500 rounded-full border-2 border-white text-white text-[10px] font-bold flex items-center justify-center">
+        <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[var(--sn-bg)] bg-[var(--sn-caution)] px-1 text-[10px] font-bold text-white">
           {unreadCount > 99 ? "99+" : unreadCount}
         </span>
       )}

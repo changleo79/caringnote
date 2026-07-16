@@ -17,17 +17,17 @@ export default function Logo({
   light = false,
 }: LogoProps) {
   const sizeClasses = {
-    sm: { icon: "w-8 h-8", text: "text-base", sub: "text-[10px]", gap: "gap-2" },
-    md: { icon: "w-10 h-10", text: "text-lg", sub: "text-xs", gap: "gap-2.5" },
-    lg: { icon: "w-12 h-12", text: "text-2xl", sub: "text-sm", gap: "gap-3" },
+    sm: { icon: "w-8 h-8", text: "text-base", gap: "gap-2" },
+    md: { icon: "w-10 h-10", text: "text-lg", gap: "gap-2.5" },
+    lg: { icon: "w-12 h-12", text: "text-2xl", gap: "gap-3" },
   }
   const s = sizeClasses[size]
 
   const IconMark = () => (
     <div
       className={cn(
-        "flex items-center justify-center rounded-xl",
-        light ? "bg-white/15 text-white" : "bg-[var(--sn-accent)] text-white",
+        "flex items-center justify-center",
+        light ? "text-white" : "text-[var(--sn-accent)]",
         s.icon
       )}
     >
@@ -36,15 +36,13 @@ export default function Logo({
         className={cn(size === "sm" ? "w-4 h-4" : size === "md" ? "w-5 h-5" : "w-6 h-6")}
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.75"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M8 3h7l4 4v13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
-        <path d="M15 3v4h4" />
-        <path d="M9.5 13.5c1.2-1.8 3.8-1.8 5 0" />
-        <circle cx="10.2" cy="11.2" r="0.7" fill="currentColor" stroke="none" />
-        <circle cx="13.8" cy="11.2" r="0.7" fill="currentColor" stroke="none" />
+        <path d="M6.5 4.5h8.25a3 3 0 0 1 3 3v12H9.5a3 3 0 0 1-3-3v-12Z" />
+        <path d="M17.75 8.5h-7a2 2 0 0 0-2 2v8.75" />
+        <path d="M11.25 13.25h4" />
       </svg>
     </div>
   )
@@ -53,28 +51,15 @@ export default function Logo({
     <div className={cn("flex items-center", variant !== "icon" && s.gap, className)}>
       <IconMark />
       {variant !== "icon" && (
-        <div className="flex flex-col">
-          <span
-            className={cn(
-              "font-display font-semibold leading-tight tracking-tight",
-              light ? "text-white" : "text-[var(--sn-ink)]",
-              s.text
-            )}
-          >
-            실버노트
-          </span>
-          {(size === "lg" || variant === "default") && (
-            <span
-              className={cn(
-                "font-medium leading-tight",
-                light ? "text-white/70" : "text-[var(--sn-ink-muted)]",
-                s.sub
-              )}
-            >
-              Silver Note
-            </span>
+        <span
+          className={cn(
+            "font-display font-semibold leading-none tracking-[-0.025em]",
+            light ? "text-white" : "text-[var(--sn-ink)]",
+            s.text
           )}
-        </div>
+        >
+          실버노트
+        </span>
       )}
     </div>
   )

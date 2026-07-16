@@ -53,25 +53,52 @@ export default function MenuPage() {
     dinner: "저녁",
     snack: "간식",
   } as const;
+  const weekDays = Array.from({ length: 7 }, (_, index) => {
+    const current = new Date();
+    const day = current.getDay();
+    current.setDate(current.getDate() - day + index);
+    return {
+      value: current.toISOString().slice(0, 10),
+      weekday: new Intl.DateTimeFormat("ko-KR", { weekday: "short" }).format(current),
+      day: current.getDate(),
+    };
+  });
 
   return (
     <div className="mx-auto max-w-xl">
       <PageHeader title="식단" description="오늘의 식사를 공유합니다." />
 
       <div className="mb-8">
-        <label className="label">날짜</label>
+        <div className="grid grid-cols-7 gap-1 rounded-[var(--sn-radius-lg)] bg-[var(--sn-surface)] p-2 shadow-[var(--sn-shadow-1)]">
+          {weekDays.map((day) => (
+            <button
+              key={day.value}
+              type="button"
+              onClick={() => setDate(day.value)}
+              className={`flex min-h-[56px] flex-col items-center justify-center rounded-[var(--sn-radius-sm)] text-sm ${
+                date === day.value
+                  ? "bg-[var(--sn-accent)] font-semibold text-white"
+                  : "text-[var(--sn-ink-muted)]"
+              }`}
+            >
+              <span className="text-xs">{day.weekday}</span>
+              <span className="mt-1">{day.day}</span>
+            </button>
+          ))}
+        </div>
         <input
           type="date"
-          className="input"
+          className="input mt-3"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          aria-label="다른 날짜 선택"
         />
       </div>
 
       {loading ? (
         <div className="h-40 animate-pulse rounded-[var(--sn-radius-md)] bg-[var(--sn-surface-muted)]" />
       ) : (
-        <form onSubmit={save} className="space-y-5">
+        <form onSubmit={save} className="grid gap-5 sm:grid-cols-2">
           {(Object.keys(labels) as Array<keyof typeof labels>).map((key) => (
             <div key={key}>
               <label className="label">{labels[key]}</label>
@@ -85,7 +112,7 @@ export default function MenuPage() {
             </div>
           ))}
           {isStaff && (
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="btn-primary w-full sm:col-span-2">
               저장
             </button>
           )}

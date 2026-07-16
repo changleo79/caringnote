@@ -10,6 +10,7 @@ export default function HandoverPage() {
   const [content, setContent] = useState("");
   const [shift, setShift] = useState("주간→야간");
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   const load = () =>
     fetch("/api/handover")
@@ -31,6 +32,7 @@ export default function HandoverPage() {
     if (res.ok) {
       toast.success("인수인계가 등록되었습니다.");
       setContent("");
+      setShowForm(false);
       load();
     } else toast.error("저장 실패 — 직원만 사용할 수 있습니다.");
   };
@@ -39,9 +41,19 @@ export default function HandoverPage() {
     <div className="mx-auto max-w-xl">
       <PageHeader
         title="교대 인수인계"
-        description="보호자에게는 보이지 않는 내부 노트입니다."
+        description="먼저 확인하고, 꼭 필요한 내용만 다음 근무자에게 전합니다."
+        action={
+          <button
+            type="button"
+            onClick={() => setShowForm((current) => !current)}
+            className={showForm ? "btn-secondary" : "btn-primary"}
+          >
+            {showForm ? "닫기" : "새 인계"}
+          </button>
+        }
       />
 
+      {showForm && (
       <form
         onSubmit={submit}
         className="mb-10 space-y-4 border-b border-[var(--sn-line)] pb-10"
@@ -72,6 +84,7 @@ export default function HandoverPage() {
           등록
         </button>
       </form>
+      )}
 
       {loading ? (
         <div className="h-24 animate-pulse rounded-[var(--sn-radius-md)] bg-[var(--sn-surface-muted)]" />

@@ -72,7 +72,7 @@ export default async function MedicalRecordDetailPage({
       <p className="text-sm font-medium text-[var(--sn-accent)]">
         {categoryLabels[record.category] || record.category}
       </p>
-      <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-[var(--sn-ink)]">
+      <h1 className="mt-2 font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--sn-ink)]">
         {record.title}
       </h1>
       <p className="mt-3 text-sm text-[var(--sn-ink-muted)]">
@@ -85,10 +85,20 @@ export default async function MedicalRecordDetailPage({
         {record.createdBy.name} · {formatDate(record.createdAt)}
       </p>
 
+      {record.plainExplain && (
+        <section className="mt-8 rounded-[var(--sn-radius-lg)] bg-[var(--sn-accent-soft)] p-5">
+          <p className="text-sm font-semibold text-[var(--sn-accent)]">쉽게 설명하면</p>
+          <p className="mt-2 whitespace-pre-wrap text-lg leading-relaxed">{record.plainExplain}</p>
+        </section>
+      )}
+
       {record.content && (
-        <p className="mt-8 whitespace-pre-wrap text-[17px] leading-relaxed text-[var(--sn-ink)]">
-          {record.content}
-        </p>
+        <details className="mt-8 border-y border-[var(--sn-line)] py-5" open={!record.plainExplain}>
+          <summary className="cursor-pointer font-semibold">자세한 기록</summary>
+          <p className="mt-4 whitespace-pre-wrap leading-relaxed text-[var(--sn-ink-muted)]">
+            {record.content}
+          </p>
+        </details>
       )}
 
       {record.attachments && record.attachments.length > 0 && (

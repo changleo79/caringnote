@@ -19,6 +19,9 @@ export default function CareOpsPage() {
   const [medName, setMedName] = useState("");
   const [medDosage, setMedDosage] = useState("");
   const [medSchedule, setMedSchedule] = useState("");
+  const [view, setView] = useState<"medications" | "plans">("medications");
+  const [showMedForm, setShowMedForm] = useState(false);
+  const [showPlanForm, setShowPlanForm] = useState(false);
 
   const loadResidents = () =>
     fetch("/api/residents")
@@ -67,6 +70,7 @@ export default function CareOpsPage() {
       toast.success("케어플랜을 저장했습니다.");
       setPlanTitle("");
       setPlanContent("");
+      setShowPlanForm(false);
       loadOps(residentId);
     } else toast.error("저장 실패");
   };
@@ -88,6 +92,7 @@ export default function CareOpsPage() {
       setMedName("");
       setMedDosage("");
       setMedSchedule("");
+      setShowMedForm(false);
       loadOps(residentId);
     } else toast.error("저장 실패");
   };
@@ -105,9 +110,9 @@ export default function CareOpsPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <PageHeader
-        eyebrow="Ops"
+        eyebrow="오늘의 돌봄"
         title="케어플랜 · 투약"
-        description="입소 요양원 라이트 Ops. 돌봄 기록에 집중합니다."
+        description="확인이 필요한 업무부터 처리합니다."
       />
 
       <div className="mb-10">
@@ -125,8 +130,32 @@ export default function CareOpsPage() {
         </select>
       </div>
 
+      <div className="mb-8 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setView("medications")}
+          className={view === "medications" ? "btn-primary" : "btn-secondary"}
+        >
+          투약 {meds.length}
+        </button>
+        <button
+          type="button"
+          onClick={() => setView("plans")}
+          className={view === "plans" ? "btn-primary" : "btn-secondary"}
+        >
+          케어플랜 {plans.length}
+        </button>
+      </div>
+
+      {view === "plans" && (
       <section className="mb-10 border-b border-[var(--sn-line)] pb-10">
-        <h2 className="mb-4 text-lg font-semibold text-[var(--sn-ink)]">케어플랜 작성</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-[var(--sn-ink)]">케어플랜</h2>
+          <button type="button" onClick={() => setShowPlanForm((current) => !current)} className="btn-secondary">
+            {showPlanForm ? "닫기" : "새 플랜"}
+          </button>
+        </div>
+        {showPlanForm && (
         <form onSubmit={addPlan} className="space-y-3">
           <input
             className="input"
@@ -146,6 +175,7 @@ export default function CareOpsPage() {
             케어플랜 저장
           </button>
         </form>
+        )}
         <ul className="mt-6 divide-y divide-[var(--sn-line)]">
           {plans.map((p) => (
             <li key={p.id} className="py-4 first:pt-0">
@@ -157,9 +187,17 @@ export default function CareOpsPage() {
           ))}
         </ul>
       </section>
+      )}
 
+      {view === "medications" && (
       <section className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-[var(--sn-ink)]">투약 일정</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-[var(--sn-ink)]">투약 일정</h2>
+          <button type="button" onClick={() => setShowMedForm((current) => !current)} className="btn-secondary">
+            {showMedForm ? "닫기" : "일정 추가"}
+          </button>
+        </div>
+        {showMedForm && (
         <form onSubmit={addMed} className="mb-6 space-y-3">
           <input
             className="input"
@@ -186,6 +224,7 @@ export default function CareOpsPage() {
             일정 추가
           </button>
         </form>
+        )}
         <ul className="divide-y divide-[var(--sn-line)]">
           {meds.map((m) => (
             <li
@@ -209,6 +248,7 @@ export default function CareOpsPage() {
           ))}
         </ul>
       </section>
+      )}
 
       <Link href={`/timeline/${residentId}`} className="btn-ghost w-full">
         타임라인에서 보기

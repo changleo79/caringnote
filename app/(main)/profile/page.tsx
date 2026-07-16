@@ -10,6 +10,8 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [careCenterName, setCareCenterName] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +24,8 @@ export default function ProfilePage() {
           setStaffMode(Boolean(d.staffMode));
           setPhone(d.phone || "");
           setName(d.name || "");
+          setEmail(d.email || "");
+          setCareCenterName(d.careCenter?.name || "");
           setRole(d.role || "");
           document.documentElement.classList.remove("font-scale-2", "font-scale-3");
           if (d.fontScale === 2) document.documentElement.classList.add("font-scale-2");
@@ -71,6 +75,15 @@ export default function ProfilePage() {
       />
 
       <div className="space-y-10">
+        <section className="card p-5">
+          <p className="font-display text-xl font-semibold">{name}</p>
+          <p className="mt-1 text-sm text-[var(--sn-ink-muted)]">{email}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <span className="badge-neutral">{isStaff ? "시설 직원" : "보호자"}</span>
+            {careCenterName && <span className="badge-neutral">{careCenterName}</span>}
+          </div>
+        </section>
+
         <section>
           <h2 className="mb-2 text-lg font-semibold text-[var(--sn-ink)]">큰글씨 모드</h2>
           <p className="mb-4 text-sm text-[var(--sn-ink-muted)]">
@@ -113,7 +126,7 @@ export default function ProfilePage() {
                 type="checkbox"
                 checked={staffMode}
                 onChange={(e) => setStaffMode(e.target.checked)}
-                className="h-5 w-5"
+                className="h-6 w-6"
               />
               <span>공용 태블릿 큰 타깃 모드 선호</span>
             </label>

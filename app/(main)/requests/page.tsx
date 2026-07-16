@@ -6,6 +6,14 @@ import { useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { PageHeader } from "@/components/calm/PageHeader"
 
+const statusLabels: Record<string, { label: string; className: string }> = {
+  Pending: { label: "확인 대기", className: "chip-ok" },
+  Approved: { label: "접수됨", className: "chip-good" },
+  Rejected: { label: "확인 필요", className: "chip-caution" },
+  Completed: { label: "전달 완료", className: "chip-good" },
+  Cancelled: { label: "취소", className: "badge-neutral" },
+}
+
 function SupplyInner() {
   const { data: session } = useSession()
   const isStaff = session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
@@ -41,33 +49,45 @@ function SupplyInner() {
   }
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-xl">
       <PageHeader title="물품 요청" description="기저귀·간식 등 필요한 것을 간단히 요청하세요." />
 
       {!isStaff && (
         <form onSubmit={submit} className="mb-10 space-y-4">
+          <div>
+          <label className="label">어르신</label>
           <select className="input" value={residentId} onChange={(e) => setResidentId(e.target.value)} required>
             <option value="">어르신 선택</option>
             {residents.map((r) => (
               <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
-          <input className="input" placeholder="품목 (예: 성인용 기저귀)" value={itemName} onChange={(e) => setItemName(e.target.value)} required />
-          <input className="input" type="number" min={1} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} />
+          </div>
+          <div>
+            <label className="label">필요한 물품</label>
+            <input className="input" placeholder="예: 성인용 기저귀" value={itemName} onChange={(e) => setItemName(e.target.value)} required />
+          </div>
+          <div>
+            <label className="label">수량</label>
+            <input className="input" type="number" min={1} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} />
+          </div>
           <button className="btn-primary w-full" type="submit">요청하기</button>
         </form>
       )}
 
-      <ul className="divide-y divide-[var(--sn-line)]">
-        {list.map((item) => (
-          <li key={item.id} className="flex items-center justify-between gap-3 py-5">
+      <ul className="space-y-3">
+        {list.map((item) => {
+          const status = statusLabels[item.status] || { label: item.status, className: "badge-neutral" }
+          return (
+          <li key={item.id} className="card flex items-center justify-between gap-3 p-5">
             <div>
               <p className="font-display text-lg font-semibold">
                 {item.itemName} × {item.quantity}
               </p>
               <p className="text-sm text-[var(--sn-ink-muted)]">
-                {item.resident?.name} · {item.status}
+                {item.resident?.name}
               </p>
+              <span className={`${status.className} mt-2`}>{status.label}</span>
             </div>
             {isStaff && item.status === "Pending" && (
               <button
@@ -86,7 +106,8 @@ function SupplyInner() {
               </button>
             )}
           </li>
-        ))}
+          )
+        })}
       </ul>
     </div>
   )

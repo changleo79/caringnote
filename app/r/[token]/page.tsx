@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import Image from "next/image"
 import Link from "next/link"
+import Logo from "@/components/brand/Logo"
 import { StatusChip } from "@/components/calm/StatusChip"
-import { PHOTOS } from "@/lib/photos"
 
 export default function MagicReportPage() {
   const params = useParams()
@@ -14,19 +15,20 @@ export default function MagicReportPage() {
 
   useEffect(() => {
     fetch(`/api/daily-reports/magic/${token}`)
-      .then(async (r) => {
-        const d = await r.json()
-        if (!r.ok) throw new Error(d.error || "오류")
-        setData(d)
+      .then(async (response) => {
+        const body = await response.json()
+        if (!response.ok) throw new Error(body.error || "소식을 열 수 없습니다.")
+        setData(body)
       })
-      .catch((e) => setError(e.message))
+      .catch((reason) => setError(reason.message))
   }, [token])
 
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[var(--sn-bg)] px-6">
         <div className="max-w-md text-center">
-          <p className="font-display text-xl font-semibold">{error}</p>
+          <Logo size="sm" />
+          <p className="mt-8 font-display text-xl font-semibold">{error}</p>
           <Link href="/" className="btn-primary mt-6 inline-flex">
             실버노트 홈
           </Link>
@@ -45,49 +47,58 @@ export default function MagicReportPage() {
 
   let image: string | null = null
   try {
-    if (data.images) image = JSON.parse(data.images)[0]
+    if (data.images) image = JSON.parse(data.images)[0] || null
   } catch {
     image = null
   }
 
   return (
     <div className="min-h-screen bg-[var(--sn-bg)]">
-      <div className="relative min-h-[55svh] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image || PHOTOS.familyStory}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover sn-hero-ken"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,32,30,0.88)] via-[rgba(12,32,30,0.25)] to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 px-5 pb-8 pt-24 text-white">
-          <p className="text-sm font-medium text-white/70">실버노트</p>
-          <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">
-            {data.resident.name}
-            <span className="ml-2 text-xl font-medium text-white/80">
-              ·{" "}
-              {data.moodChip === "GOOD"
-                ? "좋음"
-                : data.moodChip === "CAUTION"
-                  ? "주의"
-                  : "보통"}
-            </span>
-          </h1>
-          <p className="mt-1 text-white/65">{data.careCenterName}</p>
+      <header className="border-b border-[var(--sn-line)]">
+        <div className="mx-auto flex h-16 max-w-2xl items-center px-5">
+          <Logo size="sm" />
         </div>
-      </div>
+      </header>
 
-      <main className="mx-auto max-w-lg px-5 py-8 sn-fade-up">
-        <StatusChip status={data.moodChip} />
-        <p className="mt-4 text-lg leading-relaxed text-[var(--sn-ink)] whitespace-pre-wrap">
-          {data.content || "오늘의 소식이 도착했습니다."}
-        </p>
-        <p className="mt-6 text-sm text-[var(--sn-ink-faint)]">
-          {data.authorName} · {new Date(data.publishedAt).toLocaleString("ko-KR")}
-        </p>
-        <Link href="/auth/login" className="btn-primary mt-8 w-full">
-          앱에서 더 보기
-        </Link>
+      <main className="mx-auto max-w-2xl">
+        {image ? (
+          <div className="relative aspect-[4/3] bg-[var(--sn-surface-muted)]">
+            <Image
+              src={image}
+              alt={`${data.resident.name} 어르신의 오늘 모습`}
+              fill
+              priority
+              unoptimized={image.startsWith("data:")}
+              sizes="(max-width: 768px) 100vw, 672px"
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="flex aspect-[4/3] items-center justify-center bg-[var(--sn-accent-soft)]">
+            <span className="font-display text-7xl font-semibold text-[var(--sn-accent)]">
+              {data.resident.name.slice(0, 1)}
+            </span>
+          </div>
+        )}
+
+        <article className="px-5 py-8 sm:px-8 sm:py-10">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-display text-3xl font-semibold tracking-[-0.035em]">
+              {data.resident.name} 어르신
+            </h1>
+            <StatusChip status={data.moodChip} />
+          </div>
+          <p className="mt-2 text-sm text-[var(--sn-ink-muted)]">{data.careCenterName}</p>
+          <p className="mt-7 whitespace-pre-wrap text-lg leading-relaxed">
+            {data.content || "오늘의 소식이 도착했습니다."}
+          </p>
+          <p className="mt-6 text-sm text-[var(--sn-ink-faint)]">
+            {data.authorName} · {new Date(data.publishedAt).toLocaleString("ko-KR")}
+          </p>
+          <Link href="/auth/login" className="btn-primary mt-9 w-full">
+            앱에서 지난 소식 보기
+          </Link>
+        </article>
       </main>
     </div>
   )

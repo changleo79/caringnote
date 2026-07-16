@@ -6,6 +6,14 @@ import { useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { PageHeader } from "@/components/calm/PageHeader"
 
+const statusLabels: Record<string, { label: string; className: string }> = {
+  Pending: { label: "확인 대기", className: "chip-ok" },
+  Approved: { label: "예약 확정", className: "chip-good" },
+  Rejected: { label: "조율 필요", className: "chip-caution" },
+  Completed: { label: "방문 완료", className: "badge-neutral" },
+  Cancelled: { label: "취소", className: "badge-neutral" },
+}
+
 function VisitsInner() {
   const { data: session } = useSession()
   const isStaff = session?.user?.role === "CAREGIVER" || session?.user?.role === "ADMIN"
@@ -57,7 +65,7 @@ function VisitsInner() {
   }
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-xl">
       <PageHeader title="면회" description="전화 대신, 차분히 예약하세요." />
 
       {!isStaff && (
@@ -87,12 +95,17 @@ function VisitsInner() {
         </form>
       )}
 
-      <ul className="divide-y divide-[var(--sn-line)]">
-        {list.map((item) => (
-          <li key={item.id} className="py-5">
-            <p className="font-display text-lg font-semibold">{item.resident?.name}</p>
+      <ul className="space-y-3">
+        {list.map((item) => {
+          const status = statusLabels[item.status] || { label: item.status, className: "badge-neutral" }
+          return (
+          <li key={item.id} className="card p-5">
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-display text-lg font-semibold">{item.resident?.name}</p>
+              <span className={status.className}>{status.label}</span>
+            </div>
             <p className="mt-1 text-sm text-[var(--sn-ink-muted)]">
-              {new Date(item.visitAt).toLocaleString("ko-KR")} · {item.status}
+              {new Date(item.visitAt).toLocaleString("ko-KR")}
             </p>
             {isStaff && item.status === "Pending" && (
               <div className="mt-3 flex gap-2">
@@ -101,7 +114,8 @@ function VisitsInner() {
               </div>
             )}
           </li>
-        ))}
+          )
+        })}
       </ul>
     </div>
   )
