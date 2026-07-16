@@ -352,7 +352,11 @@ function QuickWriteInner() {
             {image && (
               <div className="aspect-[4/3] overflow-hidden bg-[var(--sn-surface-muted)]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={image} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={image}
+                  alt={`${selectedResident?.name || "어르신"} 어르신 알림장 사진`}
+                  className="h-full w-full object-cover"
+                />
               </div>
             )}
             <div className="p-5 sm:p-6">

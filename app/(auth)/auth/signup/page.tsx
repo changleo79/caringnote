@@ -91,8 +91,8 @@ export default function SignupPage() {
     <div className="min-h-screen bg-[var(--sn-surface)] lg:grid lg:grid-cols-[1.05fr_.95fr]">
       <div className="relative h-48 overflow-hidden sm:h-64 lg:sticky lg:top-0 lg:h-screen">
         <Image
-          src={PHOTOS.walk}
-          alt={PHOTO_ALT.walk}
+          src={PHOTOS.auth}
+          alt={PHOTO_ALT.auth}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 52vw"

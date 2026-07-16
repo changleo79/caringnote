@@ -34,7 +34,7 @@ export function ChipPicker({
             type="button"
             onClick={() => toggle(opt.id)}
             className={cn(
-              "min-h-[52px] rounded-2xl border px-4 text-[15px] font-medium transition",
+              "min-h-[56px] rounded-[var(--sn-radius)] border px-4 text-sm font-medium transition-colors",
               on
                 ? "border-[var(--sn-accent)] bg-[var(--sn-accent)] text-white"
                 : "border-[var(--sn-line-strong)] bg-[var(--sn-surface)] text-[var(--sn-ink)]"

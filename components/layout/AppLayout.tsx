@@ -153,15 +153,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {tabs.map((item) => {
             const Icon = item.icon
             const active = isActive(item.href)
+            const primary = Boolean("primary" in item && item.primary)
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
                   "relative isolate flex flex-1 flex-col items-center justify-center gap-1 text-xs font-medium",
-                  item.primary &&
+                  primary &&
                     "my-2 rounded-[var(--sn-radius)] bg-[var(--sn-accent)] text-white",
-                  !item.primary &&
+                  !primary &&
                     (active ? "text-[var(--sn-ink)]" : "text-[var(--sn-ink-faint)]")
                 )}
                 aria-current={active ? "page" : undefined}

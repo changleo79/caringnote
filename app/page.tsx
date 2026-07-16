@@ -84,15 +84,25 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-[1.2fr_.8fr]">
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <Image
-                  src={PHOTOS.familyStory}
-                  alt={PHOTO_ALT.familyStory}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 45vw"
-                  className="object-cover"
-                />
+            <div className="grid gap-4 sm:grid-cols-[1.15fr_.85fr]">
+              <div className="flex aspect-[4/5] flex-col justify-between rounded-[var(--sn-radius-lg)] bg-[var(--sn-accent)] p-7 text-white sm:p-9">
+                <div className="flex items-center justify-between text-sm text-white/70">
+                  <span>오늘의 소식</span>
+                  <span>오후 4:20</span>
+                </div>
+                <div>
+                  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/14 font-display text-2xl font-semibold">
+                    김
+                  </div>
+                  <p className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em]">
+                    김영자 어르신의
+                    <br />
+                    평온한 오후
+                  </p>
+                  <p className="mt-4 max-w-xs leading-relaxed text-white/76">
+                    사진이 없어도 상태와 쉬운 설명이 먼저 전해집니다.
+                  </p>
+                </div>
               </div>
               <div className="flex flex-col justify-between rounded-[var(--sn-radius-lg)] bg-[var(--sn-surface)] p-6 shadow-[var(--sn-shadow-1)]">
                 <div>
@@ -160,15 +170,20 @@ export default function HomePage() {
         </section>
 
         <section className="section-container py-24 sm:py-32">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src={PHOTOS.hands}
-                alt={PHOTO_ALT.hands}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                ["01", "알림장 작성", "사진과 상태를 2분 안에"],
+                ["02", "가족 열람", "앱 없이도 바로 확인"],
+                ["03", "반응과 소통", "마음과 감사를 가볍게"],
+                ["04", "소통 리포트", "기록은 자동으로 증빙"],
+              ].map(([number, title, description]) => (
+                <div key={number} className="card min-h-[176px] p-5">
+                  <p className="text-sm font-semibold text-[var(--sn-accent)]">{number}</p>
+                  <p className="mt-8 font-display text-xl font-semibold">{title}</p>
+                  <p className="mt-2 text-sm text-[var(--sn-ink-muted)]">{description}</p>
+                </div>
+              ))}
             </div>
             <div className="lg:pl-12">
               <p className="text-sm font-semibold text-[var(--sn-accent)]">시설에게</p>

@@ -144,7 +144,7 @@ export default function NewPostPage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={imageUrl}
-                  alt=""
+                  alt={`선택한 사진 ${index + 1}`}
                   className="w-full object-cover"
                   style={{ maxHeight: 320 }}
                 />

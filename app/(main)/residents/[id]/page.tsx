@@ -163,7 +163,7 @@ export default function ResidentDetailPage() {
         {resident.name}
       </h1>
 
-      <dl className="mt-6 space-y-3 text-[15px]">
+      <dl className="mt-6 space-y-3 text-sm">
         {resident.roomNumber && (
           <div className="flex gap-3">
             <dt className="w-20 shrink-0 text-[var(--sn-ink-faint)]">호실</dt>

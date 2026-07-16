@@ -144,7 +144,7 @@ export default function PostDetailPage() {
             <div key={index} className="relative w-full overflow-hidden bg-[var(--sn-surface-muted)]">
               <Image
                 src={imageUrl}
-                alt=""
+                alt={`${post.resident?.name || "시설"}의 일상 사진 ${index + 1}`}
                 width={1200}
                 height={900}
                 className="h-auto w-full object-cover"
