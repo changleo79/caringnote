@@ -27,15 +27,14 @@ export default function HomePage() {
 
       <main>
         <section className="overflow-hidden">
-          <div className="section-container grid min-h-[calc(100svh-5rem)] items-center gap-14 py-16 lg:grid-cols-[.95fr_1.05fr] lg:py-24">
-            <div className="max-w-xl">
+          <div className="section-container grid min-h-[calc(100svh-5rem)] items-center gap-14 py-16 lg:grid-cols-[1.08fr_.92fr] lg:py-24">
+            <div>
               <p className="mb-5 text-sm font-semibold tracking-[0.1em] text-[var(--sn-accent)]">
                 돌봄의 하루를 가장 명확하게
               </p>
-              <h1 className="font-display text-[clamp(2.8rem,6vw,5.25rem)] font-semibold leading-[1.05] tracking-[-0.05em]">
-                부모님의 오늘이
-                <br />
-                안심으로 이어집니다
+              <h1 className="font-display text-[clamp(2.6rem,5vw,4.4rem)] font-semibold leading-[1.08] tracking-[-0.05em]">
+                <span className="block whitespace-nowrap">부모님의 오늘이</span>
+                <span className="block whitespace-nowrap">안심으로 이어집니다</span>
               </h1>
               <p className="mt-6 max-w-lg text-lg leading-relaxed text-[var(--sn-ink-muted)] sm:text-xl">
                 시설의 돌봄 기록을 가족이 이해하기 쉬운 사진과 말로 전하는 시니어 케어 커뮤니케이션.
